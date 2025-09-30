@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/post")
-@Tag(name = "게시글 API", description = "자유게시글 등록/수정/삭제/댓글/파일/좋아요/신고 관련 API")
+@Tag(name = "자유게시글 API", description = "자유게시글 등록/수정/삭제/댓글/파일/좋아요/신고 관련 API")
 public class PostExController {
 
     private final PostService postService;
