@@ -1,5 +1,6 @@
 package com.backoven.catdogshelter.domain.post.command.application.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ErrorResponseDTO {
-
     // HTTP 상태 코드
     private int status;
 
