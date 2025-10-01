@@ -610,15 +610,18 @@
     </details>
     <details>
       <summary>게시글 수정</summary>
+      <img src="https://github.com/user-attachments/assets/fb177800-672d-4374-a0f5-40347eb923c3" width="500"/>
     </details>
     <details>
       <summary>게시글 삭제</summary>
     </details>
     <details>
       <summary>게시글 조회</summary>
+      <img src="https://github.com/user-attachments/assets/c7a3c7ce-2540-481c-9ae5-f1559990ef63" width="500"/>
     </details>
     <details>
       <summary>게시글 추천</summary>
+      <img src="https://github.com/user-attachments/assets/209bea90-0953-4528-aaf6-b3a266822e91" width="500"/>
     </details>
   </details>
 
