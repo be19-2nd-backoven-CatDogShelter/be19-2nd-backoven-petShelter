@@ -351,24 +351,37 @@
 
 
 <details>
-  <summary>📦 물품후기 게시판 API</summary>
+  <summary>📦 물품기부 게시판 API</summary>
 
   <details>
     <summary>📝 게시글</summary>
     <details>
       <summary>게시글 작성</summary>
-    </details>
+
+  ![Image](https://github.com/user-attachments/assets/c60a6fc0-dd13-45f3-be4d-5697750ff9da)
+
+  </details>
     <details>
       <summary>게시글 수정</summary>
-    </details>
+
+  ![Image](https://github.com/user-attachments/assets/30d58250-1d64-4710-a68c-165c8ea5e41f)
+    
+  </details>
     <details>
       <summary>게시글 삭제</summary>
+  
+  ![Image](https://github.com/user-attachments/assets/6b5e8b7f-a53c-4d6a-9b56-5f8e8a1f269d)
     </details>
     <details>
       <summary>게시글 조회</summary>
     </details>
     <details>
       <summary>게시글 추천</summary>
+      ![Image](https://github.com/user-attachments/assets/b06447fe-f12a-4716-8151-691e805cfc1a)
+    </details>
+       <details>
+      <summary>게시글 추천 취소</summary>
+    ![Image](https://github.com/user-attachments/assets/40bc1880-d166-4d11-8212-13750e5a0e2c)
     </details>
   </details>
 
@@ -376,12 +389,19 @@
     <summary>💬 댓글</summary>
     <details>
       <summary>댓글 작성</summary>
-    </details>
+
+  ![Image](https://github.com/user-attachments/assets/79da0c8e-ff39-4ddd-a24f-3aabbdbce8db)
+
+  </details>
     <details>
       <summary>댓글 수정</summary>
+  
+  ![Image](https://github.com/user-attachments/assets/72889229-83ab-4566-a304-9331326c1468)
     </details>
     <details>
       <summary>댓글 삭제</summary>
+    
+  ![Image](https://github.com/user-attachments/assets/5d89d46d-90ad-4f31-9ddf-7ee8be27460d)
     </details>
   </details>
 
@@ -389,13 +409,13 @@
     <summary>🚨 신고</summary>
     <details>
       <summary>댓글 신고하기</summary>
+
+![Image](https://github.com/user-attachments/assets/6f77b4ac-e230-4206-97f1-ddcd046ced46)
+
+  ![Image](https://github.com/user-attachments/assets/20a57306-e792-481a-af34-18f69af64191)
     </details>
-    <details>
-      <summary>신고 내역 조회</summary>
-    </details>
-    <details>
-      <summary>신고 처리</summary>
-    </details>
+
+
   </details>
 
 </details>
