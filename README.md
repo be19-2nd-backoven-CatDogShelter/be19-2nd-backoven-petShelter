@@ -1,7 +1,7 @@
 
 
 # 🐾 댕냥쉼터 <img src="https://github.com/user-attachments/assets/0aff8f8d-da27-4c78-a406-ceca80f924bc" align="right" height="90" />
-<img src="https://github.com/user-attachments/assets/dc3901ee-f69e-4c40-9a49-1b0c3dae8bd7"/>
+<img src="https://github.com/user-attachments/assets/a5d6677f-41cf-48e4-9249-240e0c7eb572"/>
 
 ---
 
