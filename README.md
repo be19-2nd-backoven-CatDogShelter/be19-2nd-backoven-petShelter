@@ -331,7 +331,12 @@
     <summary>게시글 상세 조회</summary>
     <img src="https://github.com/user-attachments/assets/e9f465ab-c3f9-4ff4-bc3f-c50c2338c717"/>
   </details>
-
+  
+  <details>
+    <summary>게시글 상세 조회시 조회수 증가</summary>
+    <img src="https://github.com/user-attachments/assets/e683b976-1106-4af7-9d68-a11d3d963a14"/>
+  </details>
+  
   <details>
     <summary>게시글 조회순 조회</summary>
     <img src="https://github.com/user-attachments/assets/1ecdcd55-1cbd-4fb1-bc4f-d534fb1be9b7"/>
@@ -354,12 +359,18 @@
 
 </details>
 
-
   <details>
     <summary>게시글 추천</summary>
+     <details>
+    <summary>게시글 추천하기</summary>
+    <img src="https://github.com/user-attachments/assets/1c9c5ac7-0874-4f06-9cdb-a5e2dec2ed97"/>
+  </details>
+    <details>
+    <summary>게시글 추천순 조회</summary>
+    <img src="https://github.com/user-attachments/assets/729094f1-2b3f-47b7-bad5-5da12398e865"/>
+  </details>
   </details>
 </details>
-
   
   <details>
     <summary>💬 댓글</summary>
