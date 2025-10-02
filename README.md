@@ -192,7 +192,18 @@
 
 ## 📐 DDD
 <details>
-  <img width="800" alt="DDD 다이어그램" src="(이미지링크)" />
+  <img width="1892" height="915" alt="Image" src="https://github.com/user-attachments/assets/cbe6a350-d8eb-4f53-800f-7761ff94de44" /><br>
+  <img width="1913" height="1061" alt="Image" src="https://github.com/user-attachments/assets/0ba5d9d6-6e5a-4a22-bdee-1d99e32ac755" /><br>
+  <img width="1898" height="1011" alt="Image" src="https://github.com/user-attachments/assets/3be77071-9db8-4cd5-a251-c6bea429879f" /><br>
+  <img width="1236" height="840" alt="Image" src="https://github.com/user-attachments/assets/98c4a0d6-fea0-443b-8502-5353d923e994" /><br>
+  <img width="1852" height="833" alt="Image" src="https://github.com/user-attachments/assets/d6fce6ee-bc03-4793-aa5b-b4eaa5fc6e65" /><br>
+  <img width="1643" height="804" alt="Image" src="https://github.com/user-attachments/assets/4409ff54-4519-4ca8-8a49-6bfd481dafc7" /><br>
+  <img width="1906" height="886" alt="Image" src="https://github.com/user-attachments/assets/ff71e81d-709c-464c-8cb8-6b47b6adbedc" /><br>
+  <img width="1615" height="966" alt="Image" src="https://github.com/user-attachments/assets/5c5ef52d-2d29-4f88-a091-2284784330a5" /><br>
+  <img width="1870" height="975" alt="Image" src="https://github.com/user-attachments/assets/c8e68111-fac4-4173-a936-8433566b4845" /><br>
+  <img width="1891" height="1079" alt="Image" src="https://github.com/user-attachments/assets/09b7586e-371f-4b33-ae94-cda59cfae0b2" /><br>
+  <img width="1869" height="1046" alt="Image" src="https://github.com/user-attachments/assets/c27aff1f-3d46-46f1-8d81-a0ba5c2f875b" /><br>
+  <img width="1860" height="1022" alt="Image" src="https://github.com/user-attachments/assets/91ea12ae-0cca-4bdc-bde8-1e46941d477f" />
 </details>
 
 ---
