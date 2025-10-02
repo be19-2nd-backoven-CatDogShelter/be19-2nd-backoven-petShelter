@@ -211,9 +211,31 @@
 ---
 
 ## 🏗️ MSA 아키텍처
+- 댕냥쉼터는 MSA(Microservice Architecture) 기반으로 설계되어, 서비스별 독립성과 확장성을 보장합니다.
+- 각 마이크로서비스는 Eureka Server에 등록되고, Spring Cloud Gateway를 통해 라우팅 및 보안 처리를 수행합니다.
 <img width="1740" height="781" alt="image" src="https://github.com/user-attachments/assets/9ec427cc-e083-4888-abc1-95abe91a4053" />
+
+#### CATDOGSHELTER-USER-SERVICE
+- 회원 관리 및 보호소장 관리 기능 담당
+- Spring Security와 연동, 로그인/회원가입/권한 관리 수행
+
+#### CATDOGSHELTER-POST-SERVICE
+- 입양 게시판, 봉사 모집글, 신고 등 게시글 관련 기능 처리
+#### GATEWAY-SERVER
+- 사용자 요청을 받아 각 서비스로 라우팅
+- AuthorizationHeaderFilter를 적용하여 JWT 기반 인증/인가 처리
+
 <img width="1824" height="289" alt="image" src="https://github.com/user-attachments/assets/593029f7-f618-4d45-8a4b-f141448938fa" />
 
+<br>
+
+- 🔑 Eureka Server
+<img width="912" height="218" alt="스크린샷 2025-10-02 오후 2 43 12" src="https://github.com/user-attachments/assets/7ba4204f-1227-4b2f-9f9a-277cee35e1f6" />
+
+<br>
+
+- 🔗 Eureka Clients
+<img width="731" height="125" alt="스크린샷 2025-10-02 오후 2 41 13" src="https://github.com/user-attachments/assets/1907e358-4a28-45eb-8dba-620004d32540" />
 
 ---
 
@@ -333,32 +355,6 @@
       <img src="https://github.com/user-attachments/assets/5857802c-f4ec-4e0c-990b-911ad4fa7bb4"><br>
       <img src="https://github.com/user-attachments/assets/cc9d49b3-9f69-4077-be87-5242685f9649"/><br>
       <img src="https://github.com/user-attachments/assets/3aa3ab62-4284-46cc-b649-7634296bb96f">
-    </details>
-  </details>
-
-  <details>
-    <summary>💬 댓글</summary>
-    <details>
-      <summary>댓글 작성</summary>
-    </details>
-    <details>
-      <summary>댓글 수정</summary>
-    </details>
-    <details>
-      <summary>댓글 삭제</summary>
-    </details>
-  </details>
-
-  <details>
-    <summary>🚨 신고</summary>
-    <details>
-      <summary>게시글 신고하기</summary>
-    </details>
-    <details>
-      <summary>신고 내역 조회</summary>
-    </details>
-    <details>
-      <summary>신고 처리</summary>
     </details>
   </details>
 
