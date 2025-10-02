@@ -202,15 +202,21 @@
 
 </details>
 
-
-
-
+<details>
+  <summary>💳 회원등급 API</summary>
+  <img src="https://github.com/user-attachments/assets/1c161ac8-bf41-4914-a976-9933f9e3dd9d" width="500"/>
+  <br>받을 수 있는 등급 -> 회원의 등급 조회
+</details>
 
 <details>
-  <summary>회원등급 API</summary>
-  <img src="https://github.com/user-attachments/assets/1c161ac8-bf41-4914-a976-9933f9e3dd9d" width="500"/>
-  <br>받을 수 있는 등급 -> 회원의 등급 조회회
+  <summary>보호소장 회원 API</summary>
   여기서부터 작성
+</details>
+
+<details>
+  <summary>🤳🏻쪽지 API</summary>
+  <img src="https://github.com/user-attachments/assets/d256577c-3273-49e5-9693-5eb5e2457a03" width="500"/>
+  <br> 쪽지 보내기 -> 쪽지 목록 조회(받은사람 기준, 보낸사람 기준) -> 쪽지 상세 확인
 </details>
 
 <details>
