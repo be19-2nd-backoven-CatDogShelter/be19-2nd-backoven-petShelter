@@ -374,6 +374,34 @@
     </details>
     <details>
       <summary>게시글 조회</summary>
+       <details>
+      <summary>게시글 조회수 순으로 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/0809c30c-bb7b-4568-9ede-43179b16c0da)
+    </details>
+     <details>
+      <summary>게시글 추천수 순으로 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/112caa62-f12b-4591-8772-7f87a719fa11)
+    </details>
+     <details>
+      <summary>게시글 최신 작성일자 순으로 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/1ce9713b-39bb-433d-8b20-22400627df8a)
+    </details>
+     <details>
+      <summary>게시글 제목 서치해서 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/fb27feb9-2794-4490-a082-d23e4782cc81)
+    </details>
+     <details>
+      <summary>게시글 목록 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/016586cf-2490-4386-85fa-e04157d5bd1a)
+    </details>
+     <details>
+      <summary>게시글 상세 내용조회</summary>
+      ![Image](https://github.com/user-attachments/assets/79962ec4-ca33-4b52-af11-316badc4864b)
+    </details>
+     <details>
+      <summary>게시글 이미지 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/f167dc1b-04f3-4cca-8180-794a95753ee8)
+    </details>
     </details>
     <details>
       <summary>게시글 추천</summary>
