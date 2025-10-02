@@ -253,7 +253,10 @@
 ## 🧪 테스트 프레임워크 (JUnit)
 - Service 계층 단위 테스트 스크린샷 첨부  
 <details>
-  <img width="800" alt="JUnit 테스트 결과" src="(ppt 이미지 링크)" />
+  <img width="1090" height="452" alt="Image" src="https://github.com/user-attachments/assets/b8754f31-7f86-4d84-a69e-dc640ed6f9eb" />
+  <img width="1092" height="456" alt="Image" src="https://github.com/user-attachments/assets/2f103304-b986-400c-a24f-d2d5f0964783" />
+  <img width="873" height="622" alt="Image" src="https://github.com/user-attachments/assets/d32444e7-97e9-4a08-ad66-b913c4d7b2c4" />
+  <img width="871" height="605" alt="Image" src="https://github.com/user-attachments/assets/867de897-91da-4501-9c82-95da3c0f3a16" />
 </details>
 
 ---
