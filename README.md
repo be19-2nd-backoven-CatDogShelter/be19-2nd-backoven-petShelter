@@ -165,6 +165,7 @@
 <details>
   <summary>회원 API</summary>
   <summary>회원 등록</summary>
+    <img src= "https://github.com/user-attachments/assets/52387f2a-478b-405f-b1e1-5d76c1e4a063"/>
     </details>
     <details>
       <summary>회원 정보 수정</summary>
