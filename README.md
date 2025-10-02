@@ -161,23 +161,54 @@
 
 ## 🔗 API 테스트 (Postman)
 각 API CRUD 기능별 토글 & gif 첨부
-
 <details>
   <summary>회원 API</summary>
-  <summary>회원 등록</summary>
-    <img src= "https://github.com/user-attachments/assets/52387f2a-478b-405f-b1e1-5d76c1e4a063"/>
-    </details>
-    <details>
-      <summary>회원 정보 수정</summary>
-    </details>
-    <details>
-      <summary>회원 탈퇴</summary>
-    </details>
-    <details>
-      <summary>회원 조회</summary>
-    </details>
-  </details>
+  <ul>
+    <li>
+      <details>
+        <summary>회원가입</summary>
+        <img src="https://github.com/user-attachments/assets/52387f2a-478b-405f-b1e1-5d76c1e4a063"/>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>회원 로그인</summary>
+        <img src="https://github.com/user-attachments/assets/a5f5703f-c099-4f85-b183-17870d36e034"/>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>회원 로그인이력 조회</summary>
+        <img src="https://github.com/user-attachments/assets/414bb06e-bdb7-40f7-89ef-dd33b12e3e23"/>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>회원 마이페이지 조회</summary>
+        <img src="https://github.com/user-attachments/assets/cd8a7178-d3a6-487d-82f2-54d681e8aa7a"/>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>회원 정보 수정</summary>
+        <img src="https://github.com/user-attachments/assets/ecb5e63b-0d6a-4c80-95d6-a97b9628a613"/>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>회원 비밀번호 수정</summary>
+        <img src="https://github.com/user-attachments/assets/5b0ef29f-249e-4527-af85-47bbfdfc57e1"/>
+      </details>
+    </li>
+    <li>
+      <details>
+        <summary>회원 탈퇴</summary>
+        <!-- 이미지 없으면 비워둬도 됨 -->
+      </details>
+    </li>
+  </ul>
 </details>
+
 
 <details>
   <summary>회원등급 API</summary>
