@@ -50,24 +50,27 @@
 
 <details>
   <summary>보호소장 회원 API</summary>
-  여기서부터 작성
+
+  <details>
+    <summary>보호소장 회원가입</summary>
+    <img src="https://github.com/user-attachments/assets/0ea6dda9-8af1-48d8-9fce-6ce70a34f179"/>
+  </details>
+
+  <details>
+    <summary>보호소장 로그인</summary>
+    <img src="https://github.com/user-attachments/assets/410dcdae-7b2a-495d-9cbe-a0ec2f299d72"/>
+  </details>
+
+  <details>
+    <summary>보호소장 마이페이지 조회</summary>
+    <img src="https://github.com/user-attachments/assets/43ceb3e8-e918-431f-8d69-47c993553053"/>
+  </details>
 </details>
 
 <details>
   <summary>🤳🏻쪽지 API</summary>
   <img src="https://github.com/user-attachments/assets/d256577c-3273-49e5-9693-5eb5e2457a03" width="500"/>
   <br> 쪽지 보내기 -> 쪽지 목록 조회(받은사람 기준, 보낸사람 기준) -> 쪽지 상세 확인
-</details>
-
-<details>
-  <summary>보호소장 회원 API</summary>
-  여기서부터 작성
-</details>
-
-<details>
-  <summary>메세지 API</summary>
-  <img src="https://github.com/user-attachments/assets/d256577c-3273-49e5-9693-5eb5e2457a03" width="500"/>
-  <br> 메시지 보내기 -> 메시지 목록 조회(받은사람 기준, 보낸사람 기준) -> 메시지 상세 확인
 </details>
 
 <details>
