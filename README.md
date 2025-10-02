@@ -878,6 +878,7 @@
     <summary>📝 게시글</summary>
     <details>
       <summary>게시글 작성</summary>
+      <img src="https://github.com/user-attachments/assets/05fcfab2-adc6-43a9-9089-a6bfd760f9d3" width="500"/>
     </details>
     <details>
       <summary>게시글 수정</summary>
@@ -885,6 +886,7 @@
     </details>
     <details>
       <summary>게시글 삭제</summary>
+      <img src="https://github.com/user-attachments/assets/6684b780-47b6-4250-b971-f770e4159734" width="500"/>
     </details>
     <details>
       <summary>게시글 조회</summary>
@@ -900,12 +902,15 @@
     <summary>💬 댓글</summary>
     <details>
       <summary>댓글 작성</summary>
+      <img src="https://github.com/user-attachments/assets/c2332e65-972d-4a66-a799-89ed494bbe69" width="500"/>
     </details>
     <details>
       <summary>댓글 수정</summary>
+      <img src="https://github.com/user-attachments/assets/21a385fa-dbe3-4333-81cf-7b9cc544275e" width="500"/>
     </details>
     <details>
       <summary>댓글 삭제</summary>
+      <img src="https://github.com/user-attachments/assets/5ab27a5f-e8b0-4f48-a53f-7d7077bb3dd0" width="500"/>
     </details>
   </details>
 
@@ -913,19 +918,25 @@
     <summary>🚨 신고</summary>
     <details>
       <summary>게시글 신고하기</summary>
+      <img src="https://github.com/user-attachments/assets/57440124-68f2-412a-8f3f-afc888f4c09e" width="500"/>
     </details>
     <details>
       <summary>댓글 신고하기</summary>
+      <img src="https://github.com/user-attachments/assets/881a5769-ef46-466b-893a-dab977754aae" width="500"/>
     </details>
   </details>
 
   <details>
     <summary>👍 좋아요</summary>
     <details>
+      <summary>게시글 좋아요수 순 조회</summary>
+      <img src="https://github.com/user-attachments/assets/52397631-8881-4516-aa89-51b6e6f36646" width="500"/>
+    </details>
+    <details>
       <summary>게시글 좋아요 수 증가</summary>
+      <img src="https://github.com/user-attachments/assets/49ec7a97-a4d9-4244-9172-7a5f3d61a9e2" width="500"/>
     </details>
   </details>
-
 </details>
 
 
