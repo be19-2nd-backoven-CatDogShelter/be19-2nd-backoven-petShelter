@@ -301,35 +301,75 @@
 <details>
   <summary>🏠 입양게시판 API</summary>
 
+<details>
+  <summary>📝 게시글</summary>
+
   <details>
-    <summary>📝 게시글</summary>
-    <details>
-      <summary>게시글 작성</summary>
-    </details>
-    <details>
-      <summary>게시글 수정</summary>
-    </details>
-    <details>
-      <summary>게시글 삭제</summary>
-    </details>
+    <summary>게시글 작성</summary>
+    <img src="https://github.com/user-attachments/assets/5f4db3fc-5154-4e17-9e24-0dc84dd3fd05"/>
+  </details>
+
+  <details>
+    <summary>게시글 수정</summary>
+    <img src="https://github.com/user-attachments/assets/ae2c9f64-dd39-430c-9c31-3d671205041b"/>
+  </details>
+
+  <details>
+    <summary>게시글 삭제</summary>
+    <img src="https://github.com/user-attachments/assets/1b2c0377-cdd6-4f26-ae59-1ac65b968339"/>
+  </details>
+
     <details>
       <summary>게시글 조회</summary>
+      <details>
+      <summary>게시글 전체 조회</summary>
+      <img src="https://github.com/user-attachments/assets/cd253cd9-4e65-4b0d-a333-a488e2d8ffa0
+"/>
+    </details>
+        <details>
+      <summary>게시글 상세 조회</summary>
+          <img src="https://github.com/user-attachments/assets/e9f465ab-c3f9-4ff4-bc3f-c50c2338c717
+"/>
+    </details>
+        <details>
+      <summary>게시글 조회순 조회</summary>
+          <img src="https://github.com/user-attachments/assets/1ecdcd55-1cbd-4fb1-bc4f-d534fb1be9b7
+"/>
+    </details>
+        <details>
+      <summary>게시글 추천순 조회</summary>
+          <img src="https://github.com/user-attachments/assets/b0baff9e-aed0-4d08-9d5b-e3290b9a97c9
+"/>
+    </details>
+        <details>
+      <summary>게시글 조건 검색</summary>
+          <img src="https://github.com/user-attachments/assets/93b89084-4cd9-4b9a-b765-7eb32692277c
+"/>
+    </details>
+            <details>
+      <summary>게시글 동물조건 검색</summary>
+          <img src="https://github.com/user-attachments/assets/66b7fe72-cfa6-4e08-bfbc-b2a85a03e009
+"/>
+    </details>
     </details>
     <details>
       <summary>게시글 추천</summary>
     </details>
   </details>
-
+  
   <details>
     <summary>💬 댓글</summary>
     <details>
       <summary>댓글 작성</summary>
+      <img src="https://github.com/user-attachments/assets/32f3e5da-9677-4e05-b5d0-eb5358a9a062"/>
     </details>
     <details>
       <summary>댓글 수정</summary>
+     <img src="https://github.com/user-attachments/assets/7f3258a1-b43b-4d89-b0b7-e0aa8c25a332"/>
     </details>
     <details>
       <summary>댓글 삭제</summary>
+      <img src=""/>
     </details>
   </details>
 
@@ -337,15 +377,25 @@
     <summary>🚨 신고</summary>
     <details>
       <summary>게시글 신고하기</summary>
+          <img src="https://github.com/user-attachments/assets/761247e9-afcf-487a-984e-f503e0a097e0"/>
     </details>
     <details>
       <summary>댓글 신고하기</summary>
+          <img src="https://github.com/user-attachments/assets/9c08209e-eb6a-44f0-b61b-6885abedc181"/>
     </details>
     <details>
       <summary>신고 내역 조회</summary>
+        - 게시글 신고 내역 조회
+          <img src="https://github.com/user-attachments/assets/ece3179d-c742-453d-8694-508a78144377"/>
+        - 댓글 신고 내역 조회
+          <img src="https://github.com/user-attachments/assets/f6e3fe19-22f8-495f-942e-7e0502d64097"/>
     </details>
     <details>
-      <summary>신고 처리</summary>
+      <summary>신고 중복 불가능</summary>
+      - 게시글 신고 중복 불가
+      <img src="https://github.com/user-attachments/assets/d6bbf23f-62f7-434c-8dcc-13cf74287dc4"/>
+      - 댓글 신고 중복 불가
+      <img src="https://github.com/user-attachments/assets/324ddfe2-f7a7-4711-b406-3ea094c40850"/>
     </details>
   </details>
 
