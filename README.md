@@ -788,13 +788,13 @@
     </details>
     <details>
       <summary>게시글 추천</summary>
-      ![Image](https://github.com/user-attachments/assets/92f477ef-2e1f-4ab7-80e8-c94366ed313e)
+      ![Image](https://github.com/user-attachments/assets/7ca62af8-3406-4d87-8788-dc114a2c82a5)
     </details>
     
  <details>
       <summary>게시글 추천 취소</summary>
-   
-![Image](https://github.com/user-attachments/assets/da1f8f1f-03c3-494c-ad9f-cbfe1e8c0f11)
+
+   ![Image](https://github.com/user-attachments/assets/92f477ef-2e1f-4ab7-80e8-c94366ed313e)
     </details>
 
   </details>
@@ -822,7 +822,7 @@
     <details>
       <summary>게시글 신고하기</summary>
       
-  ![Image](https://github.com/user-attachments/assets/12467535-4df6-4dde-b534-4217af62603e)
+ ![Image](https://github.com/user-attachments/assets/da1f8f1f-03c3-494c-ad9f-cbfe1e8c0f11)
 
       
   ![Image](https://github.com/user-attachments/assets/d2c8509d-3b31-4bd7-ba4f-689656d9c8ca)
@@ -832,6 +832,7 @@
 ![Image](https://github.com/user-attachments/assets/6d54a401-5d14-4be0-a7c8-51f37026236b)
 
   ![Image](https://github.com/user-attachments/assets/41d7ac79-9a90-4738-93bb-67e6860621b8)
+  ![Image](https://github.com/user-attachments/assets/f9b53422-6631-4769-941e-36140092239d)
     </details>
   </details>
 
