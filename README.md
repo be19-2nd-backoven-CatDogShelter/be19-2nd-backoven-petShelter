@@ -441,36 +441,81 @@
 
 <details>
   <summary>🔎 실종신고 게시판 API</summary>
-
-  <details>
+ <details>
     <summary>📝 게시글</summary>
     <details>
       <summary>게시글 작성</summary>
+      
+  ![Image](https://github.com/user-attachments/assets/fb5c9054-bc8d-4416-ac89-28cea24128d8)
     </details>
     <details>
       <summary>게시글 수정</summary>
+    
+  ![Image](https://github.com/user-attachments/assets/12467535-4df6-4dde-b534-4217af62603e)
     </details>
     <details>
       <summary>게시글 삭제</summary>
+      ![Image](https://github.com/user-attachments/assets/0329c5f6-1062-4ea1-bdfd-73f4e2ebe3a1)
     </details>
     <details>
       <summary>게시글 조회</summary>
+        <details>
+      <summary>게시글 조회수 순으로 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/6c29f33d-9667-48ca-a70f-2342718554c0)
+    </details>
+      <details>
+      <summary>게시글 추천수 순으로 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/69289053-4d35-47fe-9920-32e078eef2a2)
+    </details>
+      <details>
+      <summary>게시글 최신 작성일자 순으로 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/148ba3d3-5053-4b08-b004-fc5781323ce7)
+    </details>
+      <details>
+      <summary>게시글 제목 서치해서 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/74f20e3e-94a8-4ae6-8732-b096508fcab1)
+    </details>
+      <details>
+      <summary>게시글 목록 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/28df0bdd-60fc-4623-8768-627343b16527)
+    </details>
+      <details>
+      <summary>게시글 상세 내용 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/74462fef-1047-4a96-a14c-8f68ef827ee4)
+    </details>
+      <details>
+      <summary>게시글 이미지 조회</summary>
+      ![Image](https://github.com/user-attachments/assets/3e19a627-398b-4207-b818-62b7727b1211)
+    </details>
     </details>
     <details>
       <summary>게시글 추천</summary>
+      ![Image](https://github.com/user-attachments/assets/92f477ef-2e1f-4ab7-80e8-c94366ed313e)
     </details>
+    
+ <details>
+      <summary>게시글 추천 취소</summary>
+   
+![Image](https://github.com/user-attachments/assets/da1f8f1f-03c3-494c-ad9f-cbfe1e8c0f11)
+    </details>
+
   </details>
 
   <details>
     <summary>💬 댓글</summary>
     <details>
       <summary>댓글 작성</summary>
+  
+  ![Image](https://github.com/user-attachments/assets/21401925-c172-45c2-aba1-5d2180e26eaf)
     </details>
     <details>
       <summary>댓글 수정</summary>
+
+  ![Image](https://github.com/user-attachments/assets/a7e78963-6a4e-4ba1-9791-c1db0939ded9)
     </details>
     <details>
       <summary>댓글 삭제</summary>
+      ![Image](https://github.com/user-attachments/assets/6d54a401-5d14-4be0-a7c8-51f37026236b)
     </details>
   </details>
 
@@ -478,20 +523,21 @@
     <summary>🚨 신고</summary>
     <details>
       <summary>게시글 신고하기</summary>
+      
+  ![Image](https://github.com/user-attachments/assets/12467535-4df6-4dde-b534-4217af62603e)
+
+      
+  ![Image](https://github.com/user-attachments/assets/d2c8509d-3b31-4bd7-ba4f-689656d9c8ca)
     </details>
     <details>
       <summary>댓글 신고하기</summary>
-    </details>
-    <details>
-      <summary>신고 내역 조회</summary>
-    </details>
-    <details>
-      <summary>신고 처리</summary>
+![Image](https://github.com/user-attachments/assets/6d54a401-5d14-4be0-a7c8-51f37026236b)
+
+  ![Image](https://github.com/user-attachments/assets/41d7ac79-9a90-4738-93bb-67e6860621b8)
     </details>
   </details>
 
 </details>
-
 
 <details>
   <summary>📢 공지게시판 API</summary>
