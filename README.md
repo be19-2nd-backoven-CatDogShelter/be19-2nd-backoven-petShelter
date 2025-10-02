@@ -319,43 +319,47 @@
     <img src="https://github.com/user-attachments/assets/1b2c0377-cdd6-4f26-ae59-1ac65b968339"/>
   </details>
 
-    <details>
-      <summary>게시글 조회</summary>
-      <details>
-      <summary>게시글 전체 조회</summary>
-      <img src="https://github.com/user-attachments/assets/cd253cd9-4e65-4b0d-a333-a488e2d8ffa0
-"/>
-    </details>
-        <details>
-      <summary>게시글 상세 조회</summary>
-          <img src="https://github.com/user-attachments/assets/e9f465ab-c3f9-4ff4-bc3f-c50c2338c717
-"/>
-    </details>
-        <details>
-      <summary>게시글 조회순 조회</summary>
-          <img src="https://github.com/user-attachments/assets/1ecdcd55-1cbd-4fb1-bc4f-d534fb1be9b7
-"/>
-    </details>
-        <details>
-      <summary>게시글 추천순 조회</summary>
-          <img src="https://github.com/user-attachments/assets/b0baff9e-aed0-4d08-9d5b-e3290b9a97c9
-"/>
-    </details>
-        <details>
-      <summary>게시글 조건 검색</summary>
-          <img src="https://github.com/user-attachments/assets/93b89084-4cd9-4b9a-b765-7eb32692277c
-"/>
-    </details>
-            <details>
-      <summary>게시글 동물조건 검색</summary>
-          <img src="https://github.com/user-attachments/assets/66b7fe72-cfa6-4e08-bfbc-b2a85a03e009
-"/>
-    </details>
-    </details>
-    <details>
-      <summary>게시글 추천</summary>
-    </details>
+<details>
+  <summary>게시글 조회</summary>
+
+  <details>
+    <summary>게시글 전체 조회</summary>
+    <img src="https://github.com/user-attachments/assets/cd253cd9-4e65-4b0d-a333-a488e2d8ffa0"/>
   </details>
+
+  <details>
+    <summary>게시글 상세 조회</summary>
+    <img src="https://github.com/user-attachments/assets/e9f465ab-c3f9-4ff4-bc3f-c50c2338c717"/>
+  </details>
+
+  <details>
+    <summary>게시글 조회순 조회</summary>
+    <img src="https://github.com/user-attachments/assets/1ecdcd55-1cbd-4fb1-bc4f-d534fb1be9b7"/>
+  </details>
+
+  <details>
+    <summary>게시글 추천순 조회</summary>
+    <img src="https://github.com/user-attachments/assets/b0baff9e-aed0-4d08-9d5b-e3290b9a97c9"/>
+  </details>
+
+  <details>
+    <summary>게시글 조건 검색</summary>
+    <img src="https://github.com/user-attachments/assets/93b89084-4cd9-4b9a-b765-7eb32692277c"/>
+  </details>
+
+  <details>
+    <summary>게시글 동물조건 검색</summary>
+    <img src="https://github.com/user-attachments/assets/66b7fe72-cfa6-4e08-bfbc-b2a85a03e009"/>
+  </details>
+
+</details>
+
+
+  <details>
+    <summary>게시글 추천</summary>
+  </details>
+</details>
+
   
   <details>
     <summary>💬 댓글</summary>
