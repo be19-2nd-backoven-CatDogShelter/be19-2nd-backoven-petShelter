@@ -260,7 +260,26 @@
 
 ## 📜 API 명세서 (Swagger)
 <details>
-  <img width="800" alt="Swagger API 문서" src="(ppt 이미지 링크)" />
+  <img width="3378" height="1544" alt="Image" src="https://github.com/user-attachments/assets/303ebfef-8551-468b-83f1-d3e6b76d3655" /><br>
+  <img width="1792" height="638" alt="Image" src="https://github.com/user-attachments/assets/96f99539-58e9-4b3f-8f11-07883d685f27" /><br>
+  <img width="1402" height="461" alt="Image" src="https://github.com/user-attachments/assets/59279f9e-b78f-4b1b-8744-e1b0fda319fb" /><br>
+  <img width="1790" height="547" alt="Image" src="https://github.com/user-attachments/assets/90c7e08d-a670-45f0-86c7-b4bf987aad51" /><br>
+  <img width="1950" height="435" alt="Image" src="https://github.com/user-attachments/assets/e1737b45-8061-4160-a215-ef4b11b43370" /><br>
+  <img width="3440" height="946" alt="Image" src="https://github.com/user-attachments/assets/780a5053-9b14-4646-954f-a7309c638f05" /><br>
+  <img width="2624" height="788" alt="Image" src="https://github.com/user-attachments/assets/03a21810-78a6-4f34-9dd9-9d3137480e28" /><br>
+  <img width="2885" height="319" alt="image" src="https://github.com/user-attachments/assets/a3ca6a96-1a19-4eac-9d98-be7208361c86" /><br>
+  <img width="2282" height="964" alt="image" src="https://github.com/user-attachments/assets/74cd48e4-a799-42f3-b74c-8cd40e8cf2e0" /><br>
+  <img width="3108" height="1375" alt="image" src="https://github.com/user-attachments/assets/87fe4d2f-9bcc-4097-bdc1-6edf9d8dc58e" /><br>
+  <img width="1532" height="1249" alt="image" src="https://github.com/user-attachments/assets/41ac0f42-169e-4713-8397-bb92f1ab119a" /><br>
+  <img width="1730" height="1083" alt="image" src="https://github.com/user-attachments/assets/f64b8163-ee07-46e3-972b-e37002f4300b" /><br>
+  <img width="2713" height="932" alt="image" src="https://github.com/user-attachments/assets/f6506aa3-7184-4f11-b732-ad22702cc8e6" /><br>
+  <img width="2145" height="1227" alt="image" src="https://github.com/user-attachments/assets/d551c68a-9e8c-4f9a-bb5a-b049b7a896db" /><br>
+  <img width="2855" height="981" alt="image" src="https://github.com/user-attachments/assets/cb4ca4e1-724e-4cf6-bd06-44694e6fb270" /><br>
+  <img width="2084" height="1131" alt="image" src="https://github.com/user-attachments/assets/d51e4bba-0345-4e41-9acd-ba47344cd942" /><br>
+  <img width="2798" height="617" alt="image" src="https://github.com/user-attachments/assets/ec9fb4c8-439b-4e37-88cc-12b63b97c3be" /><br>
+  <img width="2026" height="1315" alt="image" src="https://github.com/user-attachments/assets/c9589ebb-2aba-4528-a810-a80e69973f9f" /><br>
+  <img width="1538" height="987" alt="image" src="https://github.com/user-attachments/assets/c915549e-44ec-4fc0-9cd6-114d66cc2b64" /><br>
+  <img width="1412" height="1441" alt="image" src="https://github.com/user-attachments/assets/c7701a56-5937-4ee7-bda0-b10cdb00d8bc" />
 </details>
 
 ---
