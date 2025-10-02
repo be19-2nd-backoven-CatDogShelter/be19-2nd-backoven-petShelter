@@ -210,7 +210,7 @@
 
 ## 📂 논리 모델링
 <details>
-  <img width="800" alt="논리모델링" src="(이미지링크)" />
+  <img width="1855" height="950" alt="Image" src="https://github.com/user-attachments/assets/eff0c779-230b-486e-897d-4e51b0d58e87" />
 </details>
 
 ---
