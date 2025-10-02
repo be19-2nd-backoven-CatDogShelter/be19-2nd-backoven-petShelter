@@ -162,52 +162,48 @@
 ## 🔗 API 테스트 (Postman)
 각 API CRUD 기능별 토글 & gif 첨부
 <details>
-  <summary>회원 API</summary>
-  <ul>
-    <li>
-      <details>
-        <summary>회원가입</summary>
-        <img src="https://github.com/user-attachments/assets/52387f2a-478b-405f-b1e1-5d76c1e4a063"/>
-      </details>
-    </li>
-    <li>
-      <details>
-        <summary>회원 로그인</summary>
-        <img src="https://github.com/user-attachments/assets/a5f5703f-c099-4f85-b183-17870d36e034"/>
-      </details>
-    </li>
-    <li>
-      <details>
-        <summary>회원 로그인이력 조회</summary>
-        <img src="https://github.com/user-attachments/assets/414bb06e-bdb7-40f7-89ef-dd33b12e3e23"/>
-      </details>
-    </li>
-    <li>
-      <details>
-        <summary>회원 마이페이지 조회</summary>
-        <img src="https://github.com/user-attachments/assets/cd8a7178-d3a6-487d-82f2-54d681e8aa7a"/>
-      </details>
-    </li>
-    <li>
-      <details>
-        <summary>회원 정보 수정</summary>
-        <img src="https://github.com/user-attachments/assets/ecb5e63b-0d6a-4c80-95d6-a97b9628a613"/>
-      </details>
-    </li>
-    <li>
-      <details>
-        <summary>회원 비밀번호 수정</summary>
-        <img src="https://github.com/user-attachments/assets/5b0ef29f-249e-4527-af85-47bbfdfc57e1"/>
-      </details>
-    </li>
-    <li>
-      <details>
-        <summary>회원 탈퇴</summary>
-        <!-- 이미지 없으면 비워둬도 됨 -->
-      </details>
-    </li>
-  </ul>
+  <summary>🙍🏻‍♀️ 회원 API</summary>
+
+  <details>
+    <summary>회원가입</summary>
+    <img src="https://github.com/user-attachments/assets/5011d398-96b4-47ce-98c9-01ede8a195a2"/>
+  </details>
+
+  <details>
+    <summary>회원 로그인</summary>
+    <img src="https://github.com/user-attachments/assets/7957bdce-7368-49cc-83b2-2ac9b94507ca"/>
+  </details>
+
+  <details>
+    <summary>회원 로그인이력 조회</summary>
+    <img src="https://github.com/user-attachments/assets/71434d1b-787c-417c-b5df-3e9b37859965"/>
+
+  </details>
+
+  <details>
+    <summary>회원 마이페이지 조회</summary>
+    <img src="https://github.com/user-attachments/assets/1f1f6771-56ed-4771-bb5a-070fa838e40a"/>
+  </details>
+
+  <details>
+    <summary>회원 정보 수정</summary>
+    <img src="https://github.com/user-attachments/assets/81b1ee82-cef5-4eea-8da6-df5befd244b1"/>
+  </details>
+
+  <details>
+    <summary>회원 비밀번호 수정</summary>
+    <img src="https://github.com/user-attachments/assets/3f15c930-fe3c-48b2-ae48-473eeb783a6c"/>
+  </details>
+
+  <details>
+    <summary>회원 탈퇴</summary>
+    <!-- 이미지 없으면 비워둬도 됨 -->
+  </details>
+
 </details>
+
+
+
 
 
 <details>
@@ -227,7 +223,6 @@
   <img src="https://github.com/user-attachments/assets/d256577c-3273-49e5-9693-5eb5e2457a03" width="500"/>
   <br> 메시지 보내기 -> 메시지 목록 조회(받은사람 기준, 보낸사람 기준) -> 메시지 상세 확인
 </details>
-
 
 <details>
   <summary>🤝 봉사모임 API</summary>
