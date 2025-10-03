@@ -19,6 +19,7 @@ spring:
             - Path=/post-service/**
           filters:
             - RewritePath=/post-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter # 테스트 할때 얘를 주석하고 테스트
         # User API ???
         - id: CatDogShelter-user-api
           uri: lb://CATDOGSHELTER-USER-SERVICE
