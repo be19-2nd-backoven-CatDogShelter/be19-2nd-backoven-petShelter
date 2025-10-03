@@ -12,7 +12,7 @@ spring:
   cloud:
     gateway:
       routes:
-        # POST API ???
+        # POST API 라우팅
         - id: CatDogShelter-post-service
           uri: lb://CATDOGSHELTER-POST-SERVICE
           predicates:
@@ -20,7 +20,7 @@ spring:
           filters:
             - RewritePath=/post-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter # 테스트 할때 얘를 주석하고 테스트
-        # User API ???
+        # User API 라우팅
         - id: CatDogShelter-user-api
           uri: lb://CATDOGSHELTER-USER-SERVICE
           predicates:
@@ -28,7 +28,7 @@ spring:
           filters:
             - RewritePath=/user-service/user/(?<segment>.*), /user/$\{segment}
 
-        # ShelterHead API ???
+        # ShelterHead API 라우팅
         - id: CatDogShelter-shelter-head-api
           uri: lb://CATDOGSHELTER-USER-SERVICE
           predicates:
