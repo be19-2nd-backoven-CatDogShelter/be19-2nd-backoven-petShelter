@@ -49,7 +49,7 @@ public class Shelter_headServiceImpl implements Shelter_headService {
     @Override
     public void registUser(Shelter_headDTO shelter_head) {
 
-        shelter_head.setHeadAccount(UUID.randomUUID().toString());
+//        shelter_head.setHeadAccount(UUID.randomUUID().toString());
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Shelter_headEntity shelterHeadEntity =
                 modelMapper.map(shelter_head, Shelter_headEntity.class);
