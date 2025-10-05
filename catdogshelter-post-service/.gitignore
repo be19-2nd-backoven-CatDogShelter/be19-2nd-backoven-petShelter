@@ -35,3 +35,16 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Logs ###
+*.log
+
+### Spring Boot ###
+*.pid
+application-*.yml
+application-*.yaml
+application-*.properties
+
+### OS ###
+.DS_Store
+Thumbs.db
