@@ -1,11 +1,14 @@
 package com.backoven.catdogshelter.domain.sighting.command.application.controller;
 
+import com.backoven.catdogshelter.common.aop.loginuser.LoginUser;
+import com.backoven.catdogshelter.common.aop.loginuser.UserContextHolder;
 import com.backoven.catdogshelter.domain.sighting.command.application.dto.*;
 import com.backoven.catdogshelter.domain.sighting.command.application.service.ASightingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/sighting-post")
 @Tag(name = "목격 정보 게시글 CUD API")
@@ -28,10 +32,12 @@ public class ASightingController {
 
     // 게시글 작성
     @PostMapping("/post")
+//    @LoginUser
     @Operation(summary = "게시글 등록", description = "들어온 정보를 통해 게시글을 생성해 등록(파일 등록 가능)")
     public ResponseEntity<?> registSightingPost(@RequestParam("newPostDTO") String newPostDTOJson,    // RequestParam과 RequestBody 동시 사용 불가
                                                 @RequestParam List<MultipartFile> multiFiles) throws JsonProcessingException {
-
+//        int userId = UserContextHolder.getUserId();
+//        log.info("userId: {}", userId);               // 테스트 해보려 했는데 login이 없어서 못함
         ObjectMapper objectMapper = new ObjectMapper();
         RequestSightingPostDTO newPostDTO = objectMapper.readValue(newPostDTOJson, RequestSightingPostDTO.class);
 

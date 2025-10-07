@@ -210,6 +210,32 @@
         WHERE id = #{postId}
     </update>
 
+    <resultMap id = "pendingPostReport" type = "com.backoven.catdogshelter.domain.sighting.query.dto.SightingPendingPostReportDTO">
+        <result property = "postId" column = "post_id"/>
+        <result property = "reportCount" column = "report_count"/>
+    </resultMap>
+
+    <select id = "selectPendingPostReports" resultMap = "">
+        SELECT
+               post_id
+             , COUNT(*) AS report_count
+          FROM sightingPostReport
+         GROUP BY post_id
+    </select>
+
+    <resultMap id = "pendingCommentReport" type = "com.backoven.catdogshelter.domain.sighting.query.dto.SightingPendingCommentReportDTO">
+        <result property = "commentId" column = "comment_id"/>
+        <result property = "reportCount" column = "report_count"/>
+    </resultMap>
+
+    <select id = "selectPendingCommentReports" resultMap = "pendingCommentReport">
+        SELECT
+               comment_id
+             , COUNT(*) AS report_count
+        FROM sightingPostCommentReport
+        GROUP BY comment_id
+    </select>
+
     <resultMap id = "postReportResultMap" type = "com.backoven.catdogshelter.domain.sighting.query.dto.SightingPostReportDTO">
         <id property = "id" column="id"/>
         <result property = "reportCategory" column = "category"/>
@@ -217,6 +243,16 @@
         <result property = "createdAt" column = "created_at"/>
         <result property = "status" column = "status"/>
         <result property = "postId" column = "post_id"/>
+        <association property="writer" resultMap = "writerResultMap"/>
+    </resultMap>
+
+    <resultMap id = "postCommentReportResultMap" type = "com.backoven.catdogshelter.domain.sighting.query.dto.SightingPostCommentReportDTO">
+        <id property = "id" column="id"/>
+        <result property = "reportCategory" column = "category"/>
+        <result property = "etcDetail" column = "etc_detail"/>
+        <result property = "createdAt" column = "created_at"/>
+        <result property = "status" column = "status"/>
+        <result property = "commentId" column = "comment_id"/>
         <association property="writer" resultMap = "writerResultMap"/>
     </resultMap>
 
@@ -239,16 +275,6 @@
                  LEFT JOIN shelter_head AS sh ON (spr.head_id = sh.head_id)
         WHERE spr.post_id = #{postId}
     </select>
-
-    <resultMap id = "postCommentReportResultMap" type = "com.backoven.catdogshelter.domain.sighting.query.dto.SightingPostCommentReportDTO">
-        <id property = "id" column="id"/>
-        <result property = "reportCategory" column = "category"/>
-        <result property = "etcDetail" column = "etc_detail"/>
-        <result property = "createdAt" column = "created_at"/>
-        <result property = "status" column = "status"/>
-        <result property = "commentId" column = "comment_id"/>
-        <association property="writer" resultMap = "writerResultMap"/>
-    </resultMap>
 
     <select id = "selectSightingPostCommentReport" parameterType = "_int" resultMap = "postCommentReportResultMap">
         SELECT

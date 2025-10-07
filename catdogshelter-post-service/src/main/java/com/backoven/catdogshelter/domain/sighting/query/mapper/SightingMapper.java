@@ -14,6 +14,10 @@ public interface SightingMapper {
 
     void incrementSightingView(int postId);
 
+    List<SightingPendingPostReportDTO> selectPendingPostReports();
+
+    List<SightingPendingCommentReportDTO> selectPendingCommentReports();
+
     List<SightingPostReportDTO> selectSightingPostReport(int postId);
 
     List<SightingPostCommentReportDTO> selectSightingPostCommentReport(int commentId);

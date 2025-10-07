@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QSightingServiceImpl implements QSightingService {
@@ -37,13 +38,39 @@ public class QSightingServiceImpl implements QSightingService {
         return sightingDetailDTO;
     }
 
+    // 확인할 신고 건이 있는가(게시글 전용)
+    @Override
+    public List<Integer> findPendingPostReportIds() {
+        // 나중에 토큰이 추가되면 관리자만 가능하도록 하는 로직 추가
+        List<SightingPendingPostReportDTO> postReportDTOs = sightingMapper.selectPendingPostReports();
+
+        return postReportDTOs.stream()
+                .filter(dto -> dto.getReportCount() >= 5)
+                .map(SightingPendingPostReportDTO::getPostId)
+                .collect(Collectors.toList());
+    }
+
+    // 확인할 신고 건이 있는가(댓글 전용)
+    @Override
+    public List<Integer> findPendingCommentReportIds() {
+        // 나중에 토큰이 추가되면 관리자만 가능하도록 하는 로직 추가
+        List<SightingPendingCommentReportDTO> commentReportDTOs = sightingMapper.selectPendingCommentReports();
+
+        return commentReportDTOs.stream()
+                .filter(dto -> dto.getReportCount() >= 5)
+                .map(SightingPendingCommentReportDTO::getCommentId)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<SightingPostReportDTO> findSightingPostReport(int postId) {
+        // 나중에 토큰이 추가되면 관리자만 가능하도록 하는 로직 추가
         return sightingMapper.selectSightingPostReport(postId);
     }
 
     @Override
     public List<SightingPostCommentReportDTO> findSightingPostCommentReport(int commentId) {
+        // 나중에 토큰이 추가되면 관리자만 가능하도록 하는 로직 추가
         return sightingMapper.selectSightingPostCommentReport(commentId);
     }
 }

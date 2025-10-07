@@ -9,7 +9,12 @@ public interface QSightingService {
 
     SightingDetailDTO findSightingDetails(int postId);
 
+    List<Integer> findPendingPostReportIds();
+
+    List<Integer> findPendingCommentReportIds();
+
     List<SightingPostReportDTO> findSightingPostReport(int postId);
 
     List<SightingPostCommentReportDTO> findSightingPostCommentReport(int commentId);
+
 }

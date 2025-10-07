@@ -1,5 +1,6 @@
 package com.backoven.catdogshelter.domain.sighting.query.controller;
 
+import com.backoven.catdogshelter.common.response.ApiResponse;
 import com.backoven.catdogshelter.domain.sighting.query.dto.*;
 import com.backoven.catdogshelter.domain.sighting.query.service.QSightingService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,22 +37,57 @@ public class QSightingController {
     // 목록 조회
     @GetMapping("/summary")
     @Operation(summary = "게시글 목록 조회", description = "게시글 목록을 조회한다. 입력을 통해서 조건 검색이 가능하고, 정렬에 대한 선택이 가능하다.")
-    public List<SightingSummaryDTO> findSightingSummary(@ModelAttribute SightingSearchDTO search) {
+    public ResponseEntity<ApiResponse<List<SightingSummaryDTO>>> findSightingSummary(@ModelAttribute SightingSearchDTO search) {
 
-//        List<SightingSummaryDTO> sightingSummaryDTO = sightingService.findSightingSummary();
+        List<SightingSummaryDTO> sightingSummaryDTO = qSightingService.findSightingSummary(search);
+        ApiResponse<List<SightingSummaryDTO>> apiResponse = new ApiResponse<>();
+        apiResponse.setStatusCode(200);
+        apiResponse.setMessage("목격 정보 게시판 목록을 성공적으로 조회하였습니다.");
+        apiResponse.setData(sightingSummaryDTO);
+
+        return ResponseEntity.ok().body(apiResponse);
+
 //        return sightingSummaryDTO;
 //        log.info("controller 계층: {}", search.toString());
-        return qSightingService.findSightingSummary(search);
+//        return qSightingService.findSightingSummary(search);
     }
 
     // 상세 조회
     @GetMapping("/{postId}")
     @Operation(summary = "게시글 상세 조회", description = "게시글의 상세 내용을 조회한다.\n게시글에 달린 댓글, 작성자의 등급, 파일의 url 등을 만들기 위한 정보 등을 포함하고 있다.")
-    public SightingDetailDTO findSightingDetails(@PathVariable int postId) {
-
+    public ResponseEntity<ApiResponse<SightingDetailDTO>> findSightingDetails(@PathVariable int postId) {
         SightingDetailDTO sightingDetailDTO = qSightingService.findSightingDetails(postId);
-        log.info("{}",  sightingDetailDTO);
-        return sightingDetailDTO;
+    ApiResponse<SightingDetailDTO> apiResponse = new ApiResponse<>();
+        apiResponse.setStatusCode(200);
+        apiResponse.setMessage(postId +"번 목격 정보 게시글을 성공적으로 조회하였습니다.");
+        apiResponse.setData(sightingDetailDTO);
+
+//        log.info("{}",  sightingDetailDTO);
+        return ResponseEntity.ok().body(apiResponse);
+}
+
+    @GetMapping("post-report")
+    @Operation(summary = "게시글 신고 조회", description = "확인할 횟수가 된 신고가 있는지 확인해준다.\n확인할 게시글 번호를 반환해준다.")
+    public ResponseEntity<ApiResponse<List<Integer>>> hasPendingPostReport() {
+        List<Integer> pendingReport = qSightingService.findPendingPostReportIds();
+        ApiResponse<List<Integer>> apiResponse = new ApiResponse<>();
+        apiResponse.setStatusCode(200);
+        apiResponse.setMessage(pendingReport.size() + "개의 확인할 신고된 게시글 있습니다.");
+        apiResponse.setData(pendingReport);
+
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @GetMapping("comment-report")
+    @Operation(summary = "게시글 신고 조회", description = "확인할 횟수가 된 신고가 있는지 확인해준다.\n확인할 댓글 번호를 반환해준다.")
+    public ResponseEntity<ApiResponse<List<Integer>>> hasPendingCommentReport() {
+        List<Integer> pendingReport = qSightingService.findPendingCommentReportIds();
+        ApiResponse<List<Integer>> apiResponse = new ApiResponse<>();
+        apiResponse.setStatusCode(200);
+        apiResponse.setMessage(pendingReport.size() + "개의 확인할 신고된 댓글이 있습니다.");
+        apiResponse.setData(pendingReport);
+
+        return ResponseEntity.ok().body(apiResponse);
     }
 
     // 게시글 신고 조회
