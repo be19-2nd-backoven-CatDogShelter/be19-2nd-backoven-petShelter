@@ -8,7 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NoticeLikeToggleRequest {
     public enum ActorType { USER, HEAD }
-    private ActorType actorType;
+    private NoticeLikeToggleRequest.ActorType actorType;
     private Integer userId;
     private Integer headId;
 }
