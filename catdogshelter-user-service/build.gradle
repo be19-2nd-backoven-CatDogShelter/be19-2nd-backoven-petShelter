@@ -42,7 +42,10 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client' // Eureka Client (서비스 등록/발견)
 
     // Thymeleaf + Security 확장
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'    // Thymeleaf에서 Spring Security 지원
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6' // Thymeleaf에서 Spring Security 지원
+
+    // spring 통신
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     // 개발 편의성 및 런타임
     compileOnly 'org.projectlombok:lombok'               // Lombok (Getter/Setter/Builder 등)
