@@ -1,7 +1,6 @@
 package com.backoven.catdogshelter.domain.notice.command.application.service;
 
 import com.backoven.catdogshelter.common.entity.ShelterheadEntity;
-import com.backoven.catdogshelter.common.entity.UserEntity;
 import com.backoven.catdogshelter.common.repository.VolNoShelterHeadRepository;
 import com.backoven.catdogshelter.common.repository.VolNoUserRepository;
 import com.backoven.catdogshelter.domain.notice.command.application.dto.NoticeCreateDTO;
