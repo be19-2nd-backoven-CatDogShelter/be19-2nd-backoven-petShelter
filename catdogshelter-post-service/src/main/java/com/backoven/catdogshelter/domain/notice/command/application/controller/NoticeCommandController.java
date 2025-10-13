@@ -1,6 +1,7 @@
 package com.backoven.catdogshelter.domain.notice.command.application.controller;
 
 import com.backoven.catdogshelter.domain.notice.command.application.dto.NoticeCreateDTO;
+import com.backoven.catdogshelter.domain.notice.command.application.dto.NoticeLikeToggleRequest;
 import com.backoven.catdogshelter.domain.notice.command.application.dto.NoticeUpdateDTO;
 import com.backoven.catdogshelter.domain.notice.command.application.service.NoticeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +62,18 @@ public class NoticeCommandController {
     public ResponseEntity<?> deleteNotice(@PathVariable Integer id) {
         noticeService.deleteNotice(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // 게시글 추천
+    @Operation(summary = "게시글 추천",
+            description = "게시글 이용자는 게시글을 추천하거나 취소 할 수 있다.")
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Map<String, Object>> toggleLike(
+            @PathVariable Integer id,
+            @RequestBody NoticeLikeToggleRequest request
+    ) {
+        boolean liked = noticeService.toggleLike(id, request);
+        return ResponseEntity.ok(Map.of("liked", liked));
     }
 
 //    @Operation(summary = "게시글 추천",
