@@ -104,7 +104,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         // JWT Payload 설정
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("auth", List.of("ROLE_USER")); // 권한
+        claims.put("auth", roles); // 권한
         claims.put("userId", userId); // 유저 ID
 
         // JWT 토큰 생성

@@ -3,6 +3,7 @@ package com.backoven.catdogshelter.domain.user.command.application.service;
 import com.backoven.catdogshelter.common.entity.QuestionCategoryEntity;
 import com.backoven.catdogshelter.common.entity.SigunguEntity;
 import com.backoven.catdogshelter.common.entity.UserEntity;
+import com.backoven.catdogshelter.common.util.DateTimeUtil;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyPasswordUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.user.UserDTO;
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = modelMapper.map(userDTO,UserEntity.class);
         log.info("Service 계층에서 DTO -> Entity: {}", UserEntity.class);
 
+        userEntity.setActivationDate(DateTimeUtil.now());
         // UserDTO로 넘어온 사용자의 암호(평문)를 BCrypt 암호화(다이체스트)
         userEntity.setEncryptPwd(bCryptPasswordEncoder.encode(userDTO.getUserPassword()));
         userRepository.save(userEntity);
@@ -119,7 +121,12 @@ public class UserServiceImpl implements UserService {
         /* 설명. DB에서 조회 된 해당 회원이
         *       가진 권한들을 가져와 List<GrantedAuthority>로 전환*/
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if (loginUser.getRating().getId() == -1) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            if(loginUser.getUserId() == 1) grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MASTER_ADMIN"));
+        }
+
 
         return new CustomUserDetails(
                 loginUser.getUserId(),
