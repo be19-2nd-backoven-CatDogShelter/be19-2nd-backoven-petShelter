@@ -5,9 +5,15 @@ import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.res
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.responsedto.ResponseRegistShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.ShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.service.ShelterheadService;
+import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyPasswordUserDTO;
+import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyUserDTO;
+import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestPasswordDTO;
+import com.backoven.catdogshelter.domain.user.command.application.dto.responsedto.ResponseModifyUserDTO;
+import com.backoven.catdogshelter.domain.user.command.application.dto.user.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +31,7 @@ public class ShelterheadController {
         this.modelMapper = modelMapper;
     }
 
-    /* 로그인 기능 전 회원가입 기능 */
+    // 보호소장 회원가입
     @PostMapping("/regist")
     // 회원가입 할 때, 사용자의 요청은 RequestRegistUserDTO(뒷 부분)가 받고,
     // 다시 반환할 때는 ResponseRegistUserDTO(앞 부분)으로 반환한다.
@@ -39,15 +45,17 @@ public class ShelterheadController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
 
-    @GetMapping("/mypage/{memNo}")
-    public ResponseEntity<ResponseFindShelterheadDTO> getUsers(@PathVariable String memNo){
-        ShelterheadDTO shelterHeadDTO = shelterheadService.getShelter_headById(memNo);
+    // 마이페이지
+    @GetMapping("/mypage/{shelterId}")
+    public ResponseEntity<ResponseFindShelterheadDTO> getUsers(@PathVariable String shelterId){
+        ShelterheadDTO shelterHeadDTO = shelterheadService.getShelter_headById(shelterId);
 
         ResponseFindShelterheadDTO responseFindShelterHeadDTO =
                 modelMapper.map(shelterHeadDTO, ResponseFindShelterheadDTO.class);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseFindShelterHeadDTO);
     }
+
 }
 
 
