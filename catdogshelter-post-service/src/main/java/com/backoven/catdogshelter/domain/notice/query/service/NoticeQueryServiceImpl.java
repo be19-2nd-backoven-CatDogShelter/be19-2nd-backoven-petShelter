@@ -1,4 +1,3 @@
-// src/main/java/com/backoven/catdogshelter/domain/notice/query/service/NoticeQueryServiceImpl.java
 package com.backoven.catdogshelter.domain.notice.query.service;
 
 import com.backoven.catdogshelter.domain.notice.query.dto.NoticeDetailDTO;
@@ -19,9 +18,10 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
 
     private final NoticeQueryMapper mapper;
 
+    // 게시글 상세 조회
     @Override
-    public NoticeDetailDTO getNoticeDetail(Integer id) {
-        var notice = mapper.findNoticeById(id);
+    public NoticeDetailDTO selectNoticeDetail(Integer id) {
+        NoticeDetailDTO notice = mapper.findNoticeById(id);
         if (notice == null) return null;
 
         List<NoticeFileDTO> files = mapper.findFilesByNoticeId(id);
@@ -29,8 +29,9 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
         return notice;
     }
 
+    // 게시글 목록 조회 (검색 및 정렬 조회)
     @Override
-    public Map<String, Object> search(
+    public Map<String, Object> selectNoticeListBySearchAndOrderBy(
             String keyword,
             String createdFrom,
             String createdTo,
