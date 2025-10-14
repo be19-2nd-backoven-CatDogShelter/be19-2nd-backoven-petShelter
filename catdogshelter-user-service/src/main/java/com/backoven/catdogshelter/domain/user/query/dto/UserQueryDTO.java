@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,4 +30,7 @@ public class UserQueryDTO {
     private Integer ratingId;            // 회원등급 FK
     private Integer sigunguId;           // 소속 시군구 FK
     private Integer questionCategoryId;  // 지정질문카테고리번호 FK
+
+    /* 설명. FeignClient 이후 */
+    List<ResponsePostDTO> postlist;
 }
