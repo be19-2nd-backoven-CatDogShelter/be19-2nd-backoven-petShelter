@@ -5,7 +5,7 @@ import com.backoven.catdogshelter.common.entity.UserEntity;
 import com.backoven.catdogshelter.common.repository.VolNoShelterHeadRepository;
 import com.backoven.catdogshelter.common.repository.VolNoUserRepository;
 import com.backoven.catdogshelter.common.util.DateTimeUtil;
-import com.backoven.catdogshelter.common.enumulation.ReportCategory;
+import com.backoven.catdogshelter.common.util.ReportCategory;
 import com.backoven.catdogshelter.domain.volunteer.command.application.dto.*;
 import com.backoven.catdogshelter.domain.volunteer.command.domain.aggregate.entity.*;
 import com.backoven.catdogshelter.domain.volunteer.command.domain.repository.*;
@@ -60,67 +60,83 @@ public class VolunteerPostServiceImpl implements VolunteerPostService {
         this.fileStorage = fileStorage;
     }
 
-    // 봉사후기 작성 + 파일 등록
+    // 게시글 등록
     @Override
     public Integer writeVolunteerPost(VolunteerPostCreateDTO dto, List<MultipartFile> files) {
-        var detail = applicationDetailsRepository.findById(dto.getVolappdetailId())
+        VolunteerAssociationApplicationDetailsEntity detail =
+                applicationDetailsRepository.findById(dto.getVolappdetailId())
                 .orElseThrow(() -> new IllegalArgumentException("신청내역이 없습니다: " + dto.getVolappdetailId()));
 
-        var post = VolunteerPostEntity.newPost(dto.getTitle(), dto.getContent(), detail);
+        VolunteerPostEntity post =
+                VolunteerPostEntity.newPost(dto.getTitle(), dto.getContent(), detail);
+
         // 파일 저장
-        var stored = fileStorage.storeAll(files);
-        for (var s : stored) {
-            var f = new VolunteerPostFileEntity();
-            f.setPost(post);
-            f.setFileRename(s.getFileRename());
-            f.setFilePath(s.getFilePath());
-            f.setUploadedAt(s.getUploadedAt());
-            post.getFiles().add(f);
+        List<VolunteerPostFileDTO> stored = fileStorage.storeAll(files);
+        for (VolunteerPostFileDTO vPFDto : stored) {
+            VolunteerPostFileEntity vPFE = new VolunteerPostFileEntity();
+            vPFE.setPost(post);
+            vPFE.setFileRename(vPFDto.getFileRename());
+            vPFE.setFilePath(vPFDto.getFilePath());
+            vPFE.setUploadedAt(vPFDto.getUploadedAt());
+            post.getFiles().add(vPFE);
         }
         volunteerPostRepository.save(post);
         return post.getId();
     }
 
-    // 봉사후기 수정 + 파일 수정
+    // 게시글 수정
     @Override
     public void modifyVolunteerPost(Integer postId, VolunteerPostUpdateDTO dto, List<MultipartFile> newFiles) {
-        var post = volunteerPostRepository.findById(postId)
+        VolunteerPostEntity post = volunteerPostRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글 없음: " + postId));
         if (post.getDeleted()) throw new IllegalStateException("삭제된 게시글입니다.");
 
         post.modify(dto.getTitle(), dto.getContent());
 
+        for (VolunteerPostFileEntity file : post.getFiles()) {
+            dto.getDeleteFileIds().add(file.getId());
+        }
+
         // 파일 삭제
         if (dto.getDeleteFileIds() != null && !dto.getDeleteFileIds().isEmpty()) {
-            var targets = volunteerPostFileRepository.findByIdIn(dto.getDeleteFileIds());
+            List<VolunteerPostFileEntity> targets = volunteerPostFileRepository.findByIdIn(dto.getDeleteFileIds());
+
             // 소유 검증
-            for (var f : targets) {
-                if (!Objects.equals(f.getPost().getId(), post.getId()))
-                    throw new IllegalArgumentException("다른 게시글 파일은 삭제할 수 없습니다. fileId=" + f.getId());
+            for (VolunteerPostFileEntity file : targets) {
+                if (!Objects.equals(file.getPost().getId(), post.getId()))
+                    throw new IllegalArgumentException("다른 게시글 파일은 삭제할 수 없습니다. fileId=" + file.getId());
+                post.getFiles().remove(file);
             }
-            log.info("파일 확인: {}", targets);
             volunteerPostFileRepository.deleteAll(targets);
         }
 
         // 새 파일 추가
-        var stored = fileStorage.storeAll(newFiles);
-        for (var s : stored) {
-            var f = new VolunteerPostFileEntity();
-            f.setPost(post);
-            f.setFileRename(s.getFileRename());
-            f.setFilePath(s.getFilePath());
-            f.setUploadedAt(s.getUploadedAt());
-            volunteerPostFileRepository.save(f);
+        List<VolunteerPostFileDTO> stored = fileStorage.storeAll(newFiles);
+        for (VolunteerPostFileDTO fileDTO : stored) {
+            VolunteerPostFileEntity fileEntity = new VolunteerPostFileEntity();
+            fileEntity.setPost(post);
+            fileEntity.setFileRename(fileDTO.getFileRename());
+            fileEntity.setFilePath(fileDTO.getFilePath());
+            fileEntity.setUploadedAt(fileDTO.getUploadedAt());
+            volunteerPostFileRepository.save(fileEntity);
         }
     }
 
-    // 봉사후기 삭제
+    // 게시글 삭제
     @Override
     public void deleteVolunteerPost(Integer postId) {
-        var updated = volunteerPostRepository.softDelete(postId, DateTimeUtil.now());
-        if (updated == 0) throw new IllegalArgumentException("이미 삭제되었거나 존재하지 않습니다: " + postId);
+        VolunteerPostEntity post = volunteerPostRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+
+        // 게시글만 Soft 삭제처리
+        post.setDeleted(true);
+
+        // 파일 삭제
+        List<VolunteerPostFileEntity> files = volunteerPostFileRepository.findByPostId(postId);
+        volunteerPostFileRepository.deleteAll(files);
     }
 
+    // 게시글 추천
     @Override
     public boolean toggleLike(Integer postId, VolunteerPostLikeToggleRequest req) {
         var post = volunteerPostRepository.findById(postId)
@@ -139,7 +155,7 @@ public class VolunteerPostServiceImpl implements VolunteerPostService {
                 return true;
             }
         } else {
-            var head = headRepository.findById(req.getHeadId())
+            ShelterheadEntity head = headRepository.findById(req.getHeadId())
                     .orElseThrow(() -> new IllegalArgumentException("보호소장 없음: " + req.getHeadId()));
             if (volunteerPostLikedRepository.existsByPost_IdAndHead_Id(postId, head.getId())) {
                 volunteerPostLikedRepository.deleteByPost_IdAndHead_Id(postId, head.getId());
@@ -154,31 +170,7 @@ public class VolunteerPostServiceImpl implements VolunteerPostService {
         }
     }
 
-    // 봉사후기 게시글 신고
-//    @Override
-//    public void reportPost(VolunteerPostReportRequest req) {
-//        var post = volunteerPostRepository.findById(req.getPostId())
-//                .orElseThrow(() -> new IllegalArgumentException("게시글 없음: " + req.getPostId()));
-//
-//        if (req.getActorType() == VolunteerPostLikeToggleRequest.ActorType.USER) {
-//            var user = VolNoUserRepository.findById(req.getUserId())
-//                    .orElseThrow(() -> new IllegalArgumentException("회원 없음: " + req.getUserId()));
-//            if (volunteerPostReportRepository.existsByPost_IdAndUser_UserId(post.getId(), user.getUserId()))
-//                return; // 이미 신고함
-//            var e = VolunteerPostReportEntity.create(post, req.getCategory(), req.getEtcDetail(), user, null);
-//            volunteerPostReportRepository.save(e);
-//        } else {
-//            var head = headRepository.findById(req.getHeadId())
-//                    .orElseThrow(() -> new IllegalArgumentException("보호소장 없음: " + req.getHeadId()));
-//            if (volunteerPostReportRepository.existsByPost_IdAndHead_Id(post.getId(), head.getId()))
-//                return;
-//            var e = VolunteerPostReportEntity.create(post, req.getCategory(), req.getEtcDetail(), null, head);
-//            volunteerPostReportRepository.save(e);
-//        }
-//    }
-
-    // 봉사후기 게시글 etc만 내용 넣을 수 있도록 유효성 검사 로직 추기
-    // 문자열 -> enum 안전 변환 (대소문자 허용)
+    // 게시글 신고
     private ReportCategory toCategory(String raw) {
         try {
             return ReportCategory.valueOf(raw.trim().toUpperCase());
@@ -230,7 +222,7 @@ public class VolunteerPostServiceImpl implements VolunteerPostService {
             if (e.getMessage() != null && e.getMessage().contains("uq_volunteer_comment_report_user")) {
                 throw new IllegalStateException("이미 신고한 댓글입니다. (user)");
             }
-            throw e; // 다른 제약 위반은 그대로 터뜨림
+            throw e;
         };
 
         return entity.getId();
@@ -242,7 +234,8 @@ public class VolunteerPostServiceImpl implements VolunteerPostService {
         var post = volunteerPostRepository.findById(dto.getPostId())
                 .orElseThrow(() -> new IllegalArgumentException("게시글 없음: " + dto.getPostId()));
 
-        UserEntity user = null; ShelterheadEntity head = null;
+        UserEntity user = null;
+        ShelterheadEntity head = null;
         if (dto.getActorType() == VolunteerPostLikeToggleRequest.ActorType.USER) {
             user = volNoUserRepository.findById(dto.getUserId())
                     .orElseThrow(() -> new IllegalArgumentException("회원 없음: " + dto.getUserId()));
@@ -272,30 +265,8 @@ public class VolunteerPostServiceImpl implements VolunteerPostService {
         if (updated == 0) throw new IllegalArgumentException("이미 삭제되었거나 존재하지 않습니다: " + commentId);
     }
 
-    // 댓글 신고
-//    @Override
-//    public void reportComment(VolunteerPostCommentReportRequest req) {
-//        var c = volunteerPostCommentRepository.findById(req.getCommentId())
-//                .orElseThrow(() -> new IllegalArgumentException("댓글 없음: " + req.getCommentId()));
-//
-//        if (req.getActorType() == VolunteerPostLikeToggleRequest.ActorType.USER) {
-//            var user = VolNoUserRepository.findById(req.getUserId())
-//                    .orElseThrow(() -> new IllegalArgumentException("회원 없음: " + req.getUserId()));
-//            if (volunteerPostCommentReportRepository.existsByComment_IdAndUser_UserId(c.getId(), user.getUserId()))
-//                return;
-//            var e = VolunteerPostCommentReportEntity.create(c, req.getCategory(), req.getEtcDetail(), user, null);
-//            volunteerPostCommentReportRepository.save(e);
-//        } else {
-//            var head = headRepository.findById(req.getHeadId())
-//                    .orElseThrow(() -> new IllegalArgumentException("보호소장 없음: " + req.getHeadId()));
-//            if (volunteerPostCommentReportRepository.existsByComment_IdAndHead_Id(c.getId(), head.getId()))
-//                return;
-//            var e = VolunteerPostCommentReportEntity.create(c, req.getCategory(), req.getEtcDetail(), null, head);
-//            volunteerPostCommentReportRepository.save(e);
-//        }
-//    }
 
-    // 댓글도 etc만 입력 가능,
+    // 댓글 신고
     @Override
     public Integer reportVolunteerPostComment(VolunteerPostCommentReportCreateRequest req) {
         if (req.getCommentId() == null) throw new IllegalArgumentException("commentId는 필수입니다.");
@@ -337,7 +308,7 @@ public class VolunteerPostServiceImpl implements VolunteerPostService {
             if (e.getMessage() != null && e.getMessage().contains("uq_volunteer_comment_report_user")) {
                 throw new IllegalStateException("이미 신고한 댓글입니다. (user)");
             }
-            throw e; // 다른 제약 위반은 그대로 터뜨림
+            throw e;
         }
         return entity.getId();
     }

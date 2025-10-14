@@ -1,4 +1,3 @@
-// VolunteerAssociationEntity.java
 package com.backoven.catdogshelter.domain.volunteer.command.domain.aggregate.entity;
 
 import com.backoven.catdogshelter.common.entity.ShelterheadEntity;
@@ -17,7 +16,8 @@ public class VolunteerAssociationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Integer volunteerId;
 
     @Column(length = 50, nullable = false)
     private String title;

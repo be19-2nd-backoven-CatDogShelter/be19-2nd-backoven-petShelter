@@ -1,4 +1,3 @@
-// package: com.backoven.catdogshelter.domain.volunteer.command.domain.aggregate.entity
 package com.backoven.catdogshelter.domain.volunteer.command.domain.aggregate.entity;
 
 import com.backoven.catdogshelter.common.util.DateTimeUtil;
@@ -60,11 +59,6 @@ public class VolunteerPostEntity {
         e.setBlinded(false);
         e.setView(0);
         return e;
-    }
-
-    public void softDelete() {
-        this.deleted = true;
-        this.updatedAt = DateTimeUtil.now();
     }
 
     public void modify(String title, String content) {

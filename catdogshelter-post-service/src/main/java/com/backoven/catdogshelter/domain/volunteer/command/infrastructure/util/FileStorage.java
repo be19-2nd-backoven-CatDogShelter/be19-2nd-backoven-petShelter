@@ -1,4 +1,3 @@
-// package: com.backoven.catdogshelter.infra
 package com.backoven.catdogshelter.domain.volunteer.command.infrastructure.util;
 
 import com.backoven.catdogshelter.common.util.DateTimeUtil;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
+@Component("volunteerPostFileStorage")
 @RequiredArgsConstructor
 public class FileStorage {
     @Value("${file.upload-dir}")
