@@ -1,6 +1,6 @@
 package com.backoven.catdogshelter.domain.user.command.application.controller;
 
-import com.backoven.catdogshelter.domain.user.UserDtoToDtoMapper;
+import com.backoven.catdogshelter.domain.user.mapping.UserDtoToDtoMapper;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyPasswordUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestPasswordDTO;
