@@ -1,4 +1,3 @@
-// VolunteerAssociationCommandController.java
 package com.backoven.catdogshelter.domain.volunteer.command.application.controller;
 
 import com.backoven.catdogshelter.domain.volunteer.command.application.dto.VolunteerAssociationApplyRequest;
@@ -6,11 +5,8 @@ import com.backoven.catdogshelter.domain.volunteer.command.application.dto.Volun
 import com.backoven.catdogshelter.domain.volunteer.command.application.dto.VolunteerAssociationDTO;
 import com.backoven.catdogshelter.domain.volunteer.command.application.dto.VolunteerAssociationUpdateDTO;
 import com.backoven.catdogshelter.domain.volunteer.command.application.service.VolunteerAssociationService;
-
 import io.swagger.v3.oas.annotations.Operation;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,19 +24,19 @@ public class VolunteerAssociationCommandController {
         this.volunteerAssociationService = volunteerAssociationService;
     }
 
-    // 작성
+    // 게시글 등록
     @Operation(summary = "게시글 등록",
             description = "보호소장은 봉사모임 게시글을 작성할 수 있다.")
-    @PostMapping("/write")
+    @PostMapping
     public ResponseEntity<Integer> writeAssociation(@RequestBody VolunteerAssociationDTO dto) {
         Integer id = volunteerAssociationService.writeAssociation(dto);
         return ResponseEntity.ok(id);
     }
 
-    // 수정
+    // 게시글 수정
     @Operation(summary = "게시글 수정",
             description = "보호소장은 자신이 작성한 게시글을 수정할 수 있다.")
-    @PutMapping("/{id}/modify")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> modifyAssociation(@PathVariable Integer id,
                                        @RequestBody VolunteerAssociationUpdateDTO dto) {
         volunteerAssociationService.modifyAssociation(id, dto);
