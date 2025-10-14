@@ -1,4 +1,4 @@
-package com.backoven.catdogshelter.domain.user;
+package com.backoven.catdogshelter.domain.user.mapping;
 
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestRegistUserDTO;
