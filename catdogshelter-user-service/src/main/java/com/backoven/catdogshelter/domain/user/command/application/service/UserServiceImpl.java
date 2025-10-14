@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = modelMapper.map(userDTO,UserEntity.class);
         log.info("Service 계층에서 DTO -> Entity: {}", UserEntity.class);
 
-        userEntity.setActivationDate(DateTimeUtil.now());
         // UserDTO로 넘어온 사용자의 암호(평문)를 BCrypt 암호화(다이체스트)
         userEntity.setEncryptPwd(bCryptPasswordEncoder.encode(userDTO.getUserPassword()));
         userRepository.save(userEntity);
@@ -124,7 +123,7 @@ public class UserServiceImpl implements UserService {
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         if (loginUser.getRating().getId() == -1) {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            if(loginUser.getUserId() == 1) grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MASTER_ADMIN"));
+            if(loginUser.getUserId()  == 1)grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MASTER_ADMIN"));
         }
 
 
