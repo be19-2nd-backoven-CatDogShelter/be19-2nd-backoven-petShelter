@@ -438,6 +438,10 @@
   <details>
     <summary>💬 댓글</summary>
     <details>
+      <summary>댓글 조회</summary>
+      <img src="https://github.com/user-attachments/assets/9648e73a-395a-4e1c-bf96-13d2183b34f8" width="500"/>
+    </details>
+    <details>
       <summary>댓글 작성</summary>
       <img src="https://github.com/user-attachments/assets/e8b9c62e-fbaf-498d-9a8d-46bd80fc7c63" width="500"/>
     </details>
