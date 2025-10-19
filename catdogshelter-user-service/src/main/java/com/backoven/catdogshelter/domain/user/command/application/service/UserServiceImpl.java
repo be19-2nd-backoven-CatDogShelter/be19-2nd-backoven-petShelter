@@ -37,8 +37,9 @@ public class UserServiceImpl implements UserService {
     private final QuestionCategoryRepository questionCategoryRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
-    private final RedisService redisService;
+    private final UserRedisService redisService;
     private final JavaMailSender mailSender; // 이메일 전송용
+
 
 
     @Autowired
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
                            SigunguRepository sigunguRepository,
                            QuestionCategoryRepository questionCategoryRepository,
                            ModelMapper modelMapper,
-                           BCryptPasswordEncoder bCryptPasswordEncoder, RedisService redisService,
+                           BCryptPasswordEncoder bCryptPasswordEncoder, UserRedisService redisService,
                            JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.sigunguRepository = sigunguRepository;
@@ -195,6 +196,7 @@ public class UserServiceImpl implements UserService {
         foundUser.setUserStatus(UserStatus.CANCEL);
     }
 
+    // 이메일로 인증코드를 발급받는 코드
     @Override
     public void sendVerificationCode(String userAccount, String answer) {
         // 1. DB에서 사용자 조회
@@ -227,6 +229,36 @@ public class UserServiceImpl implements UserService {
             log.error("이메일 발송 실패: {}", e.getMessage());
             throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
         }
+    }
+
+    // 발급받은 이메일 코드를 통해 새로운 비밀번호 입력
+    @Override
+    @Transactional
+    public void resetUserPassword(String userAccount, String verificationCode, String newPassword) {
+        // 1. 사용자가 존재하는지 확인
+        UserEntity user = userRepository.findByUserAccount(userAccount);
+        if (user == null) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
+
+        // 2. Redis에서 인증번호 꺼내오기
+        String storedCode = redisService.getAuthCode(user.getEmail());
+        if (storedCode == null) {
+            throw new IllegalArgumentException("인증번호가 만료되었거나 존재하지 않습니다.");
+        }
+
+        // 3. 인증번호 검증
+        if (!storedCode.equals(verificationCode)) {
+            throw new IllegalArgumentException("인증번호가 일치하지 않습니다.");
+        }
+
+        // 4. 새 비밀번호 암호화 후 저장
+        String encryptedPwd = bCryptPasswordEncoder.encode(newPassword);
+        user.setEncryptPwd(encryptedPwd);
+        userRepository.save(user);
+
+        // 5. Redis에서 인증번호 삭제 (일회용)
+        redisService.deleteAuthCode(user.getEmail());
     }
 
 }

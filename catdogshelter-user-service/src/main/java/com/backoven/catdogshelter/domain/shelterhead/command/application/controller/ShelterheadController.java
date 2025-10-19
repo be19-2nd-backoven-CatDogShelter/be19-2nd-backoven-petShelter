@@ -1,13 +1,13 @@
 package com.backoven.catdogshelter.domain.shelterhead.command.application.controller;
 
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.requestdto.RequestRegistShelterheadDTO;
+import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.requestdto.RequestResetShelterheadPasswordDTO;
+import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.requestdto.RequestVerifyShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.responsedto.ResponseFindShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.responsedto.ResponseRegistShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.ShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.service.ShelterheadService;
-import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyPasswordUserDTO;
-import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyUserDTO;
-import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestPasswordDTO;
+import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.*;
 import com.backoven.catdogshelter.domain.user.command.application.dto.responsedto.ResponseModifyUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.user.UserDTO;
 import org.modelmapper.ModelMapper;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class ShelterheadController {
 
-    private ShelterheadService shelterheadService;
+    private final ShelterheadService shelterheadService;
     private ModelMapper modelMapper;
 
     public ShelterheadController(ShelterheadService shelterheadService,
@@ -54,6 +54,26 @@ public class ShelterheadController {
                 modelMapper.map(shelterHeadDTO, ResponseFindShelterheadDTO.class);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseFindShelterHeadDTO);
+    }
+
+    // redis를 이용한 이메일로 인증 코드 보내는 부분
+    @PostMapping("/password/verify")
+    public ResponseEntity<String> sendVerificationCode(@RequestBody RequestVerifyShelterheadDTO dto) {
+        shelterheadService.sendVerificationCode(dto.getHeadAccount(), dto.getAnswer());
+        return ResponseEntity.ok("인증코드가 이메일로 발송되었습니다.");
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<?> resetPassword(@RequestBody RequestResetShelterheadPasswordDTO dto) {
+        try {
+            shelterheadService.resetUserPassword(dto.getHeadAccount(), dto.getVerificationCode(), dto.getNewPassword());
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("비밀번호 변경 중 오류가 발생했습니다.");
+        }
     }
 
 }

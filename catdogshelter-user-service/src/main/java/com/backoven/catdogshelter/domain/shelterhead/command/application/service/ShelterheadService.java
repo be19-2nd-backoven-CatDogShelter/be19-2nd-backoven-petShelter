@@ -12,4 +12,8 @@ public interface ShelterheadService extends UserDetailsService {
     ShelterheadDTO getShelter_headById(String memNo);
 
     void registUser(ShelterheadDTO userDTO);
+
+    void sendVerificationCode(String headAccount, String answer);
+
+    void resetUserPassword(String headAccount, String verificationCode, String newPassword);
 }

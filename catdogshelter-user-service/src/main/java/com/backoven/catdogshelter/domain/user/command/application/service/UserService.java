@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService {
 
     void sendVerificationCode(String userAccount, String answer);
 
+    void resetUserPassword(String userAccount, String verificationCode, String newPassword);
+
 }
