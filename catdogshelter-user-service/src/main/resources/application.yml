@@ -4,6 +4,18 @@ server:
     max-connections: 200
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: isy50744@gmail.com
+    password: yenp zihe buth fxyv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   application:
     name: CATDOGSHELTER-USER-SERVICE
   jpa:
@@ -28,6 +40,14 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+
+  #redis 관련 설정 부분
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+      timeout: 6000ms
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml

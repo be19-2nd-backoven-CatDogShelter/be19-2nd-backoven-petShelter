@@ -15,12 +15,15 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +37,24 @@ public class UserServiceImpl implements UserService {
     private final QuestionCategoryRepository questionCategoryRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
+    private final RedisService redisService;
+    private final JavaMailSender mailSender; // 이메일 전송용
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            SigunguRepository sigunguRepository,
                            QuestionCategoryRepository questionCategoryRepository,
                            ModelMapper modelMapper,
-                           BCryptPasswordEncoder bCryptPasswordEncoder) {
+                           BCryptPasswordEncoder bCryptPasswordEncoder, RedisService redisService,
+                           JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.sigunguRepository = sigunguRepository;
         this.questionCategoryRepository = questionCategoryRepository;
         this.modelMapper = modelMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.redisService = redisService;
+        this.mailSender = mailSender;
     }
 
     // 비밀번호 암호화
@@ -185,4 +194,39 @@ public class UserServiceImpl implements UserService {
         // 탈퇴 -> soft delete (상태 변경)
         foundUser.setUserStatus(UserStatus.CANCEL);
     }
+
+    @Override
+    public void sendVerificationCode(String userAccount, String answer) {
+        // 1. DB에서 사용자 조회
+        UserEntity foundUser = userRepository.findByUserAccount(userAccount);
+        if (foundUser == null) {
+            throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
+        }
+
+        // 2. 보안답변 검증
+        if (foundUser.getAnswer() == null || !foundUser.getAnswer().trim().equalsIgnoreCase(answer.trim())) {
+            throw new IllegalArgumentException("보안 질문 답변이 일치하지 않습니다.");
+        }
+
+        // 3. 인증 코드 생성 (6자리 난수)
+        String verificationCode = String.valueOf((int)(Math.random() * 900000) + 100000);
+        log.info("생성된 인증코드: {}", verificationCode);
+
+        // 4. Redis에 저장 (key=email, value=code, TTL=5분)
+        redisService.saveAuthCode(foundUser.getEmail(), verificationCode, 5);
+
+        // 5. 이메일 발송
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(foundUser.getEmail());
+            message.setSubject("[CatDogShelter] 비밀번호 재설정 인증코드 안내");
+            message.setText("요청하신 인증코드는 [" + verificationCode + "] 입니다.\n"
+                    + "5분 안에 입력해주세요.");
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("이메일 발송 실패: {}", e.getMessage());
+            throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
+        }
+    }
+
 }
