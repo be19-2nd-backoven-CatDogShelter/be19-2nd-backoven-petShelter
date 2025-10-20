@@ -117,6 +117,15 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(userAccount + " 아이디의 유저는 존재하지 않습니다.");
         }
 
+        // 정지일 체크
+        if(loginUser.getActivationDate() != null) {
+            String activationDate = loginUser.getActivationDate();
+            DateTimeUtil.validationTime(activationDate);
+
+            loginUser.setActivationDate(null);
+            userRepository.save(loginUser);
+        }
+
         /* 설명. DB에서 조회 된 해당 회원이
         *       가진 권한들을 가져와 List<GrantedAuthority>로 전환*/
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
