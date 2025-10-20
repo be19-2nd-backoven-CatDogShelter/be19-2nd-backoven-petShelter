@@ -13,7 +13,7 @@ public interface ShelterheadService extends UserDetailsService {
 
     void registUser(ShelterheadDTO userDTO);
 
-    void sendVerificationCode(String headAccount, String answer);
+    void sendVerificationCode(String headAccount);
 
     void resetUserPassword(String headAccount, String verificationCode, String newPassword);
 }

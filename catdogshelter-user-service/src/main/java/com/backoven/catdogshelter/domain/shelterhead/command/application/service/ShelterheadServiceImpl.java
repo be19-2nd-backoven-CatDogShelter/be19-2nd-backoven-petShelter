@@ -92,16 +92,11 @@ public class ShelterheadServiceImpl implements ShelterheadService {
     }
 
     @Override
-    public void sendVerificationCode(String headAccount, String answer) {
+    public void sendVerificationCode(String headAccount) {
         // 1. DB에서 사용자 조회
         ShelterheadEntity foundShelterhead = shelterheadRepository.findByHeadAccount(headAccount);
         if (foundShelterhead == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
-        }
-
-        // 2. 보안답변 검증
-        if (foundShelterhead.getAnswer() == null || !foundShelterhead.getAnswer().trim().equalsIgnoreCase(answer.trim())) {
-            throw new IllegalArgumentException("보안 질문 답변이 일치하지 않습니다.");
         }
 
         // 3. 인증 코드 생성 (6자리 난수)

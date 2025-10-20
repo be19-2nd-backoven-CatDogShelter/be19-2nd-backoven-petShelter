@@ -198,16 +198,11 @@ public class UserServiceImpl implements UserService {
 
     // 이메일로 인증코드를 발급받는 코드
     @Override
-    public void sendVerificationCode(String userAccount, String answer) {
+    public void sendVerificationCode(String userAccount) {
         // 1. DB에서 사용자 조회
         UserEntity foundUser = userRepository.findByUserAccount(userAccount);
         if (foundUser == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
-        }
-
-        // 2. 보안답변 검증
-        if (foundUser.getAnswer() == null || !foundUser.getAnswer().trim().equalsIgnoreCase(answer.trim())) {
-            throw new IllegalArgumentException("보안 질문 답변이 일치하지 않습니다.");
         }
 
         // 3. 인증 코드 생성 (6자리 난수)

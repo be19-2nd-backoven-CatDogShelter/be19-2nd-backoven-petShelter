@@ -59,7 +59,7 @@ public class ShelterheadController {
     // redis를 이용한 이메일로 인증 코드 보내는 부분
     @PostMapping("/password/verify")
     public ResponseEntity<String> sendVerificationCode(@RequestBody RequestVerifyShelterheadDTO dto) {
-        shelterheadService.sendVerificationCode(dto.getHeadAccount(), dto.getAnswer());
+        shelterheadService.sendVerificationCode(dto.getHeadAccount());
         return ResponseEntity.ok("인증코드가 이메일로 발송되었습니다.");
     }
 

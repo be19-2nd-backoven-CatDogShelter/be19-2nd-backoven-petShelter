@@ -11,5 +11,4 @@ import lombok.Setter;
 @Setter
 public class RequestVerifyShelterheadDTO {
     private String headAccount;
-    private String answer;
 }
