@@ -15,12 +15,15 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +37,25 @@ public class UserServiceImpl implements UserService {
     private final QuestionCategoryRepository questionCategoryRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
+    private final UserRedisService redisService;
+    private final JavaMailSender mailSender; // 이메일 전송용
+
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            SigunguRepository sigunguRepository,
                            QuestionCategoryRepository questionCategoryRepository,
                            ModelMapper modelMapper,
-                           BCryptPasswordEncoder bCryptPasswordEncoder) {
+                           BCryptPasswordEncoder bCryptPasswordEncoder, UserRedisService redisService,
+                           JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.sigunguRepository = sigunguRepository;
         this.questionCategoryRepository = questionCategoryRepository;
         this.modelMapper = modelMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.redisService = redisService;
+        this.mailSender = mailSender;
     }
 
     // 비밀번호 암호화
@@ -185,4 +195,65 @@ public class UserServiceImpl implements UserService {
         // 탈퇴 -> soft delete (상태 변경)
         foundUser.setUserStatus(UserStatus.CANCEL);
     }
+
+    // 이메일로 인증코드를 발급받는 코드
+    @Override
+    public void sendVerificationCode(String userAccount) {
+        // 1. DB에서 사용자 조회
+        UserEntity foundUser = userRepository.findByUserAccount(userAccount);
+        if (foundUser == null) {
+            throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
+        }
+
+        // 3. 인증 코드 생성 (6자리 난수)
+        String verificationCode = String.valueOf((int)(Math.random() * 900000) + 100000);
+        log.info("생성된 인증코드: {}", verificationCode);
+
+        // 4. Redis에 저장 (key=email, value=code, TTL=5분)
+        redisService.saveAuthCode(foundUser.getEmail(), verificationCode, 5);
+
+        // 5. 이메일 발송
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(foundUser.getEmail());
+            message.setSubject("[CatDogShelter] 비밀번호 재설정 인증코드 안내");
+            message.setText("요청하신 인증코드는 [" + verificationCode + "] 입니다.\n"
+                    + "5분 안에 입력해주세요.");
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("이메일 발송 실패: {}", e.getMessage());
+            throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
+        }
+    }
+
+    // 발급받은 이메일 코드를 통해 새로운 비밀번호 입력
+    @Override
+    @Transactional
+    public void resetUserPassword(String userAccount, String verificationCode, String newPassword) {
+        // 1. 사용자가 존재하는지 확인
+        UserEntity user = userRepository.findByUserAccount(userAccount);
+        if (user == null) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
+
+        // 2. Redis에서 인증번호 꺼내오기
+        String storedCode = redisService.getAuthCode(user.getEmail());
+        if (storedCode == null) {
+            throw new IllegalArgumentException("인증번호가 만료되었거나 존재하지 않습니다.");
+        }
+
+        // 3. 인증번호 검증
+        if (!storedCode.equals(verificationCode)) {
+            throw new IllegalArgumentException("인증번호가 일치하지 않습니다.");
+        }
+
+        // 4. 새 비밀번호 암호화 후 저장
+        String encryptedPwd = bCryptPasswordEncoder.encode(newPassword);
+        user.setEncryptPwd(encryptedPwd);
+        userRepository.save(user);
+
+        // 5. Redis에서 인증번호 삭제 (일회용)
+        redisService.deleteAuthCode(user.getEmail());
+    }
+
 }

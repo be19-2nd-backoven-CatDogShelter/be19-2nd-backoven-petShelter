@@ -1,10 +1,7 @@
 package com.backoven.catdogshelter.domain.user.command.application.controller;
 
 import com.backoven.catdogshelter.domain.user.UserDtoToDtoMapper;
-import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyPasswordUserDTO;
-import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyUserDTO;
-import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestPasswordDTO;
-import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestRegistUserDTO;
+import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.*;
 import com.backoven.catdogshelter.domain.user.command.application.dto.responsedto.ResponseFindLoginUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.responsedto.ResponseModifyUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.responsedto.ResponseRegistUserDTO;
@@ -121,6 +118,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    // redis를 이용한 이메일로 인증 코드 보내는 부분
+    @PostMapping("/password/verify")
+    public ResponseEntity<String> sendVerificationCode(@RequestBody RequestVerifyUserDTO dto) {
+        userService.sendVerificationCode(dto.getUserAccount());
+        return ResponseEntity.ok("인증코드가 이메일로 발송되었습니다.");
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<?> resetPassword(@RequestBody RequestResetUserPasswordDTO dto) {
+        try {
+            userService.resetUserPassword(dto.getUserAccount(), dto.getVerificationCode(), dto.getNewPassword());
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("비밀번호 변경 중 오류가 발생했습니다.");
+        }
+    }
 
 
 }
