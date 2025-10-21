@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,7 +105,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         // JWT Payload 설정
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("auth", List.of("ROLE_USER")); // 권한
+        claims.put("auth", roles); // 권한
         claims.put("userId", userId); // 유저 ID
 
         // JWT 토큰 생성
@@ -127,5 +128,30 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         loginHistoryRepository.save(history);
         log.info("로그인 히스토리 저장 완료: {}", history);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              AuthenticationException failed)
+            throws IOException, ServletException {
+
+            log.error("로그인 실패: {}", failed.getMessage());
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            String message;
+            if(failed.getMessage().startsWith("정지")) {
+                message = failed.getMessage();
+            } else {
+                message = "아이디/비밀번호가 일치하지 않습니다.";
+            }
+            // JSON 형태의 에러 응답
+            new ObjectMapper().writeValue(response.getWriter(), new HashMap<>() {{
+                put("status", 401);
+                put("error", "Unauthorized");
+                put("message", message); // UsernameNotFoundException 메시지 그대로 전달
+                put("path", request.getRequestURI());
+            }});
     }
 }

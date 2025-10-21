@@ -98,7 +98,8 @@ public class ShelterheadServiceImpl implements ShelterheadService {
         if (foundShelterhead == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
         }
-
+        
+        // 2. 이메일 일치 여부 (
         if (foundShelterhead.getEmail() == null || !foundShelterhead.getEmail().trim().equalsIgnoreCase(email.trim())) {
             throw new IllegalArgumentException("등록된 이메일과 일치하지 않습니다.");
         }
