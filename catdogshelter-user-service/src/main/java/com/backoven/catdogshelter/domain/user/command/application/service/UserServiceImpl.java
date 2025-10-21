@@ -118,10 +118,11 @@ public class UserServiceImpl implements UserService {
         }
 
         // 정지일 체크
-        if(loginUser.getActivationDate() != null) {
+        if(loginUser.getUserStatus() == UserStatus.BLACK) {
             String activationDate = loginUser.getActivationDate();
             DateTimeUtil.validationTime(activationDate);
 
+            loginUser.setUserStatus(UserStatus.GENERAL);
             loginUser.setActivationDate(null);
             userRepository.save(loginUser);
         }

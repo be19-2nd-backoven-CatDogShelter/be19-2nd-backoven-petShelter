@@ -73,6 +73,7 @@ public class UserWebSecurity {
                 new AuthenticationFilter(authenticationManager(), env, loginHistoryRepository);
         authenticationFilter.setFilterProcessesUrl("/user/login"); // 로그인 엔드포인트 지정
 
+
         http.csrf().disable() // CSRF 비활성화 (JWT 사용 시 불필요)
                 .securityMatcher("/user/**") // "/user/**" 경로만 이 설정 적용
                 .authorizeHttpRequests(auth -> auth
