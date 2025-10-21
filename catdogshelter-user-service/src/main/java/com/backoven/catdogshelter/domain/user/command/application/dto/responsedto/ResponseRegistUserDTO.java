@@ -11,7 +11,6 @@ public class ResponseRegistUserDTO {
     private String userPhone;     // 전화번호
 
     private Integer sigunguId;         // 소속 시군구 ID
-    private Integer questionCategoryId;// 보안 질문 카테고리 ID
 //    private String sidoName;      // 시도 이름
 //    private String sigunguName;   // 시군구 이름
 //    private String question;      // 보안 질문(카테고리)

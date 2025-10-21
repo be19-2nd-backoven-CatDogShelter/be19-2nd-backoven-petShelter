@@ -43,16 +43,11 @@ public class ShelterheadEntity {
     @Column(name="open_date")
     private String openDate;
 
-    private String answer;
-
     @Column(name="close_date")
     private String closeDate;
 
     @Column(name="sigungu_id")
     private String sigunguId;
-
-    @Column(name="questionCategory_id")
-    private String questionCategoryId;
 
     // 회원 가입 시 생성 될 고유 아이디(닉네임 개념). 테이블 컬럼명 하나를 사용해야하기 때문에 아이디 부분 사용
     @Column(name="head_account")

@@ -16,7 +16,6 @@ public class ResponseFindLoginUserDTO {
     private String userAccount;             // 아이디
     private String email;                   // 이메일
     private String detailAddress;           // 상세주소
-    private String answer;                  // 지정답변
     private String userPhone;               // 전화번호
 
     // 회원정보 (default)
@@ -27,5 +26,4 @@ public class ResponseFindLoginUserDTO {
     // FK
     private Integer ratingId;               // 회원등급 FK
     private Integer sigunguId;              // 소속 시군구 FK
-    private Integer questionCategoryId;     // 지정질문카테고리번호 FK
 }

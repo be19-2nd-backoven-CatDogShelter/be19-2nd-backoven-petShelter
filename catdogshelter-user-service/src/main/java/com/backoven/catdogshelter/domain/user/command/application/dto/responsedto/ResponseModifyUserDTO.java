@@ -16,6 +16,5 @@ public class ResponseModifyUserDTO {
     private Integer sigunguId;              // 소속 시군구 FK
     private String sigunguName;             // 소속 시도 FK
 
-    private Integer questionCategoryId;     // 지정질문카테고리번호 FK
 
 }
