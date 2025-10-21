@@ -20,7 +20,7 @@ public interface UserService extends UserDetailsService {
 
     void deleterUserByPassword(int userId, String currentPwd);
 
-    void sendVerificationCode(String userAccount);
+    void sendVerificationCode(String userAccount, String email);
 
     void resetUserPassword(String userAccount, String verificationCode, String newPassword);
 

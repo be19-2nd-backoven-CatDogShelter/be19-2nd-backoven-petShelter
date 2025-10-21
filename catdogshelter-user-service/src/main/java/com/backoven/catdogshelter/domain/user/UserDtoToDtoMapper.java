@@ -16,7 +16,6 @@ public class UserDtoToDtoMapper {
                 .userPassword(request.getUserPassword())
                 .email(request.getEmail())
                 .detailAddress(request.getDetailAddress())
-                .answer(request.getAnswer())
                 .userPhone(request.getUserPhone())
 
                 // 사용자가 입력하지 않는 값은 기본 0으로 세팅
@@ -48,7 +47,6 @@ public class UserDtoToDtoMapper {
                 .detailAddress(request.getDetailAddress()) // 상세 주소
                 .sigunguId(request.getSigunguId()) // 시군구
                 .questionCategoryId(request.getQuestionCategoryId()) // 질문
-                .answer(request.getAnswer()) // 질문 답변
 
                 // 그대로 유지할 값
                 .cumulativeVolunteerTime(existingUser.getCumulativeVolunteerTime())

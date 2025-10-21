@@ -15,5 +15,4 @@ public class RequestModifyUserDTO {
     private Integer sigunguId;              // 소속 시군구 FK
 
     private Integer questionCategoryId;     // 지정질문카테고리번호 FK
-    private String answer;                  // 지정답변
 }

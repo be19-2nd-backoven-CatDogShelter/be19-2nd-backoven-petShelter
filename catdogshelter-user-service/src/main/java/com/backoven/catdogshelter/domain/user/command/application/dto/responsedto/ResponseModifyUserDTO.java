@@ -17,5 +17,5 @@ public class ResponseModifyUserDTO {
     private String sigunguName;             // 소속 시도 FK
 
     private Integer questionCategoryId;     // 지정질문카테고리번호 FK
-    private String answer;                  // 지정답변
+
 }

@@ -98,14 +98,6 @@ public class UserServiceImpl implements UserService {
                     .orElseThrow(() -> new IllegalArgumentException("해당 시군구가 존재하지 않습니다."));
             userEntity.setSigungu(sigungu);
         }
-        if (updatedUser.getQuestionCategoryId() != null) {
-            QuestionCategoryEntity questionCategory = questionCategoryRepository.findById(updatedUser.getQuestionCategoryId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 질문 카테고리가 존재하지 않습니다."));
-            userEntity.setQuestionCategory(questionCategory);
-        }
-        if (updatedUser.getAnswer() != null) {
-            userEntity.setAnswer(updatedUser.getAnswer());
-        }
 
         userRepository.save(userEntity);
 
@@ -161,24 +153,6 @@ public class UserServiceImpl implements UserService {
         if (bCryptPasswordEncoder.matches(updatedUser.getNewPwd(), foundUser.getEncryptPwd())) {
             throw new IllegalArgumentException("새 비밀번호가 기존과 동일합니다.");
         }
-        // 지정질문
-        boolean questionOk = foundUser.getQuestionCategory() != null &&
-                Objects.equals(updatedUser.getQuestionId(),
-                        foundUser.getQuestionCategory().getId());
-
-        String updatedUserAnswer = updatedUser.getAnswer();
-        String foundUserAnswer  = foundUser.getAnswer();
-
-        // 답변이 동일하다면
-        boolean answerOk = updatedUserAnswer != null && foundUserAnswer != null
-                && updatedUserAnswer.trim().equalsIgnoreCase(foundUserAnswer.trim());
-
-        if (questionOk && answerOk) {
-            // 새 비밀번호로 갱신
-            foundUser.setEncryptPwd(bCryptPasswordEncoder.encode(updatedUser.getNewPwd()));
-            return;
-        }
-        throw new IllegalArgumentException("질문/답변 불일치");
     }
 
     @Override
@@ -198,11 +172,16 @@ public class UserServiceImpl implements UserService {
 
     // 이메일로 인증코드를 발급받는 코드
     @Override
-    public void sendVerificationCode(String userAccount) {
+    public void sendVerificationCode(String userAccount, String email) {
         // 1. DB에서 사용자 조회
         UserEntity foundUser = userRepository.findByUserAccount(userAccount);
         if (foundUser == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
+        }
+
+        // 2. 이메일 일치 여부 확인
+        if (foundUser.getEmail() == null || !foundUser.getEmail().trim().equalsIgnoreCase(email.trim())) {
+            throw new IllegalArgumentException("등록된 이메일과 일치하지 않습니다.");
         }
 
         // 3. 인증 코드 생성 (6자리 난수)
