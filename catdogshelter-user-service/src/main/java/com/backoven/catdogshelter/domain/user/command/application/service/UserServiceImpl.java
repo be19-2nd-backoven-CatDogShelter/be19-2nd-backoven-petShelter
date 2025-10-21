@@ -3,6 +3,7 @@ package com.backoven.catdogshelter.domain.user.command.application.service;
 import com.backoven.catdogshelter.common.entity.QuestionCategoryEntity;
 import com.backoven.catdogshelter.common.entity.SigunguEntity;
 import com.backoven.catdogshelter.common.entity.UserEntity;
+import com.backoven.catdogshelter.common.util.DateTimeUtil;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyPasswordUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.RequestModifyUserDTO;
 import com.backoven.catdogshelter.domain.user.command.application.dto.user.UserDTO;
@@ -126,10 +127,25 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(userAccount + " 아이디의 유저는 존재하지 않습니다.");
         }
 
+        // 정지일 체크
+        if(loginUser.getUserStatus() == UserStatus.BLACK) {
+            String activationDate = loginUser.getActivationDate();
+            DateTimeUtil.validationTime(activationDate);
+
+            loginUser.setUserStatus(UserStatus.GENERAL);
+            loginUser.setActivationDate(null);
+            userRepository.save(loginUser);
+        }
+
         /* 설명. DB에서 조회 된 해당 회원이
         *       가진 권한들을 가져와 List<GrantedAuthority>로 전환*/
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if (loginUser.getRating().getId() == -1) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            if(loginUser.getUserId()  == 1)grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MASTER_ADMIN"));
+        }
+
 
         return new CustomUserDetails(
                 loginUser.getUserId(),
