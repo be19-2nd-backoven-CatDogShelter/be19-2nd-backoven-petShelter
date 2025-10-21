@@ -21,8 +21,7 @@ public class ResponseRegistShelterheadDTO {
     private String openDate;                    // 개업일
     private String closeDate;
     private String sigunguId;
-    private String questionCategoryId;
-    private String answer;
+
 
     private String headAccount;    // 회원 가입 이후 생성된 회원 교유 번호
 }

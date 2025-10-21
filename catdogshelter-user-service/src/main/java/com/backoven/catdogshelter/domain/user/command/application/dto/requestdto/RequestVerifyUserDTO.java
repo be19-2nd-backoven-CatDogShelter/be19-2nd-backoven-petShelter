@@ -14,4 +14,6 @@ import lombok.Setter;
 @Setter
 public class RequestVerifyUserDTO {
     private String userAccount;
+    private String email;
+
 }

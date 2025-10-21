@@ -23,7 +23,6 @@ public class RequestRegistShelterheadDTO {
     private String closeDate;
     private String sigunguId;
     private String questionCategoryId;
-    private String answer;
 
 
 }

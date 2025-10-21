@@ -34,9 +34,6 @@ public class UserEntity {
     @Column(name = "detail_address")
     private String detailAddress; // 상세주소
 
-    @Column(name = "answer", nullable = false, length = 255)
-    private String answer; // 지정답변
-
     @Column(name = "user_phone", nullable = false, length = 20, unique = true)
     private String userPhone; // 전화번호
 
@@ -68,7 +65,4 @@ public class UserEntity {
     @JoinColumn(name = "sigungu_id", nullable = false)
     private SigunguEntity sigungu; // 소속 시군구
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "questionCategory_id", nullable = false)
-    private QuestionCategoryEntity questionCategory; // 지정질문 카테고리
 }

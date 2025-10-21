@@ -32,9 +32,6 @@ public class ShelterHeadEntity {
     @Column(name = "e_mail", length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String answer;
-
     @Column(name = "head_phone", length = 20, nullable = false, unique = true)
     private String phone;
 
@@ -59,9 +56,5 @@ public class ShelterHeadEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sigungu_id", foreignKey = @ForeignKey(name = "fk_head_sigungu"))
     private SigunguEntity sigungu;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "questionCategory_id", foreignKey = @ForeignKey(name = "fk_user_question"))
-    private QuestionCategoryEntity questionCategory;
 
 }

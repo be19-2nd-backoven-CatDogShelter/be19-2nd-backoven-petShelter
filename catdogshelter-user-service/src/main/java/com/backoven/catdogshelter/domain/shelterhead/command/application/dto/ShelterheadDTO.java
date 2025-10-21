@@ -21,7 +21,6 @@ public class ShelterheadDTO {
     private String closeDate;
     private String sigunguId;
     private String questionCategoryId;
-    private String answer;
 
     private String headAccount;
 }
