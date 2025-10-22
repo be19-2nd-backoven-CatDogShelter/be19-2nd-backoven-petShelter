@@ -157,4 +157,24 @@ public class ShelterheadServiceImpl implements ShelterheadService {
         shelterheadRedisService.deleteAuthCode(shelterhead.getEmail());
     }
 
+    @Override
+    public void findShelterheadIdByEmail(String email){
+        ShelterheadEntity shelterhead = shelterheadRepository.findByEmail(email);
+        if (shelterhead == null) {
+            throw new IllegalArgumentException("등록되지 않은 이메일입니다.");
+        }
+
+        // 이메일 전송
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(shelterhead.getEmail());
+            message.setSubject("[CatDogShelter] 회원님의 아이디 안내");
+            message.setText("회원님의 아이디는 [" + shelterhead.getHeadAccount() + "] 입니다.");
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("아이디 발송 실패: {}", e.getMessage());
+            throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
+        }
+    }
+
 }

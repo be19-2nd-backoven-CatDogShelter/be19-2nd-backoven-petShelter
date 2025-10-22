@@ -24,4 +24,5 @@ public interface UserService extends UserDetailsService {
 
     void resetUserPassword(String userAccount, String verificationCode, String newPassword);
 
+    void findUserIdByEmail(String email);
 }

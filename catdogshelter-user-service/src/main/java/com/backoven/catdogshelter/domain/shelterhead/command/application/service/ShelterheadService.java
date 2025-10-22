@@ -16,4 +16,6 @@ public interface ShelterheadService extends UserDetailsService {
     void sendVerificationCode(String headAccount, String email);
 
     void resetUserPassword(String headAccount, String verificationCode, String newPassword);
+
+    void findShelterheadIdByEmail(String email);
 }

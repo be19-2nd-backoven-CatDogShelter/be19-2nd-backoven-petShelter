@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShelterheadRepository extends JpaRepository<ShelterheadEntity, Integer> {
     ShelterheadEntity findByHeadAccount(String headAccount);
+
+    ShelterheadEntity findByEmail(String email);
 }

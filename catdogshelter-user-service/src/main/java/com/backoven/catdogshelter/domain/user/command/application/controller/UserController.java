@@ -138,5 +138,10 @@ public class UserController {
         }
     }
 
+    @PostMapping("/find-id")
+    public ResponseEntity<String> findUserId(@RequestBody RequestFindUserIdDTO dto){
+        userService.findUserIdByEmail(dto.getEmail());
+        return ResponseEntity.ok("등록된 이메일로 아이디가 전송되었습니다.");
+    }
 
 }

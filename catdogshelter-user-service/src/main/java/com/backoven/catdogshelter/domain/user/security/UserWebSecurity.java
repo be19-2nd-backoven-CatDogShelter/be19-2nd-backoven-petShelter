@@ -80,7 +80,8 @@ public class UserWebSecurity {
                         .requestMatchers(HttpMethod.POST, "/user/regist").permitAll() // 회원가입 허용
                         .requestMatchers(HttpMethod.GET, "/user/admin/**").permitAll() // 관리자용 API 허용
                         .requestMatchers(HttpMethod.POST, "/user/login").permitAll() // 로그인 허용
-                        .requestMatchers(HttpMethod.POST, "/user/password/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/password/**").permitAll() // 비밀번호 찾기
+                        .requestMatchers(HttpMethod.POST, "/user/find-id/**").permitAll() // 아이디 찾기
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안함 (JWT 방식)
