@@ -35,7 +35,6 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SigunguRepository sigunguRepository;
-    private final QuestionCategoryRepository questionCategoryRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
     private final UserRedisService redisService;
@@ -52,7 +51,6 @@ public class UserServiceImpl implements UserService {
                            JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.sigunguRepository = sigunguRepository;
-        this.questionCategoryRepository = questionCategoryRepository;
         this.modelMapper = modelMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.redisService = redisService;
@@ -249,6 +247,26 @@ public class UserServiceImpl implements UserService {
 
         // 5. Redis에서 인증번호 삭제 (일회용)
         redisService.deleteAuthCode(user.getEmail());
+    }
+
+    @Override
+    public void findUserIdByEmail(String email) {
+        UserEntity user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new IllegalArgumentException("등록되지 않은 이메일입니다.");
+        }
+
+        // 이메일 전송
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(user.getEmail());
+            message.setSubject("[CatDogShelter] 회원님의 아이디 안내");
+            message.setText("회원님의 아이디는 [" + user.getUserAccount() + "] 입니다.");
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("아이디 발송 실패: {}", e.getMessage());
+            throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
+        }
     }
 
 }

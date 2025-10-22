@@ -1,5 +1,6 @@
 package com.backoven.catdogshelter.domain.shelterhead.command.application.controller;
 
+import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.requestdto.RequestFindShelterheadIdDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.requestdto.RequestRegistShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.requestdto.RequestResetShelterheadPasswordDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.requestdto.RequestVerifyShelterheadDTO;
@@ -8,12 +9,9 @@ import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.res
 import com.backoven.catdogshelter.domain.shelterhead.command.application.dto.ShelterheadDTO;
 import com.backoven.catdogshelter.domain.shelterhead.command.application.service.ShelterheadService;
 import com.backoven.catdogshelter.domain.user.command.application.dto.requestdto.*;
-import com.backoven.catdogshelter.domain.user.command.application.dto.responsedto.ResponseModifyUserDTO;
-import com.backoven.catdogshelter.domain.user.command.application.dto.user.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,6 +72,12 @@ public class ShelterheadController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("비밀번호 변경 중 오류가 발생했습니다.");
         }
+    }
+
+    @PostMapping("/find-id")
+    public ResponseEntity<String> findUserId(@RequestBody RequestFindShelterheadIdDTO dto){
+        shelterheadService.findShelterheadIdByEmail(dto.getEmail());
+        return ResponseEntity.ok("등록된 이메일로 아이디가 전송되었습니다.");
     }
 
 }
