@@ -5,7 +5,7 @@ import com.backoven.catdogshelter.common.entity.UserEntity;
 import com.backoven.catdogshelter.common.repository.VolNoShelterHeadRepository;
 import com.backoven.catdogshelter.common.repository.VolNoUserRepository;
 import com.backoven.catdogshelter.common.util.DateTimeUtil;
-import com.backoven.catdogshelter.common.util.ReportCategory;
+import com.backoven.catdogshelter.common.enumulation.ReportCategory;
 import com.backoven.catdogshelter.domain.volunteer.command.application.dto.*;
 import com.backoven.catdogshelter.domain.volunteer.command.domain.aggregate.entity.*;
 import com.backoven.catdogshelter.domain.volunteer.command.domain.repository.*;

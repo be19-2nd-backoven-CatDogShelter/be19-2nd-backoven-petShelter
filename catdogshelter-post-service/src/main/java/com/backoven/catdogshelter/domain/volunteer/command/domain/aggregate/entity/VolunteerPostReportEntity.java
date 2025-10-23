@@ -3,7 +3,7 @@ package com.backoven.catdogshelter.domain.volunteer.command.domain.aggregate.ent
 import com.backoven.catdogshelter.common.entity.ShelterheadEntity;
 import com.backoven.catdogshelter.common.entity.UserEntity;
 import com.backoven.catdogshelter.common.util.DateTimeUtil;
-import com.backoven.catdogshelter.common.util.ReportCategory;
+import com.backoven.catdogshelter.common.enumulation.ReportCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
