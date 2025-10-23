@@ -1,4 +1,4 @@
-package com.backoven.catdogshelter.domain.post.query.controller;
+package com.backoven.catdogshelter.domain.post.feign.controller;
 
 import com.backoven.catdogshelter.domain.post.query.dto.PostInventoryDTO;
 import com.backoven.catdogshelter.domain.post.feign.dto.ResponsePostDTO;
