@@ -47,6 +47,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    // spring 통신
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     // 개발 편의성 및 런타임
     compileOnly 'org.projectlombok:lombok'               // Lombok (Getter/Setter/Builder 등)
