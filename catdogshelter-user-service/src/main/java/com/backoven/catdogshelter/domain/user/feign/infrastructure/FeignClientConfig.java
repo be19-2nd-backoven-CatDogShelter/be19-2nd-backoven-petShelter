@@ -1,4 +1,4 @@
-package com.backoven.catdogshelter.domain.user.infrastructure;
+package com.backoven.catdogshelter.domain.user.feign.infrastructure;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -8,10 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-/* 설명. micro service 건의 통신은
-*       gateway를 활용한 redirect이므로
-*       이 설정을 통해 유지해야 할 것이 있다면 전달한다. */
-// 현재: 헤더jwt 전달
+// post-service 통신 시 user-service의 헤더 jwt 전달
 @Configuration
 public class FeignClientConfig {
     @Bean
