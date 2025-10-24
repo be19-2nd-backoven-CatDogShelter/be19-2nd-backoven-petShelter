@@ -46,7 +46,6 @@ public class UserDtoToDtoMapper {
                 // 수정 가능 필드
                 .detailAddress(request.getDetailAddress()) // 상세 주소
                 .sigunguId(request.getSigunguId()) // 시군구
-                .questionCategoryId(request.getQuestionCategoryId()) // 질문
 
                 // 그대로 유지할 값
                 .cumulativeVolunteerTime(existingUser.getCumulativeVolunteerTime())
