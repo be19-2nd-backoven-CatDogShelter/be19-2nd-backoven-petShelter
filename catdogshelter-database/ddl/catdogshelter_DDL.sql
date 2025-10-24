@@ -828,7 +828,7 @@ CREATE TABLE notice (
 -- 공지 게시판 좋아요 --
 CREATE TABLE noticeLiked (
     id INT NOT NULL AUTO_INCREMENT,  
-    notice_id INT NOT NULL,          
+    notice_id INT NOT NULL,
     user_id INT,                     
     head_id INT,                     
     PRIMARY KEY (id),
