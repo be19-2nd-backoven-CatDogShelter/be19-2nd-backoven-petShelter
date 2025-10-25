@@ -1,5 +1,6 @@
 package com.backoven.catdogshelter.domain.volunteer.query.service;
 
+import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationDTO;
 import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationQueryDTO;
 import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationSearchCond;
 import com.backoven.catdogshelter.domain.volunteer.query.mapper.VolunteerAssociationQueryMapper;
@@ -13,6 +14,13 @@ import java.util.List;
 public class VolunteerAssociationQueryServiceImpl implements VolunteerAssociationQueryService {
 
     private final VolunteerAssociationQueryMapper mapper;
+
+    // headId에 대한 volunteerassociation 목록 조회
+    @Override
+    public List<VolunteerAssociationDTO> getHeadsAssociations(Integer headId) {
+        List<VolunteerAssociationDTO> response = mapper.findAssociationsByHeadId(headId);
+        return response;
+    }
 
     @Override
     public VolunteerAssociationQueryDTO selectVolunteerAssociation(Integer id) {

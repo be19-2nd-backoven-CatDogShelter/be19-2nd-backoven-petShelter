@@ -1,5 +1,6 @@
 package com.backoven.catdogshelter.domain.user.feign.infrastructure;
 
+import com.backoven.catdogshelter.domain.shelterhead.feign.dto.VolunteerAssociationDTO;
 import com.backoven.catdogshelter.domain.user.feign.dto.AdoptionUserResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,9 @@ import java.util.List;
 public interface PostServiceClient {
     @GetMapping("/adoption-post/user/{userId}/adoption")
     List<AdoptionUserResponseDTO> getAdoptionUser(@PathVariable("userId") Integer userId);
+
+    @GetMapping("/post-service/association-posts/shelter-heads/{headId}/associations")
+    List<VolunteerAssociationDTO> getHeadsAssociations(@PathVariable("headId") Integer headId);
 }
 
 

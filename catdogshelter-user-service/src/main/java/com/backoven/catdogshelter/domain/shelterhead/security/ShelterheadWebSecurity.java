@@ -68,7 +68,7 @@ public class ShelterheadWebSecurity {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/shelter-head/regist").permitAll()       // 회원가입 허용
                         .requestMatchers("/shelter-head/login").permitAll()        // 로그인 허용
-                        .requestMatchers("/shelter-head/mypage/**").authenticated() // 마이페이지 접근은 인증 필요
+                        .requestMatchers("/shelter-head/mypage/**").permitAll() // 마이페이지 접근은 인증 필요
                         .requestMatchers(HttpMethod.POST, "/shelter-head/password/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/shelter-head/find-id/**").permitAll()
                         .anyRequest().authenticated()                              // 그 외는 인증 필요
