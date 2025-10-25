@@ -91,8 +91,8 @@ INSERT INTO questionCategory (question) VALUES
 INSERT INTO user (user_name, user_account, user_password, e_mail, detail_address, answer, user_phone,
                   cumulative_volunteer_time, month_volunteer_time, volunteer_count,
                   deactivation_times, user_status, activation_date, rating_id, sigungu_id, questionCategory_id) VALUES
-('박지수', 'parkjs', 'pass123!', 'parkjs@example.com', '서울 종로구 한옥마을길 5', '짱구', '010-1234-5678',
- 0, 0, 0, 0, 'GENERAL', '2025-06-01', 0, 1, 1),
+('admin', 'admin', '$2a$10$obCrYsPYbr.mZc78lyGuJOpgViEqOilarQTnfR/InamU5f7rQ565q', 'admin@petShelter.com', '서울시 강남구 테헤란로 123', '010-1234-5678',
+ 0, 0, 0, 0, 'GENERAL', '2025-06-01', -1, 1, 1),
 
 ('최민호', 'choiminho', 'Qwe123!@#', 'minho@example.com', '서울 중구 을지로 10', '초코', '010-2345-6789',
  15, 5, 3, 1, 'GENERAL', '2025-05-15', 1, 2, 2),
