@@ -1,5 +1,6 @@
 package com.backoven.catdogshelter.domain.volunteer.query.mapper;
 
+import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationDTO;
 import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationQueryDTO;
 import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationSearchCond;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,5 +15,7 @@ public interface VolunteerAssociationQueryMapper {
     List<VolunteerAssociationQueryDTO> searchAssociations(@Param("cond") VolunteerAssociationSearchCond cond);
 
     VolunteerAssociationQueryDTO findAssociationById(@Param("id") Integer id);
+
+    List<VolunteerAssociationDTO> findAssociationsByHeadId(Integer headId);
 }
 

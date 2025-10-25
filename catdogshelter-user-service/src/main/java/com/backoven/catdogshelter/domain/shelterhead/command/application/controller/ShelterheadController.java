@@ -44,15 +44,15 @@ public class ShelterheadController {
     }
 
     // 마이페이지
-    @GetMapping("/mypage/{shelterId}")
-    public ResponseEntity<ResponseFindShelterheadDTO> getUsers(@PathVariable String shelterId){
-        ShelterheadDTO shelterHeadDTO = shelterheadService.getShelter_headById(shelterId);
-
-        ResponseFindShelterheadDTO responseFindShelterHeadDTO =
-                modelMapper.map(shelterHeadDTO, ResponseFindShelterheadDTO.class);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseFindShelterHeadDTO);
-    }
+//    @GetMapping("/mypage/{shelterId}")
+//    public ResponseEntity<ResponseFindShelterheadDTO> getUsers(@PathVariable String shelterId){
+//        ShelterheadDTO shelterHeadDTO = shelterheadService.getShelter_headById(shelterId);
+//
+//        ResponseFindShelterheadDTO responseFindShelterHeadDTO =
+//                modelMapper.map(shelterHeadDTO, ResponseFindShelterheadDTO.class);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(responseFindShelterHeadDTO);
+//    }
 
     // redis를 이용한 이메일로 인증 코드 보내는 부분
     @PostMapping("/password/verify")

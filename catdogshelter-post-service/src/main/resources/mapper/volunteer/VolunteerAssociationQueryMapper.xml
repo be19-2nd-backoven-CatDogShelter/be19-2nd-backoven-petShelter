@@ -93,4 +93,38 @@
         WHERE va.id = #{id}
     </select>
 
+    <resultMap id="association" type="com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationDTO">
+        <id property="id" column="association_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="time" column="time"/>
+        <result property="detailAddress" column="detail_address"/>
+        <result property="deadline" column="deadline"/>
+        <result property="numberOfPeople" column="number_of_people"/>
+        <result property="isEnd" column="is_end"/>
+        <result property="headName" column="head_name"/>
+        <result property="headAddress" column="company_address"/>
+
+    </resultMap>
+    <select id="findAssociationsByHeadId" resultMap="association" parameterType="int">
+        SELECT
+               A.id AS association_id
+             , A.title
+             , A.content
+             , A.created_at
+             , A.time
+             , A.detail_address
+             , A.deadline
+             , A.number_of_people
+             , A.is_end
+             , B.company_name AS head_name
+             , CONCAT(D.sido_name, ' ', C.sigungu_name) AS company_address
+          FROM VOLUNTEERASSOCIATION A
+                 LEFT JOIN SHELTER_HEAD B ON (A.head_id = B.head_id)
+                 LEFT JOIN SIGUNGU C ON (A.sigungu_id = C.sigungu_id)
+                 LEFT JOIN SIDO D ON(C.sido_id = D.sido_id)
+        WHERE B.head_id = #{headId};
+    </select>
+
 </mapper>
