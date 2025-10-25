@@ -4,10 +4,7 @@ import com.backoven.catdogshelter.domain.user.command.application.service.AdminS
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController()
@@ -40,5 +37,12 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    // 관리자 임명
+    @PatchMapping("/ratingId/admin/{userId}")
+    public ResponseEntity<?> promoteToAdmin(@PathVariable Integer userId) {
+        adminService.promoteToAdmin(userId);
+
+        return ResponseEntity.ok().build();
+    }
 
 }

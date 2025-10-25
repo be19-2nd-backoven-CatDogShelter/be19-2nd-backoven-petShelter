@@ -1,6 +1,8 @@
 package com.backoven.catdogshelter.domain.user.command.application.service;
 
 
+import com.backoven.catdogshelter.common.entity.RatingEntity;
+import com.backoven.catdogshelter.common.entity.UserEntity;
 import com.backoven.catdogshelter.domain.user.command.domain.aggregate.entity.report.base.BasePostCommentReport;
 import com.backoven.catdogshelter.domain.user.command.domain.aggregate.entity.report.base.BasePostReport;
 import com.backoven.catdogshelter.domain.user.command.domain.aggregate.entity.report.comment.*;
@@ -8,6 +10,8 @@ import com.backoven.catdogshelter.domain.user.command.domain.aggregate.entity.re
 import com.backoven.catdogshelter.domain.user.command.domain.aggregate.entity.report.post.*;
 import com.backoven.catdogshelter.domain.user.command.domain.aggregate.entity.report.postreport.*;
 
+import com.backoven.catdogshelter.domain.user.command.domain.repository.RatingRepository;
+import com.backoven.catdogshelter.domain.user.command.domain.repository.UserRepository;
 import com.backoven.catdogshelter.domain.user.command.domain.repository.report.comment.*;
 import com.backoven.catdogshelter.domain.user.command.domain.repository.report.commentreport.*;
 import com.backoven.catdogshelter.domain.user.command.domain.repository.report.post.*;
@@ -50,6 +54,10 @@ public class AdminServiceImpl implements AdminService {
     private final SightingPostCommentReportRepository sightingPostCommentReportRepository;
     private final VolunteerPostCommentReportRepository volunteerPostCommentReportRepository;
 
+    // 유저
+    private final UserRepository userRepository;
+    private final RatingRepository ratingRepository;
+
     @Autowired
     public AdminServiceImpl(AdoptionPostRepository adoptionPostRepository,
                             MissingPostRepository missingPostRepository,
@@ -72,7 +80,7 @@ public class AdminServiceImpl implements AdminService {
                             MissingPostCommentReportRepository missingPostCommentReportRepository,
                             PostCommentReportRepository postCommentReportRepository,
                             SightingPostCommentReportRepository sightingPostCommentReportRepository,
-                            VolunteerPostCommentReportRepository volunteerPostCommentReportRepository) {
+                            VolunteerPostCommentReportRepository volunteerPostCommentReportRepository, UserRepository userRepository, RatingRepository ratingRepository) {
         this.adoptionPostRepository = adoptionPostRepository;
         this.missingPostRepository = missingPostRepository;
         this.postRepository = postRepository;
@@ -95,6 +103,8 @@ public class AdminServiceImpl implements AdminService {
         this.postCommentReportRepository = postCommentReportRepository;
         this.sightingPostCommentReportRepository = sightingPostCommentReportRepository;
         this.volunteerPostCommentReportRepository = volunteerPostCommentReportRepository;
+        this.userRepository = userRepository;
+        this.ratingRepository = ratingRepository;
     }
 
 
@@ -270,5 +280,14 @@ public class AdminServiceImpl implements AdminService {
                 }
             }
         }
+    }
+
+    @Override
+    public void promoteToAdmin(Integer userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+        RatingEntity rating = ratingRepository.findById(-1).orElse(null);
+
+        user.setRating(rating);
+        userRepository.save(user);
     }
 }

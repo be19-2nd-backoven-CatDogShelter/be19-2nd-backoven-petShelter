@@ -78,8 +78,8 @@ public class UserWebSecurity {
                 .securityMatcher("/user/**") // "/user/**" 경로만 이 설정 적용
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/user/regist").permitAll() // 회원가입 허용
-                        .requestMatchers(HttpMethod.GET, "/user/admin/**").permitAll() // 관리자용 API 허용
-                        .requestMatchers(HttpMethod.PUT, "/user/admin/**").permitAll() // 관리자용 API 허용
+                        .requestMatchers(HttpMethod.PATCH,"/user/admin/ratingId/**").hasAuthority("ROLE_MASTER_ADMIN") // 관리자용 API 허용
+                        .requestMatchers("/user/admin/**").hasAuthority("ROLE_ADMIN") // 관리자용 API 허용
                         .requestMatchers(HttpMethod.POST, "/user/login").permitAll() // 로그인 허용
                         .requestMatchers(HttpMethod.POST, "/user/password/**").permitAll()
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
