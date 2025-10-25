@@ -1,6 +1,6 @@
 package com.backoven.catdogshelter.domain.volunteer.command.application.dto;
 
-import com.backoven.catdogshelter.common.util.ReportCategory;
+import com.backoven.catdogshelter.common.enumulation.ReportCategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.backoven.catdogshelter.domain.adoption.userfeign.mapper.AdoptionUserMapper">
+
+    <select id="findPostsByUserId" parameterType="java.lang.Integer"
+            resultType="com.backoven.catdogshelter.domain.adoption.userfeign.dto.AdoptionUserResponseDTO">
+    <![CDATA[
+        SELECT
+            ap.id AS id,
+            ap.title AS title,
+            CASE
+                WHEN ap.updated_at IS NOT NULL AND ap.updated_at <> '' THEN ap.updated_at
+                ELSE ap.created_at
+                END AS updatedAt,
+            ap.created_at AS createdAt,
+            ap.view AS viewCount,
+            IFNULL(like_count.likeCount, 0) AS likeCount,
+            IFNULL(comment_count.commentCount, 0) AS commentCount,
+            '입양게시판' AS boardType
+        FROM adoptionPost ap
+                 LEFT JOIN (
+            SELECT post_id, COUNT(*) AS likeCount
+            FROM adoptionPostLiked
+            GROUP BY post_id
+        ) AS like_count ON ap.id = like_count.post_id
+                 LEFT JOIN (
+            SELECT post_id, COUNT(*) AS commentCount
+            FROM adoptionPostComment
+            WHERE is_deleted = FALSE AND is_blinded = FALSE
+            GROUP BY post_id
+        ) AS comment_count ON ap.id = comment_count.post_id
+        WHERE ap.user_id = #{userId}
+          AND ap.is_deleted = FALSE
+          AND ap.is_blind = FALSE
+        ORDER BY ap.created_at DESC
+        ]]>
+</select>
+
+
+</mapper>

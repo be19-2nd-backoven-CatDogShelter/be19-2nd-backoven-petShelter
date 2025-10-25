@@ -1,5 +1,8 @@
 package com.backoven.catdogshelter.domain.shelterhead.query.controller;
 
-public class ShelterheadQueryController {
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+public class ShelterheadQueryController {
 }
+

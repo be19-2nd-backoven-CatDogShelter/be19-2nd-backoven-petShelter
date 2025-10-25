@@ -10,6 +10,21 @@ spring:
   application:
     name: CATDOGSHELTER-GATEWAY
   cloud:
+    default-filters:
+      - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+    globalcors:
+      cors-configurations:
+        '[/**]':
+          allowedOrigins:
+            - 'http://localhost:5173' # 허용하려는 도메인
+          allow-credentials: true # 요청 시 인증 정보를 전송하도록 허가
+          allowedHeaders: '*' # 허용하려는 헤더
+          allowedMethods: # 허용하려는 HTTP 메서드
+            - PUT
+            - GET
+            - POST
+            - DELETE
+            - OPTIONS
     gateway:
       routes:
         # POST API 라우팅
@@ -18,8 +33,18 @@ spring:
           predicates:
             - Path=/post-service/**
           filters:
-            - RewritePath=/post-service/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter # 테스트 할때 얘를 주석하고 테스트
+            - RewritePath=/post-service/(?<segment>.*), /${segment}
+            - AuthorizationHeaderFilter
+
+        # AdoptionPost API 라우팅
+        - id: CatDogShelter-adoption-post
+          uri: lb://CATDOGSHELTER-POST-SERVICE
+          predicates:
+            - Path=/adoption-post/**
+          filters:
+            - PreserveHostHeader
+            - AuthorizationHeaderFilter
+
         # User API 라우팅
         - id: CatDogShelter-user-api
           uri: lb://CATDOGSHELTER-USER-SERVICE
@@ -35,6 +60,8 @@ spring:
             - Path=/user-service/shelter-head/**
           filters:
             - RewritePath=/user-service/shelter-head/(?<segment>.*), /shelter-head/$\{segment}
+
+
 token:
   expiration_time: 43200000
   secret: "VKKCjFzrzJQE8oM69GmgavfauYLnHnQeG4k1ab/lrYtrEQMk7o0/3j8KmqM33prEOWs5IdSVhQsbKiV3UzFhHQ=="

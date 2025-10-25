@@ -19,7 +19,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -64,8 +68,9 @@ public class ShelterheadWebSecurity {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/shelter-head/regist").permitAll()       // 회원가입 허용
                         .requestMatchers("/shelter-head/login").permitAll()        // 로그인 허용
-                        .requestMatchers("/shelter-head/mypage/**").authenticated() // 마이페이지 접근은 인증 필요
+                        .requestMatchers("/shelter-head/mypage/**").permitAll() // 마이페이지 접근은 인증 필요
                         .requestMatchers(HttpMethod.POST, "/shelter-head/password/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/shelter-head/find-id/**").permitAll()
                         .anyRequest().authenticated()                              // 그 외는 인증 필요
                 )
                 .sessionManagement(sessionManagement ->
@@ -85,5 +90,20 @@ public class ShelterheadWebSecurity {
      */
     private Filter getAuthenticationFilter(AuthenticationManager authenticationManager) {
         return new ShelterheadAuthenticationFilter(authenticationManager, env);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 }

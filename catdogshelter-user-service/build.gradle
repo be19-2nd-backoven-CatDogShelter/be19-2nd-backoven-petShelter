@@ -43,10 +43,13 @@ dependencies {
 
     // Thymeleaf + Security 확장
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'      // Thymeleaf에서 Spring Security 지원
+
     // redis에서 사용자가 보낸 암포 저장하는 프레임 워크
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    // spring 통신
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     // 개발 편의성 및 런타임
     compileOnly 'org.projectlombok:lombok'               // Lombok (Getter/Setter/Builder 등)

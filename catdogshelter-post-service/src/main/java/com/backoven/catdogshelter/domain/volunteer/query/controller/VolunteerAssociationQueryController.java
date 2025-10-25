@@ -1,11 +1,13 @@
 package com.backoven.catdogshelter.domain.volunteer.query.controller;
 
+import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationDTO;
 import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationQueryDTO;
 import com.backoven.catdogshelter.domain.volunteer.query.dto.VolunteerAssociationSearchCond;
 import com.backoven.catdogshelter.domain.volunteer.query.service.VolunteerAssociationQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,5 +71,12 @@ public class VolunteerAssociationQueryController {
         List<VolunteerAssociationQueryDTO> list =
                 volunteerAssociationQueryService.selectVolunteerAssociationsBySearch(cond);
         return ResponseEntity.ok(list);
+    }
+
+    // 해당 번호 보호소장의 봉사 모집 목록
+    @GetMapping("/shelter-heads/{headId}/associations")
+    public ResponseEntity<List<VolunteerAssociationDTO>> getHeadsAssociations(@PathVariable Integer headId) {
+        List<VolunteerAssociationDTO> associationDTOList = volunteerAssociationQueryService.getHeadsAssociations(headId);
+        return ResponseEntity.status(HttpStatus.OK).body(associationDTOList);
     }
 }

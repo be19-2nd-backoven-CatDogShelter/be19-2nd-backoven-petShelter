@@ -15,7 +15,7 @@
         </environment>
     </environments>
     <mappers>
-<!--        <mapper resource="com/backoven/domain/adoption/AdoptionMapper.xml"/>-->
+<!--        <mapper resource="com/backoven/domain/adoption/AdoptionUserMapper.xml"/>-->
         <package name="com.backoven.catdogshelter"/>
     </mappers>
 </configuration>

@@ -42,7 +42,7 @@ public class UserController {
                 modelMapper.map(userDTO, ResponseRegistUserDTO.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(reponseUser);
     }
-
+    /*
     // 마이페이지
     @GetMapping("/mypage/{userId}")
     public ResponseEntity<ResponseFindLoginUserDTO> getUsers(
@@ -59,7 +59,7 @@ public class UserController {
         ResponseFindLoginUserDTO responseUser =
                 modelMapper.map(userDTO, ResponseFindLoginUserDTO.class);
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
-    }
+    } */
 
     // 마이페이지에서 내정보 수정
     @PutMapping("/mypage/{userId}")
@@ -138,5 +138,10 @@ public class UserController {
         }
     }
 
+    @PostMapping("/find-id")
+    public ResponseEntity<String> findUserId(@RequestBody RequestFindUserIdDTO dto){
+        userService.findUserIdByEmail(dto.getEmail());
+        return ResponseEntity.ok("등록된 이메일로 아이디가 전송되었습니다.");
+    }
 
 }

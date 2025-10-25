@@ -25,6 +25,7 @@ public class UserQueryDTO {
     private Integer deactivationTimes;        // 블라인드 횟수
     private String userStatus;           // 회원상태 (GENERAL, BLACK, CANCEL)
     private String activationDate;       // 정지 해제일
+<<<<<<< HEAD
 
     private Integer postCount;
     private Integer commentCount;
@@ -32,4 +33,12 @@ public class UserQueryDTO {
     private UserRatingDTO rating;
     private UserAddressNameDTO addressName;
     private LoginHistoryDTO loginHistory;
+=======
+    private Integer ratingId;            // 회원등급 FK
+    private Integer sigunguId;           // 소속 시군구 FK
+    private Integer questionCategoryId;  // 지정질문카테고리번호 FK
+
+    /* 설명. FeignClient 이후 */
+    List<ResponsePostDTO> postlist;
+>>>>>>> devlop
 }

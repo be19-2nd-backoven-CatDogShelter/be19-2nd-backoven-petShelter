@@ -9,8 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface PostInventoryMapper {
-
     // 조회 할때 파라미터 값이 필요 없다.
     List<PostInventoryDTO> selectPostInventory();
-
 }

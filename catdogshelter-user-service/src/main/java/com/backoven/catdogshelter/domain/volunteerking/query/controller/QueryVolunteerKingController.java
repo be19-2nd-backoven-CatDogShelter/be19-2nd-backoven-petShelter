@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/volunteer-king")
+@RequestMapping("/heroes")
 @Tag(name = "봉사왕 조회 API")
 public class QueryVolunteerKingController {
 
