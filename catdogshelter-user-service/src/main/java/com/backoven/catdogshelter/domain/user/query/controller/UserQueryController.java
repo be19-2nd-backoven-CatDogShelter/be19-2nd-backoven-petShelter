@@ -1,14 +1,11 @@
 package com.backoven.catdogshelter.domain.user.query.controller;
 
-import com.backoven.catdogshelter.domain.user.query.dto.LoginHistoryDTO;
-import com.backoven.catdogshelter.domain.user.query.dto.UserQueryDTO;
+import com.backoven.catdogshelter.domain.user.query.dto.*;
 import com.backoven.catdogshelter.domain.user.query.service.UserQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,29 +21,69 @@ public class UserQueryController {
         this.userQueryService = userQueryService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> selectAllUsers(){
-        List<UserQueryDTO> users = userQueryService.selectAllUsers();
+    // 조회 -----------------------------------------------------------------------------------
+    @GetMapping("/user")
+    public ResponseEntity<List<UserQueryDTO>> selectUsers(@RequestParam String type){
+        List<UserQueryDTO> users = userQueryService.selectUsers(type);
+
         return ResponseEntity.ok().body(users);
     }
-    @GetMapping("/general")
-    public ResponseEntity<?> selectAllUsersByGeneral(){
-        List<UserQueryDTO> usersByGeneral = userQueryService.selectAllUsersByGeneral();
-        return ResponseEntity.ok().body(usersByGeneral);
+
+    @GetMapping("/admin")
+    public ResponseEntity<List<UserQueryDTO>> selectAdmin(){
+        List<UserQueryDTO> users = userQueryService.selectAdmin();
+        return ResponseEntity.ok().body(users);
     }
-    @GetMapping("/black")
-    public ResponseEntity<?> selectAllUsersByBlack(){
-        List<UserQueryDTO> usersByBlack = userQueryService.selectAllUsersByBlack();
-        return ResponseEntity.ok().body(usersByBlack);
+
+    @GetMapping("/head")
+    public ResponseEntity<List<UserQueryShelterHeadDTO>> selectHead(){
+        List<UserQueryShelterHeadDTO> users = userQueryService.selectHead();
+        return ResponseEntity.ok().body(users);
     }
-    @GetMapping("/canceled")
-    public ResponseEntity<?> selectAllUsersByCanceled(){
-        List<UserQueryDTO> usersByCanceled = userQueryService.selectAllUsersByCanceled();
-        return ResponseEntity.ok().body(usersByCanceled);
-    }
+
     @GetMapping("/login-history")
-    public ResponseEntity<?> selectAllLoginHistory(){
-        List<LoginHistoryDTO> usersLoginHistory = userQueryService.selectAllLoginHistory();
+    public ResponseEntity<List<LoginHistoryDTO>> selectAllLoginHistory(@RequestParam(required = false) Integer userId,
+                                                                       @RequestParam(required = false) Integer headId){
+
+        if (userId != null && headId != null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        if (userId == null && headId == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        List<LoginHistoryDTO> usersLoginHistory = userQueryService.selectAllLoginHistory(userId, headId);
         return ResponseEntity.ok().body(usersLoginHistory);
     }
+
+    // 신고 -----------------------------------------------------------------------------------
+    @GetMapping("/report-post-count")
+    public ResponseEntity<Integer> selectReportsPostCount() {
+        int result = userQueryService.selectReportsPostCount();
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/report-comment-count")
+    public ResponseEntity<Integer> selectReportsCommentCount() {
+        int result = userQueryService.selectReportsCommentCount();
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/report-post")
+    public ResponseEntity<List<ReportedPostDTO>> selectReportsPost() {
+        List<ReportedPostDTO> reports = userQueryService.selectReportsPost();
+
+        return ResponseEntity.ok().body(reports);
+    }
+
+    @GetMapping("/report-comment")
+    public ResponseEntity<List<ReportedPostCommentDTO>> selectReportsComment() {
+        List<ReportedPostCommentDTO> reports = userQueryService.selectReportsComment();
+
+        return ResponseEntity.ok().body(reports);
+    }
+
+    // 통계 -----------------------------------------------------------------------------------
 }

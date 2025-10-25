@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.backoven.catdogshelter.domain.user.query.mapper.UserMapper">
+    <resultMap id = "userResultMap" type = "com.backoven.catdogshelter.domain.user.query.dto.UserQueryDTO" >
+        <id property = "userId" column = "user_id"/>
+        <result property = "userName" column = "user_name"/>
+        <result property = "userAccount" column = "user_account"/>
+        <result property = "userPassword" column = "user_password"/>
+        <result property = "email" column = "e_mail"/>
+        <result property = "detailAddress" column = "detail_address"/>
+        <result property = "userPhone" column = "user_phone"/>
+        <result property = "cumulativeVolunteerTime" column = "cumulative_volunteer_time"/>
+        <result property = "monthVolunteerTime" column = "month_volunteer_time"/>
+        <result property = "volunteerCount" column = "volunteer_count"/>
+        <result property = "deactivationTimes" column = "deactivation_times"/>
+        <result property = "userStatus" column = "user_status"/>
+        <result property = "activationDate" column = "activation_date"/>
+        <result property = "postCount" column = "post_count"/>
+        <result property = "commentCount" column = "comment_count"/>
+
+        <association property = "rating" resultMap = "ratingResultMap"/>
+        <association property = "addressName" resultMap = "addressNameResultMap"/>
+        <association property="loginHistory" resultMap="loginHistoryResultMap"/>
+    </resultMap>
+
+    <resultMap id = "ratingResultMap" type = "com.backoven.catdogshelter.domain.user.query.dto.UserRatingDTO">
+        <id property = "id" column = "rating_id"/>
+        <result property = "name" column = "rating_name"/>
+    </resultMap>
+
+    <resultMap id = "addressNameResultMap" type = "com.backoven.catdogshelter.domain.user.query.dto.UserAddressNameDTO">
+        <result property = "sidoName" column = "sido_name"/>
+        <result property = "sigunguName" column = "sigungu_name"/>
+    </resultMap>
+
+    <resultMap id = "loginHistoryResultMap" type = "com.backoven.catdogshelter.domain.user.query.dto.LoginHistoryDTO">
+        <id property = "id" column = "login_id"/>
+        <result property = "ipAddress" column = "ip_address"/>
+        <result property = "loggedAt" column = "logged_at"/>
+        <result property = "userId" column = "user_id"/>
+        <result property = "headId" column = "head_id"/>
+    </resultMap>
+
+
+    <select id = "selectUsers" parameterType = "map" resultMap = "userResultMap">
+        SELECT
+               u.user_id,
+               u.user_name,
+               u.user_account,
+               u.e_mail,
+               u.detail_address,
+               u.user_phone,
+               u.cumulative_volunteer_time,
+               u.month_volunteer_time,
+               u.volunteer_count,
+               u.deactivation_times,
+               u.user_status,
+               u.activation_date,
+               (
+                 SELECT COUNT(*)
+                   FROM (
+                          SELECT user_id FROM adoptionPost
+                          UNION ALL
+                          SELECT user_id FROM missingPost
+                          UNION ALL
+                          SELECT user_id FROM post
+                          UNION ALL
+                          SELECT user_id FROM sightingPost
+                          UNION ALL
+                          SELECT vaad.user_id FROM volunteerPost vp JOIN volunteerassociationapplicationdetails vaad ON vp.volappdetail_id = vaad.id
+                        ) p
+                  WHERE p.user_id = u.user_id
+               ) AS post_count,
+               (
+                 SELECT COUNT(*)
+                   FROM (
+                          SELECT user_id FROM adoptionPostComment
+                          UNION ALL
+                          SELECT user_id FROM donationPostComment
+                          UNION ALL
+                          SELECT user_id FROM missingPostComment
+                          UNION ALL
+                          SELECT user_id FROM postComment
+                          UNION ALL
+                          SELECT user_id FROM sightingPostComment
+                          UNION ALL
+                          SELECT user_id FROM volunteerPostComment
+                        ) p
+                  WHERE p.user_id = u.user_id
+               ) AS comment_count,
+
+               u.rating_id,
+               r.name as rating_name,
+
+               d.sido_name,
+               g.sigungu_name,
+
+               l.id as login_id,
+               l.ip_address,
+               l.logged_at
+
+          FROM user AS u
+          LEFT JOIN rating AS r ON (u.rating_id = r.id)
+          LEFT JOIN sigungu AS g ON (u.sigungu_id = g.sigungu_id)
+          LEFT JOIN sido AS d ON (g.sido_id = d.sido_id)
+          LEFT JOIN (
+                      SELECT
+                             lh1.id,
+                             lh1.ip_address,
+                             lh1.logged_at,
+                             lh1.user_id
+                        FROM loginhistory as lh1
+                       WHERE  lh1.logged_at = (
+                                                SELECT MAX(lh2.logged_at)
+                                                  FROM loginHistory lh2
+                                                 WHERE lh2.user_id = lh1.user_id
+                                              )
+                    ) AS l ON(u.user_id = l.user_id)
+        <where>
+                u.rating_id BETWEEN 0 AND 3
+            <if test="'general'.equals(type)">
+                AND u.user_status = 'GENERAL'
+            </if>
+            <if test="'black'.equals(type)">
+                AND u.user_status = 'BLACK'
+            </if>
+            <if test="'cancel'.equals(type)">
+                AND u.user_status = 'CANCEL'
+            </if>
+        </where>
+    </select>
+
+    <select id = "selectAdmin" resultMap = "userResultMap">
+        SELECT
+        u.user_id,
+        u.user_name,
+        u.user_account,
+        u.e_mail,
+        u.detail_address,
+        u.user_phone,
+        u.cumulative_volunteer_time,
+        u.month_volunteer_time,
+        u.volunteer_count,
+        u.deactivation_times,
+        u.user_status,
+        u.activation_date,
+        (
+        SELECT COUNT(*)
+        FROM (
+        SELECT user_id FROM adoptionPost
+        UNION ALL
+        SELECT user_id FROM missingPost
+        UNION ALL
+        SELECT user_id FROM post
+        UNION ALL
+        SELECT user_id FROM sightingPost
+        UNION ALL
+        SELECT vaad.user_id FROM volunteerPost vp JOIN volunteerassociationapplicationdetails vaad ON vp.volappdetail_id = vaad.id
+        ) p
+        WHERE p.user_id = u.user_id
+        ) AS post_count,
+        (
+        SELECT COUNT(*)
+        FROM (
+        SELECT user_id FROM adoptionPostComment
+        UNION ALL
+        SELECT user_id FROM donationPostComment
+        UNION ALL
+        SELECT user_id FROM missingPostComment
+        UNION ALL
+        SELECT user_id FROM postComment
+        UNION ALL
+        SELECT user_id FROM sightingPostComment
+        UNION ALL
+        SELECT user_id FROM volunteerPostComment
+        ) p
+        WHERE p.user_id = u.user_id
+        ) AS comment_count,
+
+        u.rating_id,
+        r.name as rating_name,
+
+        d.sido_name,
+        g.sigungu_name,
+
+        l.id as login_id,
+        l.ip_address,
+        l.logged_at
+
+        FROM user AS u
+        LEFT JOIN rating AS r ON (u.rating_id = r.id)
+        LEFT JOIN sigungu AS g ON (u.sigungu_id = g.sigungu_id)
+        LEFT JOIN sido AS d ON (g.sido_id = d.sido_id)
+        LEFT JOIN (
+                    SELECT
+                           lh1.id,
+                           lh1.ip_address,
+                           lh1.logged_at,
+                           lh1.user_id
+                      FROM loginhistory as lh1
+                     WHERE  lh1.logged_at = (
+                                              SELECT MAX(lh2.logged_at)
+                                                FROM loginHistory lh2
+                                               WHERE lh2.user_id = lh1.user_id
+                                            )
+                  ) AS l ON(u.user_id = l.user_id)
+        <where>
+            rating_id NOT BETWEEN 0 AND 3
+        </where>
+    </select>
+
+    <resultMap id = "shelterHeadResultMap" type = "com.backoven.catdogshelter.domain.user.query.dto.UserQueryShelterHeadDTO">
+        <id property = "headId" column = "head_id"/>
+        <result property = "ceoName" column = "ceo_name"/>
+        <result property = "ceoName2" column = "ceo_name2"/>
+        <result property = "headAccount" column = "head_account"/>
+        <result property = "email" column = "e_mail"/>
+        <result property = "headPhone" column = "head_phone"/>
+        <result property = "companyName" column = "company_name"/>
+        <result property = "bizNumber" column = "biz_number"/>
+        <result property = "corNumber" column = "cor_number"/>
+        <result property = "companyAddress" column = "company_address"/>
+        <result property = "openDate" column = "open_date"/>
+        <result property = "closeDate" column = "close_date"/>
+        <result property = "postCount" column = "post_count"/>
+        <result property = "commentCount" column = "comment_count"/>
+        <result property = "volunteerCount" column = "volunteer_count"/>
+
+        <association property = "headAddress" resultMap = "addressNameResultMap"/>
+        <association property="headLoginHistory" resultMap="loginHistoryResultMap"/>
+    </resultMap>
+
+    <select id = "selectHead" resultMap = "shelterHeadResultMap">
+        SELECT
+               sh.head_id,
+               sh.ceo_name,
+               sh.ceo_name2,
+               sh.head_account,
+               sh.e_mail,
+               sh.head_phone,
+               sh.company_name,
+               sh.biz_number,
+               sh.cor_number,
+               sh.company_address,
+               sh.open_date,
+               sh.close_date,
+
+               (
+                   SELECT COUNT(*)
+                   FROM (
+                            SELECT head_id FROM adoptionPost
+                            UNION ALL
+                            SELECT head_id FROM donationPost
+                            UNION ALL
+                            SELECT head_id FROM missingPost
+                            UNION ALL
+                            SELECT head_id FROM post
+                            UNION ALL
+                            SELECT head_id FROM sightingPost
+                        ) p
+                   WHERE p.head_id = sh.head_id
+               ) AS post_count,
+               (
+                   SELECT COUNT(*)
+                   FROM (
+                            SELECT head_id FROM adoptionPostComment
+                            UNION ALL
+                            SELECT head_id FROM donationPostComment
+                            UNION ALL
+                            SELECT head_id FROM missingPostComment
+                            UNION ALL
+                            SELECT head_id FROM postComment
+                            UNION ALL
+                            SELECT head_id FROM sightingPostComment
+                            UNION ALL
+                            SELECT head_id FROM volunteerPostComment
+                        ) p
+                   WHERE p.head_id = sh.head_id
+               ) AS comment_count,
+               (
+                 SELECT COUNT(*)
+                   FROM volunteerassociation as va
+                  WHERE va.head_id = sh.head_id
+               ) AS volunteer_count,
+
+               g.sigungu_name,
+               d.sido_name,
+
+               l.id as login_id,
+               l.ip_address,
+               l.logged_at
+
+        FROM shelter_head AS sh
+        LEFT JOIN sigungu AS g ON (sh.sigungu_id = g.sigungu_id)
+        LEFT JOIN sido AS d ON (g.sido_id = d.sido_id)
+        LEFT JOIN (
+                    SELECT
+                           lh1.id,
+                           lh1.ip_address,
+                           lh1.logged_at,
+                           lh1.head_id
+                      FROM loginhistory as lh1
+                     WHERE lh1.logged_at = (
+                                             SELECT MAX(lh2.logged_at)
+                                             FROM loginHistory lh2
+                                             WHERE lh2.head_id = lh1.head_id
+                                           )
+                  ) AS l ON(sh.head_id = l.head_id)
+    </select>
+
+
+    <select id = "selectAllLoginHistory" parameterType = "map" resultMap = "loginHistoryResultMap">
+        SELECT
+               id AS login_id
+             , ip_address
+             , logged_at
+             , user_id
+             , head_id
+          FROM loginhistory
+        <where>
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>
+            <if test="headId != null">
+                head_id = #{headId}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectReportsPostCount" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+                 SELECT post_id AS id
+                 FROM postReport
+                 WHERE status = FALSE
+                 GROUP BY post_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT post_id AS id
+                 FROM adoptionPostReport
+                 WHERE status = FALSE
+                 GROUP BY post_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT post_id AS id
+                 FROM missingPostReport
+                 WHERE status = FALSE
+                 GROUP BY post_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT post_id AS id
+                 FROM sightingPostReport
+                 WHERE status = FALSE
+                 GROUP BY post_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT post_id AS id
+                 FROM volunteerPostReport
+                 WHERE status = FALSE
+                 GROUP BY post_id
+                 HAVING COUNT(*) >= 5
+             ) AS post_reports;
+    </select>
+
+    <select id="selectReportsCommentCount" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+                 SELECT comment_id AS id
+                 FROM postCommentReport
+                 WHERE status = FALSE
+                 GROUP BY comment_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT comment_id AS id
+                 FROM adoptionPostCommentReport
+                 WHERE status = FALSE
+                 GROUP BY comment_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT comment_id AS id
+                 FROM donationPostCommentReport
+                 WHERE status = FALSE
+                 GROUP BY comment_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT comment_id AS id
+                 FROM missingPostCommentReport
+                 WHERE status = FALSE
+                 GROUP BY comment_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT comment_id AS id
+                 FROM sightingPostCommentReport
+                 WHERE status = FALSE
+                 GROUP BY comment_id
+                 HAVING COUNT(*) >= 5
+
+                 UNION ALL
+
+                 SELECT comment_id AS id
+                 FROM volunteerPostCommentReport
+                 WHERE status = FALSE
+                 GROUP BY comment_id
+                 HAVING COUNT(*) >= 5
+             ) AS comment_reports;
+    </select>
+
+    <resultMap id = "reportsResultMap" type = "com.backoven.catdogshelter.domain.user.query.dto.ReportedPostDTO">
+        <id property = "id" column = "id"/>
+        <result property = "title" column = "title"/>
+        <result property = "writer" column = "writer"/>
+        <result property = "category" column = "category"/>
+        <result property = "status" column = "is_blind"/>
+        <result property = "createdAt" column = "created_at"/>
+        <result property = "view" column = "view"/>
+        <result property = "reportCount" column = "report_count"/>
+    </resultMap>
+
+    <select id = "selectReportsPost" resultMap = "reportsResultMap">
+        -- 입양 게시판
+        SELECT
+               ap.id
+             , ap.title
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '입양' AS category
+             , ap.is_blind
+             , ap.created_at
+             , ap.view
+             , Count(apr.id) as report_count
+          FROM adoptionpostreport AS apr
+          JOIN adoptionpost AS ap ON (apr.post_id = ap.id)
+          LEFT JOIN user AS u ON (ap.user_id = u.user_id)
+          LEFT JOIN shelter_head AS sh ON (ap.head_id = sh.head_id)
+         GROUP BY ap.id
+        HAVING SUM(CASE WHEN apr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+
+        -- 실종
+        SELECT
+               mp.id
+             , mp.title
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '실종' AS category
+             , mp.is_blinded
+             , mp.created_at
+             , mp.view
+             , Count(mpr.id) as report_count
+        FROM missingpostreport AS mpr
+                 JOIN missingpost AS mp ON (mpr.post_id = mp.id)
+                 LEFT JOIN user AS u ON (mp.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (mp.head_id = sh.head_id)
+        GROUP BY mp.id
+        HAVING SUM(CASE WHEN mpr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+
+        -- 자유
+        SELECT
+               p.id
+             , p.title
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '자유' AS category
+             , p.is_blinded
+             , p.created_at
+             , p.view
+             , Count(pr.id) as report_count
+        FROM postreport AS pr
+                 JOIN post AS p ON (pr.post_id = p.id)
+                 LEFT JOIN user AS u ON (p.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (p.head_id = sh.head_id)
+        GROUP BY p.id
+        HAVING SUM(CASE WHEN pr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+
+        UNION ALL
+
+        -- 목격
+        SELECT
+               sp.id
+             , sp.title
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '목격' AS category
+             , sp.is_blinded
+             , sp.created_at
+             , sp.view
+             , Count(spr.id) as report_count
+        FROM sightingpostreport AS spr
+                 JOIN sightingpost AS sp ON (spr.post_id = sp.id)
+                 LEFT JOIN user AS u ON (sp.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (sp.head_id = sh.head_id)
+        GROUP BY sp.id
+        HAVING SUM(CASE WHEN spr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+
+        -- 봉사
+        SELECT
+               vp.id
+             , vp.title
+             , u.user_name as writer
+             , '봉사' AS category
+             , vp.is_blinded
+             , vp.created_at
+             , vp.view
+             , Count(vpr.id) as report_count
+        FROM volunteerpostreport AS vpr
+        JOIN volunteerpost AS vp ON (vpr.post_id = vp.id)
+        LEFT JOIN volunteerassociationapplicationdetails AS vaad ON (vaad.id = vp.volappdetail_id)
+        LEFT JOIN user AS u ON (vaad.user_id = u.user_id)
+        GROUP BY vp.id
+        HAVING SUM(CASE WHEN vpr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+    </select>
+
+
+    <resultMap id = "reportsCommentResultMap" type = "com.backoven.catdogshelter.domain.user.query.dto.ReportedPostCommentDTO">
+        <id property = "id" column = "id"/>
+        <result property = "content" column = "content"/>
+        <result property = "writer" column = "writer"/>
+        <result property = "category" column = "category"/>
+        <result property = "status" column = "is_blind"/>
+        <result property = "createdAt" column = "created_at"/>
+        <result property = "postId" column = "post_id"/>
+        <result property = "reportCount" column = "report_count"/>
+    </resultMap>
+
+    <select id = "selectReportsComment" resultMap = "reportsResultMap">
+        -- 입양
+        SELECT
+               apc.id
+             , apc.content
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '입양' AS category
+             , apc.is_blinded
+             , apc.created_at
+             , apc.post_id
+             , Count(apcr.id) as report_count
+        FROM adoptionpostcommentreport AS apcr
+        JOIN adoptionpostcomment AS apc ON (apcr.comment_id = apc.id)
+        LEFT JOIN user AS u ON (apc.user_id = u.user_id)
+        LEFT JOIN shelter_head AS sh ON (apc.head_id = sh.head_id)
+       GROUP BY apc.id
+      HAVING SUM(CASE WHEN apcr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+        -- 후원
+        SELECT
+               dpc.id
+             , dpc.content
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '후원' AS category
+             , dpc.is_blinded
+             , dpc.created_at
+             , dpc.post_id
+             , Count(dpcr.id) as report_count
+        FROM donationpostcommentreport AS dpcr
+                 JOIN donationpostcomment AS dpc ON (dpcr.comment_id = dpc.id)
+                 LEFT JOIN user AS u ON (dpc.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (dpc.head_id = sh.head_id)
+        GROUP BY dpc.id
+        HAVING SUM(CASE WHEN dpcr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+
+        -- 실종
+        SELECT
+               mpc.id
+             , mpc.content
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '실종' AS category
+             , mpc.is_blinded
+             , mpc.created_at
+             , mpc.post_id
+             , Count(mpcr.id) as report_count
+        FROM missingpostcommentreport AS mpcr
+                 JOIN missingpostcomment AS mpc ON (mpcr.comment_id = mpc.id)
+                 LEFT JOIN user AS u ON (mpc.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (mpc.head_id = sh.head_id)
+        GROUP BY mpc.id
+        HAVING SUM(CASE WHEN mpcr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+        -- 자유
+        SELECT
+            pc.id
+             , pc.content
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '자유' AS category
+             , pc.is_blinded
+             , pc.created_at
+             , pc.post_id
+             , Count(pcr.id) as report_count
+        FROM postcommentreport AS pcr
+                 JOIN postcomment AS pc ON (pcr.comment_id = pc.id)
+                 LEFT JOIN user AS u ON (pc.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (pc.head_id = sh.head_id)
+        GROUP BY pc.id
+        HAVING SUM(CASE WHEN pcr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+
+        -- 목격
+        SELECT
+            spc.id
+             , spc.content
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '목격' AS category
+             , spc.is_blinded
+             , spc.created_at
+             , spc.post_id
+             , Count(spcr.id) as report_count
+        FROM sightingpostcommentreport AS spcr
+                 JOIN sightingpostcomment AS spc ON (spcr.comment_id = spc.id)
+                 LEFT JOIN user AS u ON (spc.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (spc.head_id = sh.head_id)
+        GROUP BY spc.id
+        HAVING SUM(CASE WHEN spcr.status = FALSE THEN 1 ELSE 0 END) >= 5
+
+        UNION ALL
+        -- 봉사
+        SELECT
+            vpc.id
+             , vpc.content
+             , COALESCE(u.user_name, sh.company_name) as writer
+             , '봉사' AS category
+             , vpc.is_blinded
+             , vpc.created_at
+             , vpc.post_id
+             , Count(vpcr.id) as report_count
+        FROM volunteerpostcommentreport AS vpcr
+                 JOIN volunteerpostcomment AS vpc ON (vpcr.comment_id = vpc.id)
+                 LEFT JOIN user AS u ON (vpc.user_id = u.user_id)
+                 LEFT JOIN shelter_head AS sh ON (vpc.head_id = sh.head_id)
+        GROUP BY vpc.id
+        HAVING SUM(CASE WHEN vpcr.status = FALSE THEN 1 ELSE 0 END) >= 5
+    </select>
+
+
+</mapper>
