@@ -22,7 +22,7 @@ public class UserQueryService {
 
     public List<UserQueryDTO> selectUsers(String type) {
         Map<String, Object> params = new HashMap<>();
-        params.put("type", type);
+        params.put("type", type.toLowerCase());
         log.info("입력값 = {}", type);
         List<UserQueryDTO> users = userMapper.selectUsers(params);
         log.info("되어라 = {}", users);
