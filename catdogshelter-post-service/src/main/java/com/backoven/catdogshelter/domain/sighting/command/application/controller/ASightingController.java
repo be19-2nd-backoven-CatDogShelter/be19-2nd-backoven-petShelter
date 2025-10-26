@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sighting-post")
+@Slf4j
 @Tag(name = "목격 정보 게시글 CUD API")
 public class ASightingController {
 
@@ -173,9 +175,10 @@ public class ASightingController {
         return ResponseEntity.noContent().build();
     }
     // 게시글 추천
-    @PostMapping("/post-like")
+    @PutMapping("/post-like")
     @Operation(summary = "게시글 추천", description = "누른 사람의 번호와 게시글 번호를 통해 추천을 기록합니다.")
     public ResponseEntity<?> registSightingPostLiked(@RequestBody RequestSightingPostLikedDTO newLikedDTO) {
+        log.info("입력값: {}", newLikedDTO);
         aSightingService.registSightingPostLiked(newLikedDTO);
 
         return ResponseEntity.noContent().build();
