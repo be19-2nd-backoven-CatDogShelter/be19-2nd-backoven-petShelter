@@ -18,9 +18,17 @@
         <result property="title" column="title"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
+        <result property = "animalType" column="animal_type"/>
+        <result property="breed" column="breed"/>
+        <result property="color" column="color"/>
+        <result property="sightedAt" column="sighted_at"/>
+        <result property="sightedPlace" column="sighted_place"/>
+
         <result property="view" column="view"/>
         <result property="likeCount" column="like_count"/>
-        <association property="writer" resultMap="writerResultMap"/>
+        <association property="writer" resultMap="writerResultMap2"/>
+        <association property="address" resultMap = "addressNameResultMap"/>
+        <association property="file" resultMap = "fileResultMap"/>
     </resultMap>
 
     <!-- 게시글 개수 세기 -->
@@ -72,12 +80,32 @@
         WHEN sp.user_id IS NOT NULL THEN u.user_name
         WHEN sp.head_id IS NOT NULL THEN sh.company_name
         END AS writer_name
+        , r.name AS writer_rating
         , sp.user_id
         , sp.head_id
+        , sp.animal_type
+        , sp.breed
+        , sp.color
+        , sp.sighted_at
+        , sp.sighted_place
+
+        , g.sigungu_name
+        , d.sido_name
+        , spf. file_rename
+        , spf.file_path
         FROM sightingPost AS sp
         LEFT JOIN sightingPostLiked AS spl ON (sp.id = spl.post_id)
         LEFT JOIN user AS u ON (sp.user_id = u.user_id)
         LEFT JOIN shelter_head AS sh ON (sp.head_id = sh.head_id)
+        LEFT JOIN sigungu AS g ON (sp.sigungu_id = g.sigungu_id)
+        LEFT JOIN sido AS d ON (g.sido_id = d.sido_id)
+        LEFT JOIN sightingPostFiles AS spf ON (sp.id = spf.post_id)
+                                                  AND spf.id = (
+                                                  SELECT MIN(id)
+                                                  FROM sightingPostFiles
+                                                  WHERE post_id = sp.id
+                                                  )
+        LEFT JOIN rating AS r ON (u.rating_id = r.id)
         <where>
             sp.is_blinded = FALSE
             AND sp.is_deleted = FALSE
