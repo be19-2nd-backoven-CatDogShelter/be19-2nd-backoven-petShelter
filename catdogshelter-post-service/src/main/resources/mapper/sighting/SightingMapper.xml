@@ -22,9 +22,44 @@
         <result property="likeCount" column="like_count"/>
         <association property="writer" resultMap="writerResultMap"/>
     </resultMap>
+
+    <!-- 게시글 개수 세기 -->
+    <select id = "countSightingSummary" resultType = "_int">
+        SELECT
+               COUNT(id)
+          FROM sightingPost AS sp
+          LEFT JOIN user AS u ON (sp.user_id = u.user_id)
+          LEFT JOIN shelter_head AS sh ON (sp.head_id = sh.head_id)
+        <where>
+            sp.is_blinded = FALSE
+            AND sp.is_deleted = FALSE
+            <if test="search.writer != null and search.writer != ''">
+                AND (u.user_name LIKE CONCAT('%', #{search.writer}, '%')
+                OR sh.company_name LIKE CONCAT('%', #{search.writer}, '%'))
+            </if>
+            <if test="search.title != null and search.title != ''">
+                AND sp.title LIKE CONCAT('%', #{search.title}, '%')
+            </if>
+            <if test="search.content != null and search.content != ''">
+                AND sp.content LIKE CONCAT('%', #{search.content}, '%')
+            </if>
+            <if test="search.animalType != null and search.animalType != ''">
+                AND sp.animal_type = #{search.animalType}
+            </if>
+            <if test="search.breed != null and search.breed != ''">
+                AND sp.breed LIKE CONCAT('%', #{searchbreed}, '%')
+            </if>
+            <if test="search.color != null and search.color != ''">
+                AND sp.color LIKE CONCAT('%', #{search.color}, '%')
+            </if>
+            <if test="search.sigunguCode != null">
+                AND sp.sigungu_id = #{search.sigunguCode}
+            </if>
+        </where>
+    </select>
+
     <!-- 게시글 목록 조회 -->
     <select id="selectSightingSummary"
-            parameterType="com.backoven.catdogshelter.domain.sighting.query.dto.SightingSearchDTO"
             resultMap="sightingSummaryResultMap">
         SELECT
         sp.id
@@ -46,52 +81,53 @@
         <where>
             sp.is_blinded = FALSE
             AND sp.is_deleted = FALSE
-            <if test="writer != null and writer != ''">
-                AND (u.user_name LIKE CONCAT('%', #{writer}, '%')
-                OR sh.company_name LIKE CONCAT('%', #{writer}, '%'))
+            <if test="search.writer != null and search.writer != ''">
+                AND (u.user_name LIKE CONCAT('%', #{search.writer}, '%')
+                OR sh.company_name LIKE CONCAT('%', #{search.writer}, '%'))
             </if>
-            <if test="title != null and title != ''">
-                AND sp.title LIKE CONCAT('%', #{title}, '%')
+            <if test="search.title != null and search.title != ''">
+                AND sp.title LIKE CONCAT('%', #{search.title}, '%')
             </if>
-            <if test="content != null and content != ''">
-                AND sp.content LIKE CONCAT('%', #{content}, '%')
+            <if test="search.content != null and search.content != ''">
+                AND sp.content LIKE CONCAT('%', #{search.content}, '%')
             </if>
-            <if test="animalType != null and animalType != ''">
-                AND sp.animal_type = #{animalType}
+            <if test="search.animalType != null and search.animalType != ''">
+                AND sp.animal_type = #{search.animalType}
             </if>
-            <if test="breed != null and breed != ''">
-                AND sp.breed LIKE CONCAT('%', #{breed}, '%')
+            <if test="search.breed != null and search.breed != ''">
+                AND sp.breed LIKE CONCAT('%', #{searchbreed}, '%')
             </if>
-            <if test="color != null and color != ''">
-                AND sp.color LIKE CONCAT('%', #{color}, '%')
+            <if test="search.color != null and search.color != ''">
+                AND sp.color LIKE CONCAT('%', #{search.color}, '%')
             </if>
-            <if test="sigunguCode != null">
-                AND sp.sigungu_id = #{sigunguCode}
+            <if test="search.sigunguCode != null">
+                AND sp.sigungu_id = #{search.sigunguCode}
             </if>
         </where>
         <choose>
-            <when test="order == 0">
+            <when test="search.order == 0">
                 ORDER BY sp.id DESC
             </when>
-            <when test="order == 1">
+            <when test="search.order == 1">
                 ORDER BY sp.id ASC, sp.id DESC
             </when>
-            <when test="order == 2">
+            <when test="search.order == 2">
                 ORDER BY sp.view DESC, sp.id DESC
             </when>
-            <when test="order == 3">
+            <when test="search.order == 3">
                 ORDER BY sp.view ASC, sp.id DESC
             </when>
-            <when test="order == 4">
+            <when test="search.order == 4">
                 ORDER BY like_count DESC, sp.id DESC
             </when>
-            <when test="order == 5">
+            <when test="search.order == 5">
                 ORDER BY like_count ASC, sp.id DESC
             </when>
             <otherwise>
                 ORDER BY sp.id DESC
             </otherwise>
         </choose>
+        LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <!-- 시도 이름, 시군구 이름 매핑 -->
