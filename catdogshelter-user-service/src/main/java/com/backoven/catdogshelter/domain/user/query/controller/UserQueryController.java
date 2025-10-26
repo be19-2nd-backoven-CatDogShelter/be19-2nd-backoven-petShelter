@@ -23,15 +23,15 @@ public class UserQueryController {
 
     // 조회 -----------------------------------------------------------------------------------
     @GetMapping("/user")
-    public ResponseEntity<List<UserQueryDTO>> selectUsers(@RequestParam String type){
-        List<UserQueryDTO> users = userQueryService.selectUsers(type);
+    public ResponseEntity<List<AdminUserDTO>> selectUsers(@RequestParam String type){
+        List<AdminUserDTO> users = userQueryService.selectUsers(type);
 
         return ResponseEntity.ok().body(users);
     }
 
     @GetMapping("/admin")
-    public ResponseEntity<List<UserQueryDTO>> selectAdmin(){
-        List<UserQueryDTO> users = userQueryService.selectAdmin();
+    public ResponseEntity<List<AdminUserDTO>> selectAdmin(){
+        List<AdminUserDTO> users = userQueryService.selectAdmin();
         return ResponseEntity.ok().body(users);
     }
 

@@ -20,16 +20,16 @@ public class UserQueryService {
         this.userMapper = userMapper;
     }
 
-    public List<UserQueryDTO> selectUsers(String type) {
+    public List<AdminUserDTO> selectUsers(String type) {
         Map<String, Object> params = new HashMap<>();
         params.put("type", type.toLowerCase());
         log.info("입력값 = {}", type);
-        List<UserQueryDTO> users = userMapper.selectUsers(params);
+        List<AdminUserDTO> users = userMapper.selectUsers(params);
         log.info("되어라 = {}", users);
         return users;
     }
 
-    public List<UserQueryDTO> selectAdmin() {
+    public List<AdminUserDTO> selectAdmin() {
         return userMapper.selectAdmin();
     }
 

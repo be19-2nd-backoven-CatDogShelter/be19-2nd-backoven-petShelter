@@ -9,10 +9,10 @@ import java.util.Map;
 @Mapper
 public interface UserMapper {
     // 전체 일반 회원 조회
-    List<UserQueryDTO> selectUsers(Map<String, Object> params);
+    List<AdminUserDTO> selectUsers(Map<String, Object> params);
 
     // 관리자 조회
-    List<UserQueryDTO> selectAdmin();
+    List<AdminUserDTO> selectAdmin();
 
     // 보호소 회원 조회
     List<UserQueryShelterHeadDTO> selectHead();

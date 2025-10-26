@@ -59,16 +59,9 @@ INSERT INTO rating (id, name, standard) VALUES
 (8, '운영자', 0);
 
 
-<<<<<<< HEAD:catdogshelter-database/dummydata/a.common/CatDogShelter_common_dummy_data_.sql
--- 일반회원 (user) 10명
-INSERT INTO user (user_name, user_account, user_password, e_mail, detail_address, answer, user_phone,
-                  cumulative_volunteer_time, month_volunteer_time, volunteer_count,
-                  deactivation_times, user_status, activation_date, rating_id, sigungu_id, questionCategory_id) VALUES
-('admin', 'admin', '$2a$10$obCrYsPYbr.mZc78lyGuJOpgViEqOilarQTnfR/InamU5f7rQ565q', 'admin@petShelter.com', '서울시 강남구 테헤란로 123', '010-1234-5678',
- 0, 0, 0, 0, 'GENERAL', '2025-06-01', -1, 1, 1),
-=======
 -- 일반회원
 INSERT INTO user (user_name, user_account, user_password, e_mail, detail_address, user_phone, cumulative_volunteer_time, month_volunteer_time, volunteer_count, deactivation_times, user_status, activation_date, rating_id, sigungu_id) VALUES
+('admin', 'admin', '$2a$10$obCrYsPYbr.mZc78lyGuJOpgViEqOilarQTnfR/InamU5f7rQ565q', 'admin@petShelter.com', '서울시 강남구 테헤란로 123', '010-1234-5678', 0, 0, 0, 0, 'GENERAL', '2025-06-01', -1, 1, 1),
 ('박지수', 'parkjs', 'pass123!', 'parkjs@example.com', '서울 종로구 한옥마을길 5', '010-1234-5678', 0, 0, 0, 0, 'GENERAL', '2025-06-01', 0, 1),
 ('최민호', 'choiminho', 'Qwe123!@#', 'minho@example.com', '서울 중구 을지로 10', '010-2345-6789', 15, 5, 3, 1, 'GENERAL', '2025-05-15', 1, 2),
 ('이소영', 'leesy', 'Abcd987$', 'soyoung@example.com', '부산 서구 구덕로 23', '010-3456-7890', 30, 10, 5, 2, 'GENERAL', '2025-04-20', 2, 6),
@@ -79,7 +72,6 @@ INSERT INTO user (user_name, user_account, user_password, e_mail, detail_address
 ('서민재', 'seominj', 'HappyDog#4', 'seominj@example.com', '울산 중구 옥교동 101', '010-8901-2345', 75, 22, 9, 3, 'GENERAL', '2025-05-20', 3, 7),
 ('이태훈', 'leeth', 'Sunshine!7', 'leeth@example.com', '경기 수원시 장안구 정자동 8', '010-9012-3456', 12, 4, 2, 0, 'GENERAL', '2025-07-15', 1, 8),
 ('박서윤', 'parksy', 'MoonCat$5', 'parksy@example.com', '강원 춘천시 중앙로 12', '010-0123-4567', 25, 6, 4, 1, 'GENERAL', '2025-07-05', 1, 9);
->>>>>>> devlop:catdogshelter-database/dummydata/a.common/기본_더미_데이터_1023_1843.sql
 
 -- 봉사왕
 INSERT INTO volunteerKing (category, year, month, volunteer_time, user_id) VALUES
