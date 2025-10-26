@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class LoginHistoryDTO {
     private Integer id;          // PK
     private String ipAddress;    // 로그인 IP
-    private LocalDateTime loggedAt; // 로그인 시간
+    private String loggedAt; // 로그인 시간
     private Integer userId;      // 일반회원 FK
     private Integer headId;      // 보호소장 FK
 }

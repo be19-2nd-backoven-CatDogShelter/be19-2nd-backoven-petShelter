@@ -1,18 +1,13 @@
 package com.backoven.catdogshelter.domain.user.query.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class UserQueryDTO {
-
+public class AdminUserDTO {
     private Integer userId;              // PK
     private String userName;             // 회원명
     private String userAccount;          // 아이디
@@ -25,10 +20,11 @@ public class UserQueryDTO {
     private Integer deactivationTimes;        // 블라인드 횟수
     private String userStatus;           // 회원상태 (GENERAL, BLACK, CANCEL)
     private String activationDate;       // 정지 해제일
-    private Integer ratingId;            // 회원등급 FK
-    private Integer sigunguId;           // 소속 시군구 FK
-    private Integer questionCategoryId;  // 지정질문카테고리번호 FK
 
-    /* 설명. FeignClient 이후 */
-    List<ResponsePostDTO> postlist;
+    private Integer postCount;
+    private Integer commentCount;
+
+    private UserRatingDTO rating;
+    private UserAddressNameDTO addressName;
+    private LoginHistoryDTO loginHistory;
 }
