@@ -36,12 +36,14 @@ public class QSightingController {
     // 목록 조회
     @GetMapping("/summary")
     @Operation(summary = "게시글 목록 조회", description = "게시글 목록을 조회한다. 입력을 통해서 조건 검색이 가능하고, 정렬에 대한 선택이 가능하다.")
-    public List<SightingSummaryDTO> findSightingSummary(@ModelAttribute SightingSearchDTO search) {
+    public SightingSummaryPageDTO findSightingSummary(@ModelAttribute SightingSearchDTO search,
+                                                        @RequestParam(defaultValue = "1") int page,
+                                                        @RequestParam(defaultValue = "10") int size) {
 
 //        List<SightingSummaryDTO> sightingSummaryDTO = sightingService.findSightingSummary();
 //        return sightingSummaryDTO;
 //        log.info("controller 계층: {}", search.toString());
-        return qSightingService.findSightingSummary(search);
+        return qSightingService.findSightingSummary(search, page, size);
     }
 
     // 상세 조회

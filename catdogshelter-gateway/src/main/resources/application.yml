@@ -34,7 +34,7 @@ spring:
             - Path=/post-service/**
           filters:
             - RewritePath=/post-service/(?<segment>.*), /${segment}
-            - AuthorizationHeaderFilter
+#            - AuthorizationHeaderFilter
 
         # AdoptionPost API 라우팅
         - id: CatDogShelter-adoption-post
