@@ -76,7 +76,9 @@ public class UserWebSecurity {
 
         http.csrf().disable() // CSRF 비활성화 (JWT 사용 시 불필요)
                 .securityMatcher("/user/**") // "/user/**" 경로만 이 설정 적용
+                .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/regist").permitAll() // 회원가입 허용
                         .requestMatchers(HttpMethod.PATCH,"/user/admi/ratingId").hasAuthority("ROLE_MASTER_ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/user/admin/**").hasAuthority("ROLE_ADMIN")
@@ -101,4 +103,6 @@ public class UserWebSecurity {
     private Filter getAuthenticationFilter(AuthenticationManager authenticationManager) {
         return new AuthenticationFilter(authenticationManager, env, loginHistoryRepository);
     }
+
+    
 }
