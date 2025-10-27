@@ -6,6 +6,7 @@ import com.backoven.catdogshelter.common.entity.UserEntity;
 import com.backoven.catdogshelter.common.util.DateTimeUtil;
 import com.backoven.catdogshelter.domain.adoption.command.application.dto.*;
 import com.backoven.catdogshelter.domain.adoption.command.domain.aggregate.entity.AdoptionPost.*;
+import com.backoven.catdogshelter.domain.adoption.command.domain.aggregate.enumeration.AdoptionPostStatus;
 import com.backoven.catdogshelter.domain.adoption.command.domain.aggregate.enumeration.ReportCategory;
 import com.backoven.catdogshelter.domain.adoption.command.domain.repository.AdoptionPostFileRepository;
 import com.backoven.catdogshelter.domain.adoption.command.domain.repository.AdoptionPostLikedRepository;
@@ -106,7 +107,7 @@ public class AdoptionPostCommandService {
         postEntity.setTitle(newPost.getTitle());
         postEntity.setContent(newPost.getContent());
         postEntity.setCreatedAt(DateTimeUtil.now());
-        postEntity.setUpdatedAt(DateTimeUtil.now());
+        // postEntity.setUpdatedAt(DateTimeUtil.now());
         postEntity.setUserPhone(newPost.getUserPhone());
 
         // 동물 정보
@@ -118,7 +119,8 @@ public class AdoptionPostCommandService {
         postEntity.setWeight(newPost.getWeight());
 
         // 상태 정보
-        postEntity.setStatus(newPost.getStatus());
+//        postEntity.setStatus(newPost.getStatus());
+        postEntity.setStatus(AdoptionPostStatus.PROTECTING); //무조건 PROTECTING
         postEntity.setVaccination(newPost.getVaccination());
         postEntity.setNeutering(newPost.getNeutering());
 
@@ -157,7 +159,6 @@ public class AdoptionPostCommandService {
                     fileEntity.setFilePath(dest.getAbsolutePath());
                     fileEntity.setUploadedAt(DateTimeUtil.now());
                     fileEntity.setAdoptionPost(postEntity);
-                    fileEntities.add(fileEntity);
 
                     fileEntity.setAdoptionPost(postEntity);
                     fileEntities.add(fileEntity);

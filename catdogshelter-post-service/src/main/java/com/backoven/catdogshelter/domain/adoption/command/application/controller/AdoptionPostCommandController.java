@@ -18,12 +18,14 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -61,13 +63,21 @@ public class AdoptionPostCommandController {
             @ApiResponse(responseCode = "201", description = "생성 성공",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = AdoptionPostCommandDTO.class)))})
-    @PostMapping("/regist")
+    @PostMapping(
+            value = "/regist",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<?> registAdoptionPost(
-            @ModelAttribute AdoptionPostCommandDTO newPost
+            @ModelAttribute AdoptionPostCommandDTO newPost,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
     ) throws IOException {
+
+        newPost.setFiles(files); // DTO에 파일 세팅
+
         adoptionPostCommandService.registAdoptionPost(newPost);
-        return ResponseEntity.created(URI.create("/adoption/post/board")).build();
+        return ResponseEntity.ok().build();
     }
+
     // 게시글 수정 + 파일 재업로드
     @Operation(summary = "게시글 수정",
             description = "파일과 재업로드 포함 게시글 수정")
