@@ -20,10 +20,16 @@ public class QSightingServiceImpl implements QSightingService {
 
     // 목록 가져오기
     @Override
-    public List<SightingSummaryDTO> findSightingSummary(SightingSearchDTO search) {
+    public SightingSummaryPageDTO findSightingSummary(SightingSearchDTO search, int page, int size) {
 //        List<SightingSummaryDTO> sightingSummaryDTO = sightingMapper.selectSightingSummary();
 //        return sightingSummaryDTO;
-        return sightingMapper.selectSightingSummary(search);
+        int offset = (page -1 ) * size;
+        int totalCount = sightingMapper.countSightingSummary(search);
+        List<SightingSummaryDTO> content = sightingMapper.selectSightingSummary(search, offset, size);
+        int totalPage = (int) Math.ceil((double) totalCount / size);
+
+
+        return new SightingSummaryPageDTO(content, totalCount, totalPage, page, size);
     }
 
     @Override

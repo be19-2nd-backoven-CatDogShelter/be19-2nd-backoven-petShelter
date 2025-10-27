@@ -5,7 +5,7 @@ import com.backoven.catdogshelter.domain.sighting.query.dto.*;
 import java.util.List;
 
 public interface QSightingService {
-    List<SightingSummaryDTO> findSightingSummary(SightingSearchDTO search);
+    SightingSummaryPageDTO findSightingSummary(SightingSearchDTO search, int page, int size);
 
     SightingDetailDTO findSightingDetails(int postId);
 
