@@ -1,31 +1,45 @@
 server:
   port: 8000
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
 spring:
   application:
     name: CATDOGSHELTER-GATEWAY
   cloud:
-    default-filters:
-      - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-    globalcors:
-      cors-configurations:
-        '[/**]':
-          allowedOrigins:
-            - 'http://localhost:5173' # 허용하려는 도메인
-          allow-credentials: true # 요청 시 인증 정보를 전송하도록 허가
-          allowedHeaders: '*' # 허용하려는 헤더
-          allowedMethods: # 허용하려는 HTTP 메서드
-            - PUT
-            - GET
-            - POST
-            - DELETE
-            - OPTIONS
     gateway:
+      # 1) CORS 전역 설정 + 프리플라이트(OPTIONS) 게이트웨이에서 처리
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+              - "http://127.0.0.1:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            exposedHeaders:
+              - "Authorization"
+              - "Location"
+            allowCredentials: true
+            maxAge: 3600
+
+      # 2) 중복 CORS 헤더 제거 (중요)
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
+
+      # 3) 라우팅
       routes:
         # POST API 라우팅
         - id: CatDogShelter-post-service
@@ -33,7 +47,8 @@ spring:
           predicates:
             - Path=/post-service/**
           filters:
-            - RewritePath=/post-service/(?<segment>.*), /${segment}
+            # ${segment}는 프로퍼티 치환에 걸리므로 \$로 이스케이프
+            - RewritePath=/post-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
 
         # AdoptionPost API 라우팅
@@ -42,6 +57,7 @@ spring:
           predicates:
             - Path=/adoption-post/**
           filters:
+            - RewritePath=/adoption-post/(?<segment>.*), /$\{segment}
             - PreserveHostHeader
             - AuthorizationHeaderFilter
 
@@ -60,7 +76,6 @@ spring:
             - Path=/user-service/shelter-head/**
           filters:
             - RewritePath=/user-service/shelter-head/(?<segment>.*), /shelter-head/$\{segment}
-
 
 token:
   expiration_time: 43200000

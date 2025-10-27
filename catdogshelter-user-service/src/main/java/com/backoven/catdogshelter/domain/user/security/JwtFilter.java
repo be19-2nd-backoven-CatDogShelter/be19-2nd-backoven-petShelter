@@ -2,6 +2,7 @@ package com.backoven.catdogshelter.domain.user.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -10,17 +11,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Set;
 
-/**
- * JWT 인증 필터
- * - 사용자가 요청 시 JWT 토큰을 함께 전달했는지 검사
- * - 토큰이 유효하다면 Authentication 객체를 만들어 SecurityContext에 저장
- * - 한 요청당 한 번만 실행되는 필터(OncePerRequestFilter 상속)
- */
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+
+    private static final Set<String> PUBLIC_PATHS = Set.of(
+            "/user/regist",
+            "/user/login"
+    );
 
     public JwtFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -29,30 +30,54 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain)
+                                    FilterChain chain)
             throws ServletException, IOException {
 
-        // 요청 헤더에서 Authorization 값 추출
-        String authorizationHeader = request.getHeader("Authorization");
-        log.info("Authorization 헤더 값: {}", authorizationHeader);
+        final String path = request.getRequestURI();
 
-        // Authorization 헤더에 "Bearer "로 시작하는 토큰이 존재할 경우 처리
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
-            // "Bearer " 이후의 실제 토큰 값 추출
-            String token = authorizationHeader.substring(7);
-            log.info("JWT 토큰 값: {}", token);
-
-            // 토큰 검증
-            if (jwtUtil.validateToken(token)) {
-                // 토큰이 유효하면 Authentication 객체 생성
-                Authentication authentication = jwtUtil.getAuthentication(token);
-
-                // SecurityContext에 인증 객체 저장
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+        // 1) CORS preflight / 공개 경로는 무조건 통과
+        boolean isPublic = PUBLIC_PATHS.stream().anyMatch(path::endsWith);
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod()) || isPublic) {
+            chain.doFilter(request, response);
+            return;
         }
 
-        // 다음 필터로 요청/응답 전달
-        filterChain.doFilter(request, response);
+        // 2) 토큰: 쿠키 우선, 없으면 헤더
+        String token = extractFromCookie(request);
+        String headerToken = extractFromHeader(request);
+
+        // 3) 검증: 쿠키가 있으면 먼저, 없거나 무효면 헤더로 보조 시도
+        Authentication auth = null;
+        if (token != null && jwtUtil.validateToken(token)) {
+            auth = jwtUtil.getAuthentication(token);
+        } else if (headerToken != null && jwtUtil.validateToken(headerToken)) {
+            auth = jwtUtil.getAuthentication(headerToken);
+        }
+
+        if (auth != null) {
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        }
+
+        chain.doFilter(request, response);
+    }
+
+    private String extractFromHeader(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        return null;
+    }
+
+    private String extractFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if ("ACCESS_TOKEN".equals(c.getName())) {
+                    return c.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

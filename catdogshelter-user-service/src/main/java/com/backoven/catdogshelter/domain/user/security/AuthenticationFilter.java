@@ -13,35 +13,30 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * AuthenticationFilter
- * - 사용자가 로그인할 때 동작하는 커스텀 필터
- * - UsernamePasswordAuthenticationFilter를 확장
- * - 로그인 시도 → 인증 성공 시 JWT 토큰 생성 및 로그인 기록 저장
- */
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final Environment env;                       // 환경설정 값(token.secret, expiration_time 등) 참조
-    private final LoginHistoryRepository loginHistoryRepository; // 로그인 기록 저장용 Repository
+    private final Environment env;
+    private final LoginHistoryRepository loginHistoryRepository;
 
-    // AuthenticationManager, Environment, LoginHistoryRepository 주입
     public AuthenticationFilter(AuthenticationManager authenticationManager,
                                 Environment env,
                                 LoginHistoryRepository loginHistoryRepository) {
@@ -50,84 +45,99 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.loginHistoryRepository = loginHistoryRepository;
     }
 
-    /**
-     * 로그인 시도 메서드
-     * - 클라이언트가 전달한 JSON(body)을 DTO로 변환
-     * - UsernamePasswordAuthenticationToken을 생성해 AuthenticationManager로 전달
-     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            // Request body(JSON) → RequestLoginDTO 변환
-            RequestLoginDTO creds = new ObjectMapper()
-                    .readValue(request.getInputStream(), RequestLoginDTO.class);
+            RequestLoginDTO creds = null;
 
-            // 아이디/비밀번호 기반 토큰 생성 후 AuthenticationManager로 인증 시도
+            // 1) JSON 바디가 있으면 우선 시도
+            if (request.getContentLengthLong() > 0
+                    || (request.getHeader("Content-Type") != null
+                    && request.getHeader("Content-Type").toLowerCase().contains("application/json"))) {
+                creds = new ObjectMapper().readValue(request.getInputStream(), RequestLoginDTO.class);
+            }
+
+            // 2) 바디가 비었으면 폼/쿼리 파라미터에서 폴백
+            if (creds == null) {
+                String userAccount = nvl(request.getParameter("userAccount"),
+                        request.getParameter("email")); // 혹시 프론트가 email로 보낼 수도 있으니
+                String userPassword = nvl(request.getParameter("userPassword"),
+                        request.getParameter("password"));
+
+                if (userAccount == null || userPassword == null) {
+                    // 여기서 바로 예외를 던지면 401로 깔끔하게 떨어짐
+                    throw new RuntimeException("Empty login payload");
+                }
+                creds = new RequestLoginDTO();
+                creds.setUserAccount(userAccount);
+                creds.setUserPassword(userPassword);
+            }
+
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getUserAccount(), creds.getUserPassword(), new ArrayList<>())
+                            creds.getUserAccount(), creds.getUserPassword(), Collections.emptyList())
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    /**
-     * 인증 성공 메서드
-     * - 인증 완료 후 실행
-     * - JWT 토큰 생성 및 응답 헤더에 추가
-     * - 로그인 기록 저장
-     */
+    private static String nvl(String a, String b) {
+        return (a != null && !a.isBlank()) ? a : b;
+    }
+
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult)
             throws IOException, ServletException {
-        log.info("로그인 성공 → Authentication 객체 반환: {}", authResult);
 
-        // 인증된 사용자 정보 (principal) 추출
-        String id = ((User) authResult.getPrincipal()).getUsername();
-        log.info("회원 아이디: {}", id);
+        // 자격 증명은 이미 지워질 수 있으니 전체 객체를 통째로 로그로 찍지 않는다.
+        CustomUserDetails user = (CustomUserDetails) authResult.getPrincipal();
+        String username = user.getUsername();
+        Integer userId  = user.getUserId();
 
-        // 권한 목록 추출
         List<String> roles = authResult.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        log.info("로그인한 회원 권한들: {}", roles);
-        log.info("만료 시간: {}", env.getProperty("token.expiration_time"));
+        log.info("로그인 성공: username={}, roles={}", username, roles);
 
-        // CustomUserDetails 캐스팅 후 추가 정보 추출
-        CustomUserDetails customUser = (CustomUserDetails) authResult.getPrincipal();
-        String username = customUser.getUsername();
-        Integer userId = customUser.getUserId();
-
-        // JWT Payload 설정
+        // JWT 생성
+        long expMs = Long.parseLong(env.getProperty("token.expiration_time"));
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("auth", roles); // 권한
-        claims.put("userId", userId); // 유저 ID
+        claims.put("auth", roles);
+        claims.put("userId", userId);
 
-        // JWT 토큰 생성
         String token = Jwts.builder()
                 .setClaims(claims)
-                .setExpiration(new Date(System.currentTimeMillis()
-                        + Long.parseLong(env.getProperty("token.expiration_time"))))
+                .setExpiration(new Date(System.currentTimeMillis() + expMs))
                 .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
                 .compact();
 
-        // 토큰을 응답 헤더에 추가
-        response.addHeader("token", token);
+        // HttpOnly 쿠키로 내려주기 (localhost 개발 환경)
+        ResponseCookie cookie = ResponseCookie.from("ACCESS_TOKEN", token)
+                .httpOnly(true)
+                .secure(false)              // 배포(https)에서는 true
+                .sameSite("Lax")            // localhost:5173 <-> 8000는 same-site로 동작
+                .path("/")
+                .maxAge(Duration.ofMillis(expMs))
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        // 로그인 기록 저장
+        // 간단한 응답 바디/상태
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write("{\"ok\":true}");
+
+        // 로그인 이력 저장
         LoginHistoryEntity history = LoginHistoryEntity.builder()
                 .ipAddress(request.getRemoteAddr())
                 .loggedAt(LocalDateTime.now().toString())
-                .userId(customUser.getUserId())
+                .userId(userId)
                 .build();
-
         loginHistoryRepository.save(history);
-        log.info("로그인 히스토리 저장 완료: {}", history);
     }
 
     @Override
@@ -136,22 +146,19 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                               AuthenticationException failed)
             throws IOException, ServletException {
 
-            log.error("로그인 실패: {}", failed.getMessage());
+        log.error("로그인 실패: {}", failed.getMessage());
 
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json;charset=UTF-8");
-            String message;
-            if(failed.getMessage().startsWith("정지")) {
-                message = failed.getMessage();
-            } else {
-                message = "아이디/비밀번호가 일치하지 않습니다.";
-            }
-            // JSON 형태의 에러 응답
-            new ObjectMapper().writeValue(response.getWriter(), new HashMap<>() {{
-                put("status", 401);
-                put("error", "Unauthorized");
-                put("message", message); // UsernameNotFoundException 메시지 그대로 전달
-                put("path", request.getRequestURI());
-            }});
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json;charset=UTF-8");
+        String message = failed.getMessage() != null && failed.getMessage().startsWith("정지")
+                ? failed.getMessage()
+                : "아이디/비밀번호가 일치하지 않습니다.";
+
+        new ObjectMapper().writeValue(response.getWriter(), new HashMap<>() {{
+            put("status", 401);
+            put("error", "Unauthorized");
+            put("message", message);
+            put("path", request.getRequestURI());
+        }});
     }
 }
