@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -342,8 +343,26 @@ public class ASightingServiceImpl implements ASightingService {
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         SightingPostLiked newLiked = modelMapper.map(newLikedDTO, SightingPostLiked.class);
+//        sightingPostLikedRepository.save(newLiked);
 
-        sightingPostLikedRepository.save(newLiked);
+        Optional<SightingPostLiked> existingLiked;
+
+        if(newLiked.getUserId() != null) {
+            existingLiked = sightingPostLikedRepository.findByPostIdAndUserId(newLiked.getPostId(), newLiked.getUserId());
+        } else {
+            existingLiked = sightingPostLikedRepository.findByPostIdAndHeadId(newLiked.getPostId(), newLiked.getHeadId());
+        }
+
+        // 이미 존재
+        if(existingLiked.isPresent()) {
+            // 이미 좋아요 존재 → 삭제
+            sightingPostLikedRepository.delete(existingLiked.get());
+        } else {
+            // 좋아요 추가
+            sightingPostLikedRepository.save(newLiked);
+        }
+
+
     }
 
     @Override

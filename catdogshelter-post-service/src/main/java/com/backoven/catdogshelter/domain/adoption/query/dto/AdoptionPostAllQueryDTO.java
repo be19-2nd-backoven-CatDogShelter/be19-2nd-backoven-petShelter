@@ -18,6 +18,8 @@ public class AdoptionPostAllQueryDTO {
 
     private String writerName;   // user_name 또는 company_name
 
+    private String breed;
+
     private String userRating;   // 회원 등급
 
     private int view;
@@ -28,4 +30,6 @@ public class AdoptionPostAllQueryDTO {
 
     private String sigunguName;  // 시/군/구 이름
 
+    // 썸네일 파일명 추가
+    private String storageFileName;
 }

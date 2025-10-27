@@ -2,7 +2,7 @@ package com.backoven.catdogshelter.domain.adoption.query.service;
 
 import com.backoven.catdogshelter.domain.adoption.query.dto.AdoptionPostDetailQueryDTO;
 import com.backoven.catdogshelter.domain.adoption.query.dynamic.SearchCriteria;
-import com.backoven.catdogshelter.domain.adoption.query.mapper.AdoptionMapper;
+import com.backoven.catdogshelter.domain.adoption.query.mapper.AdoptionQueryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
@@ -16,55 +16,69 @@ import static com.backoven.catdogshelter.domain.adoption.query.template.Template
 @Slf4j
 @Service
 public class AdoptionPostQueryServiceImpl implements AdoptionPostQueryService {
-    private AdoptionMapper adoptionMapper;
+    private AdoptionQueryMapper adoptionQueryMapper;
 
     @Override
-    public List<AdoptionPostAllQueryDTO> selectAdoptionAllPosts() {
+    public List<AdoptionPostAllQueryDTO> selectAdoptionAllPosts(int page, int size, String sortType) {
         SqlSession sqlSession = getSqlSession();
-        adoptionMapper = sqlSession.getMapper(AdoptionMapper.class);
-        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionMapper.selectAllAdoptionPosts();
+        adoptionQueryMapper = sqlSession.getMapper(AdoptionQueryMapper.class);
+
+        int offset = page * size;
+        List<AdoptionPostAllQueryDTO> adoptionPostList =
+                adoptionQueryMapper.selectAllAdoptionPostsPaging(size, offset, sortType);
+
         sqlSession.close();
-        return adotpionPostList;
+        return adoptionPostList;
     }
+
+    public long countAllPosts() {
+        SqlSession sqlSession = getSqlSession();
+        adoptionQueryMapper = sqlSession.getMapper(AdoptionQueryMapper.class);
+        long count = adoptionQueryMapper.countAll();
+        sqlSession.close();
+        return count;
+    }
+
+
     @Override
     public AdoptionPostDetailQueryDTO selectAdoptionPostById(int adoptionPostId) {
         SqlSession sqlSession = getSqlSession();
-        adoptionMapper = sqlSession.getMapper(AdoptionMapper.class);
-        adoptionMapper.updateAdoptionPostView(adoptionPostId); // 조회수 증가
+        adoptionQueryMapper = sqlSession.getMapper(AdoptionQueryMapper.class);
+        adoptionQueryMapper.updateAdoptionPostView(adoptionPostId); // 조회수 증가
         sqlSession.commit(); // 조회수 update commit
-        AdoptionPostDetailQueryDTO adoptionPostDetailDTO = adoptionMapper.selectAdoptionPostById(adoptionPostId);
+        AdoptionPostDetailQueryDTO adoptionPostDetailDTO = adoptionQueryMapper.selectAdoptionPostById(adoptionPostId);
         sqlSession.close();
         return adoptionPostDetailDTO;
     }
     @Override
     public List<AdoptionPostAllQueryDTO> selectAdoptionAllPostsByView() {
         SqlSession sqlSession = getSqlSession();
-        adoptionMapper =sqlSession.getMapper(AdoptionMapper.class);
-        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionMapper.selectAllAdoptionPostsByView();
+        adoptionQueryMapper =sqlSession.getMapper(AdoptionQueryMapper.class);
+        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionQueryMapper.selectAllAdoptionPostsByView();
         sqlSession.close();
         return adotpionPostList;
     }
     @Override
     public List<AdoptionPostAllQueryDTO> selectAdoptionAllPostsByLiked() {
         SqlSession sqlSession = getSqlSession();
-        adoptionMapper =sqlSession.getMapper(AdoptionMapper.class);
-        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionMapper.selectAllAdoptionPostByLiked();
+        adoptionQueryMapper =sqlSession.getMapper(AdoptionQueryMapper.class);
+        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionQueryMapper.selectAllAdoptionPostByLiked();
         sqlSession.close();
         return adotpionPostList;
     }
     @Override
     public List<AdoptionPostAllQueryDTO> selectAdoptionPostByKeyword(SearchCriteria keyword) {
         SqlSession sqlSession = getSqlSession();
-        adoptionMapper =sqlSession.getMapper(AdoptionMapper.class);
-        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionMapper.selectAdoptionPostByKeyword(keyword);
+        adoptionQueryMapper =sqlSession.getMapper(AdoptionQueryMapper.class);
+        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionQueryMapper.selectAdoptionPostByKeyword(keyword);
         sqlSession.close();
         return adotpionPostList;
     }
     @Override
     public List<AdoptionPostAllQueryDTO> selectAdoptionPostByAnimalCondition(SearchCriteria animalCondition){
         SqlSession sqlSession = getSqlSession();
-        adoptionMapper =sqlSession.getMapper(AdoptionMapper.class);
-        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionMapper.selectAdoptionPostByAnimalCondition(animalCondition);
+        adoptionQueryMapper =sqlSession.getMapper(AdoptionQueryMapper.class);
+        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionQueryMapper.selectAdoptionPostByAnimalCondition(animalCondition);
         sqlSession.close();
         return adotpionPostList;
     }

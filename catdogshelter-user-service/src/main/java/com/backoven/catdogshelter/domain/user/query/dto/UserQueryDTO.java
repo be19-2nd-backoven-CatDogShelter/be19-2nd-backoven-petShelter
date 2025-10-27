@@ -16,10 +16,8 @@ public class UserQueryDTO {
     private Integer userId;              // PK
     private String userName;             // 회원명
     private String userAccount;          // 아이디
-    private String userPassword;         // 비밀번호
     private String email;                // 이메일
     private String detailAddress;        // 상세주소
-    private String answer;               // 지정답변
     private String userPhone;            // 전화번호
     private Integer cumulativeVolunteerTime;  // 누적봉사시간
     private Integer monthVolunteerTime;       // 월봉사시간

@@ -11,6 +11,7 @@ eureka:
 spring:
   application:
     name: CATDOGSHELTER-GATEWAY
+
   cloud:
     gateway:
       # 1) CORS 전역 설정 + 프리플라이트(OPTIONS) 게이트웨이에서 처리
@@ -41,7 +42,9 @@ spring:
 
       # 3) 라우팅
       routes:
-        # POST API 라우팅
+
+
+        # POST 서비스 라우팅 (프론트는 /post-service/** 로 호출)
         - id: CatDogShelter-post-service
           uri: lb://CATDOGSHELTER-POST-SERVICE
           predicates:
@@ -67,7 +70,7 @@ spring:
           predicates:
             - Path=/user-service/user/**
           filters:
-            - RewritePath=/user-service/user/(?<segment>.*), /user/$\{segment}
+            - RewritePath=/user-service/user/(?<segment>.*), /user/${segment}
 
         # ShelterHead API 라우팅
         - id: CatDogShelter-shelter-head-api
