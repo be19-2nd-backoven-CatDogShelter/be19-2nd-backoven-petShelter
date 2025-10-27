@@ -2,13 +2,18 @@ package com.backoven.catdogshelter.domain.sighting.query.mapper;
 
 import com.backoven.catdogshelter.domain.sighting.query.dto.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface SightingMapper {
 
-    List<SightingSummaryDTO> selectSightingSummary(SightingSearchDTO search);
+    List<SightingSummaryDTO> selectSightingSummary(@Param("search") SightingSearchDTO search,
+                                                   @Param("offset") int offset,
+                                                   @Param("limit") int limit);
+
+    int countSightingSummary(@Param("search") SightingSearchDTO search);
 
     SightingDetailDTO selectSightingDetails(int postId);    // 상세 보기
 
