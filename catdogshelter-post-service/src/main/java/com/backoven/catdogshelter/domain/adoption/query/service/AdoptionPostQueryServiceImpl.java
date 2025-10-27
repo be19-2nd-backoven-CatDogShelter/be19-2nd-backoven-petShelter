@@ -5,6 +5,9 @@ import com.backoven.catdogshelter.domain.adoption.query.dynamic.SearchCriteria;
 import com.backoven.catdogshelter.domain.adoption.query.mapper.AdoptionQueryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,12 +77,24 @@ public class AdoptionPostQueryServiceImpl implements AdoptionPostQueryService {
         sqlSession.close();
         return adotpionPostList;
     }
+
     @Override
-    public List<AdoptionPostAllQueryDTO> selectAdoptionPostByAnimalCondition(SearchCriteria animalCondition){
+    public Page<AdoptionPostAllQueryDTO> selectAdoptionPostByAnimalCondition(
+            SearchCriteria criteria, int page, int size) {
+
         SqlSession sqlSession = getSqlSession();
-        adoptionQueryMapper =sqlSession.getMapper(AdoptionQueryMapper.class);
-        List<AdoptionPostAllQueryDTO> adotpionPostList = adoptionQueryMapper.selectAdoptionPostByAnimalCondition(animalCondition);
+        adoptionQueryMapper = sqlSession.getMapper(AdoptionQueryMapper.class);
+
+        int offset = page * size;
+
+        long total = adoptionQueryMapper.countAllByCondition(criteria); // 총 개수 조회
+
+        List<AdoptionPostAllQueryDTO> list =
+                adoptionQueryMapper.selectAdoptionPostByAnimalCondition(criteria, size, offset);
+
         sqlSession.close();
-        return adotpionPostList;
+
+        return new PageImpl<>(list, PageRequest.of(page, size), total);
     }
+
 }

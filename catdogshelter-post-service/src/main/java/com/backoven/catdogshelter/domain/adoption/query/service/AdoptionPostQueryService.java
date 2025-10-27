@@ -3,6 +3,7 @@ package com.backoven.catdogshelter.domain.adoption.query.service;
 import com.backoven.catdogshelter.domain.adoption.query.dto.AdoptionPostDetailQueryDTO;
 import com.backoven.catdogshelter.domain.adoption.query.dto.AdoptionPostAllQueryDTO;
 import com.backoven.catdogshelter.domain.adoption.query.dynamic.SearchCriteria;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface AdoptionPostQueryService {
     // 키워드 조회
     List<AdoptionPostAllQueryDTO> selectAdoptionPostByKeyword(SearchCriteria keyword);
     // 컨디션 조회
-    List<AdoptionPostAllQueryDTO> selectAdoptionPostByAnimalCondition(SearchCriteria animalCondition);
-
+    Page<AdoptionPostAllQueryDTO> selectAdoptionPostByAnimalCondition(
+            SearchCriteria criteria, int page, int size);
 
 }

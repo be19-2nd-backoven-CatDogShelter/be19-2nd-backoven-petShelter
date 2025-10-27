@@ -329,18 +329,18 @@
             parameterType="map"
             resultMap="adoptionPostQueryResultMap">
         SELECT
-            ap.id
-            , ap.title
-            , ap.animal_type
-            , ap.breed
-            , CASE WHEN ap.updated_at IS NOT NULL THEN ap.updated_at ELSE ap.created_at END AS display_date
-            , COALESCE(u.user_name, sh.company_name) AS writer_name
-            , CASE WHEN u.user_name IS NOT NULL THEN r.name ELSE NULL END AS user_rating
-            , ap.view
-            , COALESCE(COUNT(apl.id), 0) AS recommend_count
-            , si.sido_name
-            , sg.sigungu_name
-            , (SELECT f.file_rename
+        ap.id
+        , ap.title
+        , ap.animal_type
+        , ap.breed
+        , CASE WHEN ap.updated_at IS NOT NULL THEN ap.updated_at ELSE ap.created_at END AS display_date
+        , COALESCE(u.user_name, sh.company_name) AS writer_name
+        , CASE WHEN u.user_name IS NOT NULL THEN r.name ELSE NULL END AS user_rating
+        , ap.view
+        , COALESCE(COUNT(apl.id), 0) AS recommend_count
+        , si.sido_name
+        , sg.sigungu_name
+        , (SELECT f.file_rename
         FROM adoptionPostFiles f
         WHERE f.post_id = ap.id
         ORDER BY f.uploaded_at ASC
@@ -355,36 +355,44 @@
         WHERE ap.status = 'PROTECTING'
         AND ap.is_blind = FALSE
 
-        <!-- 동물 종류 -->
-        <if test="animalType != null and animalType != ''">
-            <choose>
-                <when test="animalType == '강아지'"> AND ap.animal_type = 'DOG' </when>
-                <when test="animalType == '고양이'"> AND ap.animal_type = 'CAT' </when>
-            </choose>
+        <!-- ✅ 동물 종류 조건만 활성 -->
+        <if test="criteria.animalType != null and criteria.animalType != ''">
+            AND ap.animal_type = #{criteria.animalType}
         </if>
 
-        <!-- 성별/접종/중성화 -->
-        <if test="gender != null and gender != ''">       AND ap.gender = #{gender} </if>
-        <if test="vaccination != null and vaccination != ''"> AND ap.vaccination = #{vaccination} </if>
-        <if test="neutering != null and neutering != ''">     AND ap.neutering = #{neutering} </if>
-
-        <!-- 지역 필터 (이름으로 필터링) -->
-        <if test="sidoName != null and sidoName != ''">       AND si.sido_name = #{sidoName} </if>
+        <!-- 지역/성별 기타 필터 조건 전부 비활성화 -->
+        <!--
+        <if test="sidoName != null and sidoName != ''"> AND si.sido_name = #{sidoName} </if>
         <if test="sigunguName != null and sigunguName != ''"> AND sg.sigungu_name = #{sigunguName} </if>
+        <if test="gender != null and gender != ''"> AND ap.gender = #{gender} </if>
+        <if test="vaccination != null and vaccination != ''"> AND ap.vaccination = #{vaccination} </if>
+        <if test="neutering != null and neutering != ''"> AND ap.neutering = #{neutering} </if>
+        -->
 
         GROUP BY ap.id, ap.title, ap.animal_type, ap.breed, ap.created_at, ap.updated_at,
-        ap.user_id, ap.head_id, u.user_name, r.name, sh.company_name, ap.view,
-        si.sido_name, sg.sigungu_name
+        ap.user_id, ap.head_id, u.user_name, r.name, sh.company_name, ap.view
 
-        <!-- 정렬 -->
+        <!-- ✅ 정렬 -->
         <choose>
             <when test="sortType == 'view'">  ORDER BY ap.view DESC </when>
             <when test="sortType == 'liked'"> ORDER BY recommend_count DESC </when>
             <otherwise>                       ORDER BY ap.created_at DESC </otherwise>
         </choose>
 
-        <!-- 페이징 -->
+        <!-- ✅ 페이징 -->
         LIMIT #{size} OFFSET #{offset}
+    </select>
+
+
+    <!-- ✅ Count 쿼리도 같은 조건 유지 -->
+    <select id="countAllByCondition" parameterType="map" resultType="long">
+        SELECT COUNT(*)
+        FROM adoptionPost ap
+        WHERE ap.status = 'PROTECTING'
+        AND ap.is_blind = FALSE
+        <if test="animalType != null and animalType != ''">
+            AND ap.animal_type = #{animalType}
+        </if>
     </select>
 
 </mapper>
