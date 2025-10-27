@@ -1,14 +1,17 @@
 package com.backoven.catdogshelter.domain.user.query.service;
 
-import com.backoven.catdogshelter.domain.user.query.dto.LoginHistoryDTO;
-import com.backoven.catdogshelter.domain.user.query.dto.UserQueryDTO;
+import com.backoven.catdogshelter.domain.user.query.dto.*;
 import com.backoven.catdogshelter.domain.user.query.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
+@Slf4j
 public class UserQueryService {
     private final UserMapper userMapper;
 
@@ -17,28 +20,45 @@ public class UserQueryService {
         this.userMapper = userMapper;
     }
 
-    public List<UserQueryDTO> selectAllUsers() {
-        List<UserQueryDTO> users = userMapper.selectAllUsers();
+    public List<AdminUserDTO> selectUsers(String type) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", type.toLowerCase());
+        log.info("입력값 = {}", type);
+        List<AdminUserDTO> users = userMapper.selectUsers(params);
+        log.info("되어라 = {}", users);
         return users;
     }
 
-    public List<UserQueryDTO> selectAllUsersByGeneral() {
-        List<UserQueryDTO> usersByGeneral = userMapper.selectAllUsersByGeneral();
-        return usersByGeneral;
+    public List<AdminUserDTO> selectAdmin() {
+        return userMapper.selectAdmin();
     }
 
-    public List<UserQueryDTO> selectAllUsersByBlack() {
-        List<UserQueryDTO> usersByBlack = userMapper.selectAllUsersByBlack();
-        return usersByBlack;
+    public List<UserQueryShelterHeadDTO> selectHead() {
+        return userMapper.selectHead();
     }
 
-    public List<UserQueryDTO> selectAllUsersByCanceled() {
-        List<UserQueryDTO> usersByCanceled = userMapper.selectAllUsersByCanceled();
-        return usersByCanceled;
-    }
+    public List<LoginHistoryDTO> selectAllLoginHistory(Integer userId, Integer headId) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("headId", headId);
 
-    public List<LoginHistoryDTO> selectAllLoginHistory() {
-        List<LoginHistoryDTO> usersLoginHistory = userMapper.selectAllLoginHistory();
+        List<LoginHistoryDTO> usersLoginHistory = userMapper.selectAllLoginHistory(params);
         return usersLoginHistory;
+    }
+
+    public int selectReportsPostCount() {
+        return userMapper.selectReportsPostCount();
+    }
+
+    public int selectReportsCommentCount() {
+        return userMapper.selectReportsCommentCount();
+    }
+
+    public List<ReportedPostDTO> selectReportsPost() {
+        return userMapper.selectReportsPost();
+    }
+
+    public List<ReportedPostCommentDTO> selectReportsComment() {
+        return userMapper.selectReportsComment();
     }
 }

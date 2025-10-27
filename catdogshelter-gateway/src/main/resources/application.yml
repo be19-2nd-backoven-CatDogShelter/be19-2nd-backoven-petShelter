@@ -40,8 +40,17 @@ spring:
           predicates:
             - Path=/post-service/**
           filters:
-            # /post-service/xxx  →  /xxx 로 내부 서비스에 전달
             - RewritePath=/post-service/(?<segment>.*), /${segment}
+#            - AuthorizationHeaderFilter
+
+        # AdoptionPost API 라우팅
+        - id: CatDogShelter-adoption-post
+          uri: lb://CATDOGSHELTER-POST-SERVICE
+          predicates:
+            - Path=/adoption-post/**
+          filters:
+            - PreserveHostHeader
+            - AuthorizationHeaderFilter
 
         # User API 라우팅
         - id: CatDogShelter-user-api
