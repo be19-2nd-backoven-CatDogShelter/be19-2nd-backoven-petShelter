@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AdoptionPostQueryService {
     // 전체 게시판 목록 조회
-    List<AdoptionPostAllQueryDTO> selectAdoptionAllPosts();
+    List<AdoptionPostAllQueryDTO> selectAdoptionAllPosts(int page, int size, String sortType);
     // 게시글 조회
     AdoptionPostDetailQueryDTO selectAdoptionPostById(int adoptionPostId);
     // 조회수순 조회
@@ -19,4 +19,6 @@ public interface AdoptionPostQueryService {
     List<AdoptionPostAllQueryDTO> selectAdoptionPostByKeyword(SearchCriteria keyword);
     // 컨디션 조회
     List<AdoptionPostAllQueryDTO> selectAdoptionPostByAnimalCondition(SearchCriteria animalCondition);
+
+
 }

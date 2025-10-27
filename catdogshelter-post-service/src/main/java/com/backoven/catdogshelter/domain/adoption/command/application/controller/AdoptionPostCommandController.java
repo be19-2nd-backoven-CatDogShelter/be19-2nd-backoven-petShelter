@@ -27,7 +27,7 @@ import java.nio.file.Paths;
 
 @Slf4j
 @RestController
-@RequestMapping("catdogshelter/adoption-post")
+@RequestMapping("/adoption-post")
 @Tag(name="입양 게시글 CUD API")
 public class AdoptionPostCommandController {
 
@@ -96,7 +96,7 @@ public class AdoptionPostCommandController {
             @PathVariable String fileName) throws IOException {
 
         // 실제 저장 경로 (postId는 여기선 사용 안 하지만 RESTful 경로를 위해 포함)
-        Path file = Paths.get("/Users/haeone/Desktop/be19-2nd-backoven-petShelter/uploads/")
+        Path file = Paths.get("/Users/haeone/Desktop/stack/be19-2nd-backoven-petShelter/catdogshelter-file-uploads/adoption")
                 .resolve(fileName);
 
         Resource resource = new UrlResource(file.toUri());
