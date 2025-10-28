@@ -28,7 +28,8 @@ public class AdoptionPostDetailQueryDTO {
     private String status;
     private String vaccination;
     private String neutering;
-
+    private String sidoName;
+    private String sigunguName;
     // 파일 리스트
     private List<AdoptionPostFileDTO> files;
 

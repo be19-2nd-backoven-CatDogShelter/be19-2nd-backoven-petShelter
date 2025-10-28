@@ -99,6 +99,8 @@
         <result property="status" column="status"/>
         <result property="vaccination" column="vaccination"/>
         <result property="neutering" column="neutering"/>
+        <result property="sidoName" column="sido_name"/>
+        <result property="sigunguName" column="sigungu_name"/>
 
         <!-- 1: N 파일 리스트 -->
         <collection property="files"
@@ -108,8 +110,8 @@
             <result property="filePath" column="file_path"/>
             <result property="uploadedAt" column="uploaded_at"/>
             <result property="fileUrl" column="file_url"/>
-
         </collection>
+
         <!-- 1 : N 댓글 리스트 -->
         <collection property="comments"
                     ofType="com.backoven.catdogshelter.domain.adoption.query.dto.AdoptionPostCommentDTO">
@@ -125,68 +127,74 @@
             parameterType="_int"
             resultMap="adoptionPostDetailResultMap">
         SELECT
-               ap.id
-             , ap.title
-             , ap.content
-             , ap.user_phone
-             , ap.view
-             , CASE
-                   WHEN ap.updated_at IS NOT NULL THEN ap.updated_at
-                   ELSE ap.created_at
-                END AS post_display_date
+        ap.id
+        , ap.title
+        , ap.content
+        , ap.user_phone
+        , ap.view
+        , CASE
+        WHEN ap.updated_at IS NOT NULL THEN ap.updated_at
+        ELSE ap.created_at
+        END AS post_display_date
         <!-- 작성자 -->
-            , CASE
-                WHEN u.user_name IS NOT NULL
-                THEN u.user_name            -- 회원이면 이름
-                ELSE sh.company_name        -- 보호소장이면 보호소명
-                END AS writer_name
-            , CASE
-                WHEN u.user_name IS NOT NULL
-                THEN r.name                 -- 회원이면 등급
-                ELSE NULL                   -- 보호소장이면 등급 없음
-                END AS user_rating
+        , CASE
+        WHEN u.user_name IS NOT NULL
+        THEN u.user_name
+        ELSE sh.company_name
+        END AS writer_name
+        , CASE
+        WHEN u.user_name IS NOT NULL
+        THEN r.name
+        ELSE NULL
+        END AS user_rating
         <!-- 추천수 -->
-             , COALESCE(COUNT(DISTINCT l.id), 0) AS recommend_count
-             , ap.animal_type
-             , ap.breed
-             , ap.age
-             , ap.color
-             , ap.gender
-             , ap.weight
-             , ap.status
-             , ap.vaccination
-             , ap.neutering
+        , (SELECT COUNT(*)
+        FROM adoptionPostLiked
+        WHERE post_id = ap.id) AS recommend_count
+        , ap.animal_type
+        , ap.breed
+        , ap.age
+        , ap.color
+        , ap.gender
+        , ap.weight
+        , ap.status
+        , ap.vaccination
+        , ap.neutering
         <!-- 파일 -->
-             , f.id AS file_id
-             , f.file_rename
-             , f.file_path
-             , f.uploaded_at
-             , CONCAT('/post-service/adoption-post/image/', f.file_rename) AS file_url
+        , f.id AS file_id
+        , f.file_rename
+        , f.file_path
+        , f.uploaded_at
+        , CONCAT('/post-service/adoption-post/image/', f.file_rename) AS file_url
         <!-- 댓글 -->
-             , c.id AS comment_id
-             , c.content AS comment_content
-             , CASE
-                   WHEN c.updated_at IS NOT NULL THEN c.updated_at
-                   ELSE c.created_at
-               END AS comment_display_date
-            , COALESCE(cu.user_name, ch.company_name) AS comment_writer_name
+        , c.id AS comment_id
+        , c.content AS comment_content
+        , CASE
+        WHEN c.updated_at IS NOT NULL THEN c.updated_at
+        ELSE c.created_at
+        END AS comment_display_date
+        , CASE
+        WHEN cu.user_name IS NOT NULL THEN cu.user_name
+        WHEN ch.company_name IS NOT NULL THEN ch.company_name
+        ELSE '익명'
+        END AS comment_writer_name
         <!-- 지역 -->
-            , sg.sigungu_name
-            , si.sido_name
-         FROM adoptionPost ap
-         LEFT JOIN user u ON ap.user_id = u.user_id
-         LEFT JOIN shelter_head sh ON ap.head_id = sh.head_id
-         LEFT JOIN rating r ON u.rating_id = r.id
-         LEFT JOIN adoptionPostLiked l ON ap.id = l.post_id
-         LEFT JOIN adoptionPostFiles f ON ap.id = f.post_id
-         LEFT JOIN adoptionPostComment c ON ap.id = c.post_id
-          AND c.is_blinded = FALSE
-         LEFT JOIN user cu ON c.user_id = cu.user_id
-         LEFT JOIN shelter_head ch ON c.head_id = ch.head_id
-         LEFT JOIN sigungu sg ON ap.sigungu_id = sg.sigungu_id
-         LEFT JOIN sido si ON sg.sido_id = si.sido_id
-         WHERE ap.id = #{id}
-         GROUP BY ap.id, f.id, c.id, sg.sigungu_id, si.sido_id
+        , sg.sigungu_name
+        , si.sido_name
+        FROM adoptionPost ap
+        LEFT JOIN user u ON ap.user_id = u.user_id
+        LEFT JOIN shelter_head sh ON ap.head_id = sh.head_id
+        LEFT JOIN rating r ON u.rating_id = r.id
+        LEFT JOIN adoptionPostFiles f ON ap.id = f.post_id
+        LEFT JOIN adoptionPostComment c ON ap.id = c.post_id
+        AND c.is_blinded = FALSE
+        AND c.is_deleted = FALSE
+        LEFT JOIN user cu ON c.user_id = cu.user_id
+        LEFT JOIN shelter_head ch ON c.head_id = ch.head_id
+        LEFT JOIN sigungu sg ON ap.sigungu_id = sg.sigungu_id
+        LEFT JOIN sido si ON sg.sido_id = si.sido_id
+        WHERE ap.id = #{id}
+        ORDER BY f.id, c.created_at DESC
     </select>
 
     <!-- 조회수 증가 -->
@@ -329,18 +337,18 @@
             parameterType="map"
             resultMap="adoptionPostQueryResultMap">
         SELECT
-            ap.id
-            , ap.title
-            , ap.animal_type
-            , ap.breed
-            , CASE WHEN ap.updated_at IS NOT NULL THEN ap.updated_at ELSE ap.created_at END AS display_date
-            , COALESCE(u.user_name, sh.company_name) AS writer_name
-            , CASE WHEN u.user_name IS NOT NULL THEN r.name ELSE NULL END AS user_rating
-            , ap.view
-            , COALESCE(COUNT(apl.id), 0) AS recommend_count
-            , si.sido_name
-            , sg.sigungu_name
-            , (SELECT f.file_rename
+        ap.id
+        , ap.title
+        , ap.animal_type
+        , ap.breed
+        , CASE WHEN ap.updated_at IS NOT NULL THEN ap.updated_at ELSE ap.created_at END AS display_date
+        , COALESCE(u.user_name, sh.company_name) AS writer_name
+        , CASE WHEN u.user_name IS NOT NULL THEN r.name ELSE NULL END AS user_rating
+        , ap.view
+        , COALESCE(COUNT(apl.id), 0) AS recommend_count
+        , si.sido_name
+        , sg.sigungu_name
+        , (SELECT f.file_rename
         FROM adoptionPostFiles f
         WHERE f.post_id = ap.id
         ORDER BY f.uploaded_at ASC
@@ -355,36 +363,44 @@
         WHERE ap.status = 'PROTECTING'
         AND ap.is_blind = FALSE
 
-        <!-- 동물 종류 -->
-        <if test="animalType != null and animalType != ''">
-            <choose>
-                <when test="animalType == '강아지'"> AND ap.animal_type = 'DOG' </when>
-                <when test="animalType == '고양이'"> AND ap.animal_type = 'CAT' </when>
-            </choose>
+        <!-- ✅ 동물 종류 조건만 활성 -->
+        <if test="criteria.animalType != null and criteria.animalType != ''">
+            AND ap.animal_type = #{criteria.animalType}
         </if>
 
-        <!-- 성별/접종/중성화 -->
-        <if test="gender != null and gender != ''">       AND ap.gender = #{gender} </if>
-        <if test="vaccination != null and vaccination != ''"> AND ap.vaccination = #{vaccination} </if>
-        <if test="neutering != null and neutering != ''">     AND ap.neutering = #{neutering} </if>
-
-        <!-- 지역 필터 (이름으로 필터링) -->
-        <if test="sidoName != null and sidoName != ''">       AND si.sido_name = #{sidoName} </if>
+        <!-- 지역/성별 기타 필터 조건 전부 비활성화 -->
+        <!--
+        <if test="sidoName != null and sidoName != ''"> AND si.sido_name = #{sidoName} </if>
         <if test="sigunguName != null and sigunguName != ''"> AND sg.sigungu_name = #{sigunguName} </if>
+        <if test="gender != null and gender != ''"> AND ap.gender = #{gender} </if>
+        <if test="vaccination != null and vaccination != ''"> AND ap.vaccination = #{vaccination} </if>
+        <if test="neutering != null and neutering != ''"> AND ap.neutering = #{neutering} </if>
+        -->
 
         GROUP BY ap.id, ap.title, ap.animal_type, ap.breed, ap.created_at, ap.updated_at,
-        ap.user_id, ap.head_id, u.user_name, r.name, sh.company_name, ap.view,
-        si.sido_name, sg.sigungu_name
+        ap.user_id, ap.head_id, u.user_name, r.name, sh.company_name, ap.view
 
-        <!-- 정렬 -->
+        <!-- ✅ 정렬 -->
         <choose>
             <when test="sortType == 'view'">  ORDER BY ap.view DESC </when>
             <when test="sortType == 'liked'"> ORDER BY recommend_count DESC </when>
             <otherwise>                       ORDER BY ap.created_at DESC </otherwise>
         </choose>
 
-        <!-- 페이징 -->
+        <!-- ✅ 페이징 -->
         LIMIT #{size} OFFSET #{offset}
+    </select>
+
+
+    <!-- ✅ Count 쿼리도 같은 조건 유지 -->
+    <select id="countAllByCondition" parameterType="map" resultType="long">
+        SELECT COUNT(*)
+        FROM adoptionPost ap
+        WHERE ap.status = 'PROTECTING'
+        AND ap.is_blind = FALSE
+        <if test="animalType != null and animalType != ''">
+            AND ap.animal_type = #{animalType}
+        </if>
     </select>
 
 </mapper>
