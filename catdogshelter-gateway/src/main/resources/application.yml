@@ -36,11 +36,14 @@ spring:
             allowCredentials: true
             maxAge: 3600
 
+<<<<<<< HEAD
       # 2) 중복 CORS 헤더 제거 (중요)
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
 
       # 3) 라우팅
+=======
+>>>>>>> devlop
       routes:
 
 
@@ -50,6 +53,7 @@ spring:
           predicates:
             - Path=/post-service/**
           filters:
+<<<<<<< HEAD
             # ${segment}는 프로퍼티 치환에 걸리므로 \$로 이스케이프
             - RewritePath=/post-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
@@ -63,6 +67,10 @@ spring:
             - RewritePath=/adoption-post/(?<segment>.*), /$\{segment}
             - PreserveHostHeader
             - AuthorizationHeaderFilter
+=======
+            # /post-service/xxx  →  /xxx 로 내부 서비스에 전달
+            - RewritePath=/post-service/(?<segment>.*), /${segment}
+>>>>>>> devlop
 
         # User API 라우팅
         - id: CatDogShelter-user-api

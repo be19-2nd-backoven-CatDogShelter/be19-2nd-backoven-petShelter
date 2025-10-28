@@ -34,10 +34,10 @@
     <!-- 게시글 개수 세기 -->
     <select id = "countSightingSummary" resultType = "_int">
         SELECT
-               COUNT(id)
-          FROM sightingPost AS sp
-          LEFT JOIN user AS u ON (sp.user_id = u.user_id)
-          LEFT JOIN shelter_head AS sh ON (sp.head_id = sh.head_id)
+        COUNT(id)
+        FROM sightingPost AS sp
+        LEFT JOIN user AS u ON (sp.user_id = u.user_id)
+        LEFT JOIN shelter_head AS sh ON (sp.head_id = sh.head_id)
         <where>
             sp.is_blinded = FALSE
             AND sp.is_deleted = FALSE
@@ -55,7 +55,7 @@
                 AND sp.animal_type = #{search.animalType}
             </if>
             <if test="search.breed != null and search.breed != ''">
-                AND sp.breed LIKE CONCAT('%', #{searchbreed}, '%')
+                AND sp.breed LIKE CONCAT('%', #{search.breed}, '%')
             </if>
             <if test="search.color != null and search.color != ''">
                 AND sp.color LIKE CONCAT('%', #{search.color}, '%')
@@ -100,11 +100,11 @@
         LEFT JOIN sigungu AS g ON (sp.sigungu_id = g.sigungu_id)
         LEFT JOIN sido AS d ON (g.sido_id = d.sido_id)
         LEFT JOIN sightingPostFiles AS spf ON (sp.id = spf.post_id)
-                                                  AND spf.id = (
-                                                  SELECT MIN(id)
-                                                  FROM sightingPostFiles
-                                                  WHERE post_id = sp.id
-                                                  )
+        AND spf.id = (
+        SELECT MIN(id)
+        FROM sightingPostFiles
+        WHERE post_id = sp.id
+        )
         LEFT JOIN rating AS r ON (u.rating_id = r.id)
         <where>
             sp.is_blinded = FALSE
@@ -123,7 +123,7 @@
                 AND sp.animal_type = #{search.animalType}
             </if>
             <if test="search.breed != null and search.breed != ''">
-                AND sp.breed LIKE CONCAT('%', #{searchbreed}, '%')
+                AND sp.breed LIKE CONCAT('%', #{search.breed}, '%')
             </if>
             <if test="search.color != null and search.color != ''">
                 AND sp.color LIKE CONCAT('%', #{search.color}, '%')
