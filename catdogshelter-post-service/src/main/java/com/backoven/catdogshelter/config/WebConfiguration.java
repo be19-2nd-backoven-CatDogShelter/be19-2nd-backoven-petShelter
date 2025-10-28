@@ -21,7 +21,8 @@ public class WebConfiguration implements WebMvcConfigurer {
         // URL: http://localhost:8080/uploads/파일명
         // 실제 폴더: /Users/dong/uploads/
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:/Users/dong/uploads/");
+                .addResourceLocations("file:/Users/haeone/Desktop/stack/be19-2nd-backoven-petShelter/catdogshelter-file-uploads/");
+
     }
 
 
