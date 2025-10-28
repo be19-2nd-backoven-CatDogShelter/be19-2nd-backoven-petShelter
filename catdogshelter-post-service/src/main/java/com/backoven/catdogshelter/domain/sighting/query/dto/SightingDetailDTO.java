@@ -26,12 +26,15 @@ public class SightingDetailDTO {
     private AnimalType animalType;              // 동물 타입
     @Schema(description = "품종", example = "말티즈")
     private String breed;                       // 동물 품종
+    private String color;
     @Schema(description = "작성 시간", example = "2025.10.01 10:08:10")
     private String createdAt;                   // 게시글 작성일
     @Schema(description = "수정 시간", example = "2025.10.01 10:18:10")
     private String updatedAt;                   // 게시글 수정일
     @Schema(description = "조회수", example = "5")
     private int view;                           // 조회수
+
+    private boolean like;
     @Schema(description = "추천수", example = "5")
     private int likeCount;                      // 추천 수
 

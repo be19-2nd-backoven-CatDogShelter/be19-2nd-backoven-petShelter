@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SightingMapper {
@@ -15,7 +16,7 @@ public interface SightingMapper {
 
     int countSightingSummary(@Param("search") SightingSearchDTO search);
 
-    SightingDetailDTO selectSightingDetails(int postId);    // 상세 보기
+    SightingDetailDTO selectSightingDetails(Map<String, Object> postId);    // 상세 보기
 
     void incrementSightingView(int postId);
 

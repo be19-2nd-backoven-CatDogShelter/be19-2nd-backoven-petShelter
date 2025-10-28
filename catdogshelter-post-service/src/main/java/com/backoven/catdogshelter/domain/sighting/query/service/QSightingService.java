@@ -7,7 +7,7 @@ import java.util.List;
 public interface QSightingService {
     SightingSummaryPageDTO findSightingSummary(SightingSearchDTO search, int page, int size);
 
-    SightingDetailDTO findSightingDetails(int postId);
+    SightingDetailDTO findSightingDetails(int postId, Boolean userType, Integer userId);
 
     List<SightingPostReportDTO> findSightingPostReport(int postId);
 

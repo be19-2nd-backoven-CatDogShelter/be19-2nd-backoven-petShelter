@@ -14,55 +14,31 @@ spring:
 
   cloud:
     gateway:
-      # 1) CORS 전역 설정 + 프리플라이트(OPTIONS) 게이트웨이에서 처리
+      # 응답 헤더 중복 제거
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+
+      # ★ Gateway 전역 CORS (위치와 키가 'gateway.globalcors' 여야 함)
       globalcors:
         add-to-simple-url-handler-mapping: true
         corsConfigurations:
           '[/**]':
-            allowedOrigins:
-              - "http://localhost:5173"
-              - "http://127.0.0.1:5173"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders:
-              - "*"
-            exposedHeaders:
-              - "Authorization"
-              - "Location"
+            # allowCredentials(true)와 함께 '*'는 사용할 수 없음 → patterns로 변경
+            allowedOriginPatterns:
+              - 'http://localhost:5173'
+            allowedMethods: "*"
+            allowedHeaders: "*"
             allowCredentials: true
-            maxAge: 3600
 
-      # 2) 중복 CORS 헤더 제거 (중요)
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
-
-      # 3) 라우팅
       routes:
-
-
         # POST 서비스 라우팅 (프론트는 /post-service/** 로 호출)
         - id: CatDogShelter-post-service
           uri: lb://CATDOGSHELTER-POST-SERVICE
           predicates:
             - Path=/post-service/**
           filters:
-            # ${segment}는 프로퍼티 치환에 걸리므로 \$로 이스케이프
-            - RewritePath=/post-service/(?<segment>.*), /$\{segment}
-#            - AuthorizationHeaderFilter
-
-        # AdoptionPost API 라우팅
-        - id: CatDogShelter-adoption-post
-          uri: lb://CATDOGSHELTER-POST-SERVICE
-          predicates:
-            - Path=/adoption-post/**
-          filters:
-            - RewritePath=/adoption-post/(?<segment>.*), /$\{segment}
-            - PreserveHostHeader
-            - AuthorizationHeaderFilter
+            # /post-service/xxx  →  /xxx 로 내부 서비스에 전달
+            - RewritePath=/post-service/(?<segment>.*), /${segment}
 
         # User API 라우팅
         - id: CatDogShelter-user-api
@@ -78,7 +54,7 @@ spring:
           predicates:
             - Path=/user-service/shelter-head/**
           filters:
-            - RewritePath=/user-service/shelter-head/(?<segment>.*), /shelter-head/$\{segment}
+            - RewritePath=/user-service/shelter-head/(?<segment>.*), /shelter-head/${segment}
 
 token:
   expiration_time: 43200000

@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class QSightingServiceImpl implements QSightingService {
@@ -34,9 +36,18 @@ public class QSightingServiceImpl implements QSightingService {
 
     @Override
     @Transactional  // 상세 조회를 들어가면 조회수 +1
-    public SightingDetailDTO findSightingDetails(int postId) {
+    public SightingDetailDTO findSightingDetails(int postId, Boolean userType, Integer userId) {
 
-        SightingDetailDTO sightingDetailDTO = sightingMapper.selectSightingDetails(postId);
+        Map<String, Object> params =  new HashMap<>();
+        params.put("postId", postId);
+        if(userType == null) {}
+        else if(userType) {
+            params.put("userId", userId);
+        } else {
+            params.put("headId", userId);
+        }
+
+        SightingDetailDTO sightingDetailDTO = sightingMapper.selectSightingDetails(params);
 
         sightingMapper.incrementSightingView(postId);  // 조회수 업데이트
 

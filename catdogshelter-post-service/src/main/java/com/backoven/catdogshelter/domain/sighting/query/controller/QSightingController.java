@@ -49,9 +49,11 @@ public class QSightingController {
     // 상세 조회
     @GetMapping("/{postId}")
     @Operation(summary = "게시글 상세 조회", description = "게시글의 상세 내용을 조회한다.\n게시글에 달린 댓글, 작성자의 등급, 파일의 url 등을 만들기 위한 정보 등을 포함하고 있다.")
-    public SightingDetailDTO findSightingDetails(@PathVariable int postId) {
+    public SightingDetailDTO findSightingDetails( @PathVariable int postId,
+                                                  @RequestParam(required = false) Boolean userType,
+                                                  @RequestParam(required = false) Integer userId){
 
-        SightingDetailDTO sightingDetailDTO = qSightingService.findSightingDetails(postId);
+        SightingDetailDTO sightingDetailDTO = qSightingService.findSightingDetails(postId, userType, userId);
         log.info("{}",  sightingDetailDTO);
         return sightingDetailDTO;
     }
