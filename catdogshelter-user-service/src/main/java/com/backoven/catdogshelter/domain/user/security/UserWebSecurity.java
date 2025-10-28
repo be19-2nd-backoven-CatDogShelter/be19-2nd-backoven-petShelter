@@ -80,10 +80,11 @@ public class UserWebSecurity {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/regist").permitAll() // 회원가입 허용
-                        .requestMatchers(HttpMethod.PATCH,"/user/admi/ratingId").hasAuthority("ROLE_MASTER_ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/user/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/user/admin/admin").hasAuthority("ROLE_MASTER_ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/user/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/user/admin/**").permitAll()
+//                        .requestMatchers(HttpMethod.PATCH,"/user/admi/ratingId").hasAuthority("ROLE_MASTER_ADMIN")
+//                        .requestMatchers(HttpMethod.PUT,"/user/admin/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers(HttpMethod.GET,"/user/admin/admin").hasAuthority("ROLE_MASTER_ADMIN")
+//                        .requestMatchers(HttpMethod.GET,"/user/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/user/login").permitAll() // 로그인 허용
                         .requestMatchers(HttpMethod.POST, "/user/password/**").permitAll() // 비밀번호 찾기
                         .requestMatchers(HttpMethod.POST, "/user/find-id/**").permitAll() // 아이디 찾기
