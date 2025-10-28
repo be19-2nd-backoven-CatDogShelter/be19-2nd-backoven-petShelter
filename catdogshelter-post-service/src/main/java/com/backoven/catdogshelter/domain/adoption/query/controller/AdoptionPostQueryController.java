@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -148,16 +149,24 @@ public class AdoptionPostQueryController {
     public ResponseEntity<?> findPostByKeyword(SearchCriteria criteria) {
         List<AdoptionPostAllQueryDTO> adoptionPostList =
                 adoptionService.selectAdoptionPostByKeyword(criteria);
-        return ResponseEntity.ok(adoptionPostList);
+        return  ResponseEntity.ok(
+                adoptionService.selectAdoptionPostByKeyword(criteria)
+        );
     }
     // 동물 조건 검색 (복수 조건 AND)
     @Operation(summary = "조건 검색", description = "동물 조건(종류, 나이, 성별 등)으로 복수 조건 검색 (AND 조건).")
     @ApiResponse(responseCode = "200", description = "성공",
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = AdoptionPostAllQueryDTO.class))))
     @GetMapping("/search/condition")
-    public ResponseEntity<?> findPostByAnimalCondition(SearchCriteria criteria) {
-        List<AdoptionPostAllQueryDTO> adoptionPostList =
-                adoptionService.selectAdoptionPostByAnimalCondition(criteria);
-        return ResponseEntity.ok(adoptionPostList);
+    public ResponseEntity<?> findPostByAnimalCondition(
+            SearchCriteria criteria,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
+        Page<AdoptionPostAllQueryDTO> resultPage =
+                adoptionService.selectAdoptionPostByAnimalCondition(criteria, page, size);
+
+        return ResponseEntity.ok(resultPage);
     }
+
 }

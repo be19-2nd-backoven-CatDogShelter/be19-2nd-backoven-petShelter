@@ -52,7 +52,7 @@ spring:
           filters:
             # ${segment}는 프로퍼티 치환에 걸리므로 \$로 이스케이프
             - RewritePath=/post-service/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter
+#            - AuthorizationHeaderFilter
 
         # AdoptionPost API 라우팅
         - id: CatDogShelter-adoption-post
