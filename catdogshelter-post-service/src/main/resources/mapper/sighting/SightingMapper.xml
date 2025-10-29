@@ -207,9 +207,11 @@
         <result property="sightedPlace" column="sighted_place"/>
         <result property="animalType" column="animal_type"/>
         <result property="breed" column="breed"/>
+        <result property="color" column="color"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
         <result property="view" column="view"/>
+        <result property="like" column="liked"/>
         <result property="likeCount" column="like_count"/>
         <association property="addressName" resultMap="addressNameResultMap"/>
         <association property="writer" resultMap="writerResultMap2"/>
@@ -225,9 +227,27 @@
              , sp.sighted_place
              , sp.animal_type
              , sp.breed
+             , sp.color
              , sp.created_at
              , sp.updated_at
              , sp.view
+             , CASE
+                    WHEN #{userId} IS NOT NULL THEN
+                    EXISTS (
+                        SELECT 1
+                          FROM sightingPostLiked spl
+                          WHERE spl.post_id = sp.id
+                          AND spl.user_id = #{userId}
+                          )
+                          WHEN #{headId} IS NOT NULL THEN
+                          EXISTS (
+                          SELECT 1
+                          FROM sightingPostLiked spl
+                          WHERE spl.post_id = sp.id
+                          AND spl.head_id = #{headId}
+                          )
+                          ELSE FALSE
+            END AS liked
              , (SELECT COUNT(*) FROM sightingPostLiked WHERE post_id = sp.id) AS like_count
              , sido.sido_name
              , sigungu.sigungu_name

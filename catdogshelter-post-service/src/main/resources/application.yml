@@ -40,7 +40,7 @@ logging:
     root: info
 
 file:
-  upload-Dir: /Users/haeone/Desktop/be19-2nd-backoven-petShelter
+  upload-Dir: C:\SWCamp_19th\Project_3rd_BackOven\catdogshelter-file-uploads
 filepath: /Users/haeone/Desktop/be19-2nd-backoven-petShelter
 
 # 로그인
